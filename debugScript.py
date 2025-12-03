@@ -64,22 +64,22 @@ forms_service = build("forms", "v1", credentials=creds)
 ## ---- RESET FORM ---- ##
 ## -------------------- ##
 
-# ''' def clear_form_items():
-#     form = forms_service.forms().get(formId=FORM_ID).execute()
-#     items = form.get("items", [])
+def clear_form_items():
+    form = forms_service.forms().get(formId=FORM_ID).execute()
+    items = form.get("items", [])
 
-#     if not items:
-#         print("Form already empty.")
-#         return
+    if not items:
+        print("Form already empty.")
+        return
 
-#     delete_requests = [{"deleteItem": {"location": {"index": 0}}} for _ in items]
+    delete_requests = [{"deleteItem": {"location": {"index": len(items) - 1 - i}}} for i in range(len(items))]
 
-#     print(f"Deleting {len(delete_requests)} items...")
+    print(f"Deleting {len(delete_requests)} items...")
 
-#     forms_service.forms().batchUpdate(
-#         formId=FORM_ID,
-#         body={"requests": delete_requests}
-#     ).execute()'''
+    forms_service.forms().batchUpdate(
+        formId=FORM_ID,
+        body={"requests": delete_requests}
+    ).execute()
 
 ## -------------------- ##
 ## --- READ SHEET(S)--- ##
@@ -145,17 +145,12 @@ def read_body_sheet():
 
     return header, structured_rows
 
-def is_row_complete(row):
-    """Check if a row has all required fields."""
-    return all(row.get(field) for field in REQUIRED_FIELDS)
-
 def read_form():
     form_existing_json = forms_service.forms().get(formId=FORM_ID).execute()
 
     with open("./json_existing.json", "w") as f:
         json.dump([], f)
         json.dump(form_existing_json, f, indent=4)    
-
     
 ## -------------------- ##
 ##  BUILD HARDWARE JSON ##
@@ -254,13 +249,13 @@ def create_form(form_info_json, form_body_json):
 
     form_item_request = []
 
-    for item in form_body_json:
+    for index, item in enumerate(form_body_json):
         if not item:
             continue
         form_item_request.append({
                     "createItem": {
                         "item": item,
-                        "location": {"index": 0}
+                        "location": {"index": index}
                     }
                 }
         )
@@ -291,7 +286,7 @@ def create_form(form_info_json, form_body_json):
 def main():
     
     ## RESET FORM
-    # clear_form_items()
+    clear_form_items()
 
     ## READ IN INFORMATION FROM THE GOOGLE SHEET
     form_title, doc_title, form_description = read_info_sheet()

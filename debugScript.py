@@ -179,7 +179,11 @@ def build_json(row):
     if q_type in ["", "N/A", "NONE"]:
         return None
 
-    item = {"itemId": item_id, "title": q_text, "questionItem": {"image": image_id, "question": {"required": required}}}
+    item = {"itemId": item_id, "title": q_text, "questionItem": {"question": {"required": required}}}
+    
+    # Only add image if image_id is not empty
+    if image_id:
+        item["questionItem"]["image"] = image_id
 
     if q_type in ["TEXT", "SHORT", "SHORT_TEXT", "FILE_UPLOAD", "FILE UPLOAD"]:
         item["questionItem"]["question"]["textQuestion"] = {"paragraph": False}
@@ -224,19 +228,16 @@ def create_form(form_info_json, form_body_json):
 
     with open("./json_form.json", "w") as f:
         json.dump([], f)
-        form_json = []
         form_json = {
         "formId": FORM_ID,
         "info": form_info_json,
         "settings": {"emailCollectionType": "DO_NOT_COLLECT"},
         "items": form_body_json,
         "revisionId": "",
-        "responderUri": "https://docs.google.com/forms/d/e/1FAIpQLScyMe44vpgeUPfurEH2b-vu0JSTUubJfDCPnMCXcI_fNVzyqg/viewform",
-        "publishSettings": {"publishState": {"isAcceptingResponses": "FALSE", "isPublished" : "FALSE"}}
+        "publishSettings": {"publishState": {"isAcceptingResponses": False, "isPublished" : False}}
         }
         json.dump(form_json, f, indent=4)
-
-    
+        json.dump(form_json, f, indent=4)
     form_info_request = {
         "requests": [
             {
@@ -256,7 +257,7 @@ def create_form(form_info_json, form_body_json):
     for item in form_body_json:
         if not item:
             continue
-        form_item_request.append ({
+        form_item_request.append({
                     "createItem": {
                         "item": item,
                         "location": {"index": 0}
@@ -267,8 +268,15 @@ def create_form(form_info_json, form_body_json):
     form_body_request = {"requests": form_item_request}
     
 
-    forms_service.forms().batchUpdate(formId=FORM_ID, body=form_info_request).execute()
-    forms_service.forms().batchUpdate(formId=FORM_ID, body=form_body_request).execute()
+    try:
+        forms_service.forms().batchUpdate(formId=FORM_ID, body=form_info_request).execute()
+    except Exception as e:
+        print(f"Error updating form info: {e}")
+
+    try:
+        forms_service.forms().batchUpdate(formId=FORM_ID, body=form_body_request).execute()
+    except Exception as e:
+        print(f"Error updating form body: {e}")
 
 
     # form = forms_service.forms().get(formId=FORM_ID).execute()    

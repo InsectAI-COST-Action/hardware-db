@@ -10,6 +10,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import os
 import json
+import copy
 
 #### CONFIGURATION ####
 
@@ -27,6 +28,8 @@ SCOPES = [
     "https://www.googleapis.com/auth/forms.responses.readonly",
     "https://www.googleapis.com/auth/spreadsheets"
 ]
+
+DEBUG = False  # set True to enable verbose item-level debug output
 
 
 BATCH_SIZE = 50
@@ -93,7 +96,7 @@ def read_info_sheet():
     ).execute()
     
     rows = metadata.get('values', [])
-    print("Rows extracted:", rows)
+    # print("Rows extracted:", rows)
 
     if not rows:
         raise ValueError("Sheet metadata missing or incorrect")
@@ -117,7 +120,7 @@ def read_info_sheet():
         if first_col == FORM_TYPE and second_col in keys_to_find:
             results[second_col] = row.get(header[2], "")
 
-    print("Form metadata found:", results)
+    # print("Form metadata found:", results)
 
     form_title = results["formTitle"]
     doc_title = results["docTitle"]
@@ -168,7 +171,7 @@ def build_json(row):
 
     # Section / Page Break
     if q_type in ["SECTION", "SECTION_HEADER", "PAGE_BREAK"]:
-        return {"title": q_text, "description": description, "pageBreakItem": {}}
+        return {"itemId": item_id, "title": q_text, "description": description, "pageBreakItem": {}}
 
     # Skip empty / N/A
     if q_type in ["", "N/A", "NONE"]:
@@ -195,6 +198,10 @@ def build_json(row):
 
     return item
 
+## -------------------- ##
+##     JSON HANDLING    ##
+## -------------------- ##
+
 def create_json_info(form_title, doc_title, form_description):
     form_info_json = {
         "title": form_title,
@@ -219,6 +226,186 @@ def create_json_body(rows):
 
     return form_body_json
 
+## -------------------- ##
+##     FORM SYNCING     ##
+## -------------------- ##
+
+def execute_delete_ops(forms_service, form_id, delete_ops):
+	"""Execute delete requests immediately so subsequent move indices are valid."""
+	if not delete_ops:
+		return
+	try:
+		forms_service.forms().batchUpdate(formId=form_id, body={"requests": delete_ops}).execute()
+		# print(f"Deleted {len(delete_ops)} items")
+	except Exception as e:
+		print(f"Error deleting items: {e}")
+
+def apply_item_updates(forms_service, form_id, valid_items, existing_items):
+    """
+    Performs minimal updates while preserving full question structure
+    to avoid Google Forms API validation errors.
+    """
+
+    def opts_list_from_question(q):
+        return [o.get("value") for o in q.get("choiceQuestion", {}).get("options", [])]
+
+    # Maps for lookup
+    id_to_item = {it.get("itemId"): it for it in existing_items if it.get("itemId")}
+    id_to_index = {it.get("itemId"): i for i, it in enumerate(existing_items) if it.get("itemId")}
+
+    update_ops = []
+
+    for _, desired_item in valid_items:
+        item_id = desired_item.get("itemId")
+        if not item_id or item_id not in id_to_item:
+            print(f"Skipping update: missing or unknown itemId '{item_id}'")
+            continue
+
+        existing_item = id_to_item[item_id]
+        index = id_to_index[item_id]
+
+        diffs = []
+
+        # Compare title / description
+        if (existing_item.get("title") or "") != (desired_item.get("title") or ""):
+            diffs.append("title")
+        if (existing_item.get("description") or "") != (desired_item.get("description") or ""):
+            diffs.append("description")
+
+        # Compare question-level differences
+        ex_q = existing_item.get("questionItem", {}).get("question", {}) or {}
+        des_q = desired_item.get("questionItem", {}).get("question", {}) or {}
+
+        if ex_q.get("required") != des_q.get("required"):
+            diffs.append("question.required")
+
+        if opts_list_from_question(ex_q) != opts_list_from_question(des_q):
+            diffs.append("question.options")
+
+        if not diffs:
+            continue
+
+        print(f"Updating item {item_id}, diffs={diffs}, index={index}")
+
+        # Start with a *deep copy* of the entire existing item
+        update_item = copy.deepcopy(existing_item)
+        update_mask_parts = []
+
+        # Patch title / description
+        if "title" in diffs:
+            update_item["title"] = desired_item.get("title")
+            update_mask_parts.append("title")
+
+        if "description" in diffs:
+            update_item["description"] = desired_item.get("description")
+            update_mask_parts.append("description")
+
+        # Patch inside questionItem
+        q_update_target = update_item.get("questionItem", {}).get("question", {})
+
+        # Required
+        if "question.required" in diffs:
+            q_update_target["required"] = bool(des_q.get("required"))
+            update_mask_parts.append("questionItem.question.required")
+
+        # Options
+        if "question.options" in diffs:
+            desired_choice = des_q.get("choiceQuestion", {})
+            if desired_choice:
+                q_update_target["choiceQuestion"] = desired_choice
+                update_mask_parts.append("questionItem.question.choiceQuestion.options")
+
+        # Build the update request
+        update_ops.append({
+            "updateItem": {
+                "item": update_item,
+                "location": {"index": index},
+                "updateMask": ",".join(update_mask_parts)
+            }
+        })
+
+        print("Prepared updateItem:", json.dumps(update_ops[-1], indent=2))
+
+    # Execute all update ops
+    if not update_ops:
+        print("No item updates needed.")
+        return 0
+
+    try:
+        forms_service.forms().batchUpdate(formId=form_id, body={"requests": update_ops}).execute()
+        print(f"Applied {len(update_ops)} item updates")
+        return len(update_ops)
+    except Exception as e:
+        print("ERROR applying updates:", e)
+        print(json.dumps(update_ops, indent=2))
+        return 0
+
+def simulate_operations(valid_items, existing_items):
+	"""
+	Simulate sequential moves and creates on a local current_order list to produce valid
+	'moveItem' and 'createItem' requests. Returns form_requests (list).
+	"""
+	current_order = [it.get("itemId") for it in existing_items]
+	form_requests = []
+	valid_items_sorted = sorted(valid_items, key=lambda x: x[0])
+
+	for desired_idx, item in valid_items_sorted:
+		# validate desired_idx
+		if desired_idx is None or desired_idx < 0:
+			continue
+		if desired_idx > len(current_order):
+			desired_idx = len(current_order)
+
+		item_id = item.get("itemId", "")
+		if item_id and item_id in current_order:
+			old_idx = current_order.index(item_id)
+			if old_idx != desired_idx:
+				form_requests.append({
+					"moveItem": {
+						"originalLocation": {"index": int(old_idx)},
+						"newLocation": {"index": int(desired_idx)}
+					}
+				})
+				# simulate move
+				val = current_order.pop(old_idx)
+				current_order.insert(desired_idx, val)
+		else:
+			# create (use item as-is; JSON should provide itemId when authoritative)
+			form_requests.append({
+				"createItem": {
+					"item": item,
+					"location": {"index": int(desired_idx)}
+				}
+			})
+			# simulate insertion: if item has itemId, insert it so later ops can reference it
+			current_order.insert(desired_idx, item_id or f"_tmp_{len(current_order)}")
+
+	return form_requests
+
+def apply_moves_creates(forms_service, form_id, form_info_request, form_requests):
+	"""Apply form info update (already minimal) and the moves/creates batch; return counts summary."""
+	# apply form info (title/description)
+	try:
+		forms_service.forms().batchUpdate(formId=form_id, body=form_info_request).execute()
+	except Exception as e:
+		print(f"Error updating form info: {e}")
+
+	if not form_requests:
+		# nothing else to do
+		return {"moves": 0, "creates": 0, "total": 0}
+
+	form_body_request = {"requests": form_requests}
+	try:
+		resp = forms_service.forms().batchUpdate(formId=form_id, body=form_body_request).execute()
+		replies = resp.get("replies", []) if resp else []
+		moves = sum(1 for r in replies if "moveItem" in r)
+		creates = sum(1 for r in replies if "createItem" in r)
+		# print(f"Applied batch: moves={moves}, creates={creates}, total_replies={len(replies)}")
+		return {"moves": moves, "creates": creates, "total": len(replies)}
+	except Exception as e:
+		# print(f"Error updating form body: {e}")
+		return {"moves": 0, "creates": 0, "total": 0}
+
 def create_form(form_info_json, form_body_json):
 
     with open("./json_form.json", "w") as f:
@@ -233,6 +420,7 @@ def create_form(form_info_json, form_body_json):
         }
         json.dump(form_json, f, indent=4)
         json.dump(form_json, f, indent=4)
+    
     form_info_request = {
         "requests": [
             {
@@ -247,47 +435,41 @@ def create_form(form_info_json, form_body_json):
         ]
     }
 
-    form_item_request = []
+    # Fetch existing form
+    existing_form = forms_service.forms().get(formId=FORM_ID).execute()
+    existing_items = existing_form.get("items", [])
+    existing_ids = {item.get("itemId"): idx for idx, item in enumerate(existing_items)}
 
-    for index, item in enumerate(form_body_json):
-        if not item:
-            continue
-        form_item_request.append({
-                    "createItem": {
-                        "item": item,
-                        "location": {"index": index}
-                    }
-                }
-        )
+    # Filter out None items from form_body_json
+    valid_items = [(idx, item) for idx, item in enumerate(form_body_json) if item]
+    new_ids = {item.get("itemId"): idx for idx, item in valid_items}
 
-    form_body_request = {"requests": form_item_request}
-    
+    # Step 1: Delete items not present in JSON
+    delete_ops = []
+    for existing_id in sorted(existing_ids.keys(), key=lambda x: existing_ids[x], reverse=True):
+        if existing_id and existing_id not in new_ids:
+            # find index once
+            index = existing_ids.get(existing_id)
+            if index is not None:
+                delete_ops.append({"deleteItem": {"location": {"index": index}}})
 
-    try:
-        forms_service.forms().batchUpdate(formId=FORM_ID, body=form_info_request).execute()
-    except Exception as e:
-        print(f"Error updating form info: {e}")
+    # execute deletes and refresh
+    execute_delete_ops(forms_service, FORM_ID, delete_ops)
+    existing_form = forms_service.forms().get(formId=FORM_ID).execute()
+    existing_items = existing_form.get("items", [])
+    # Step 2: apply per-item content updates
+    apply_item_updates(forms_service, FORM_ID, valid_items, existing_items)
+    # refresh items for accurate indices
+    existing_form = forms_service.forms().get(formId=FORM_ID).execute()
+    existing_items = existing_form.get("items", [])
+    # Step 3: simulate moves/creates and apply them
+    form_requests = simulate_operations(valid_items, existing_items)
+    summary = apply_moves_creates(forms_service, FORM_ID, form_info_request, form_requests)
 
-    try:
-        forms_service.forms().batchUpdate(formId=FORM_ID, body=form_body_request).execute()
-    except Exception as e:
-        print(f"Error updating form body: {e}")
-
-
-    # form = forms_service.forms().get(formId=FORM_ID).execute()    
-    # form_request = {"requests": form_body_json}
-    # form_created = forms_service.forms().create(body=form_body_json).execute()
-    # print("Created form with ID:", form_created["formId"])
-    # print("Form updated")
-    # forms_service.forms().batchUpdate(formId=FORM_ID, body=form_request).execute()
-    print("Form title updated")
-
+    # print(f"Form sync complete: {summary}")
 
 def main():
     
-    ## RESET FORM
-    clear_form_items()
-
     ## READ IN INFORMATION FROM THE GOOGLE SHEET
     form_title, doc_title, form_description = read_info_sheet()
     header, rows = read_body_sheet()
@@ -296,24 +478,6 @@ def main():
     create_form(form_info_json, form_body_json)
     read_form()
 
-    ## WRITE INFORMATION FROM THE GOOGLE SHEET INTO A JSON FILE
-    # build_json()
-
-    ## DISPLAY INFORMATION FROM GOOGLE SHEET TO CHECK/DEBUG
-    ## print("HELLO THIS IS WORKING", doc_title, form_title, form_description)
-
-    # Initialise the file ONLY ONC
-    
-
-    
-            # json.dump(item, f)
-
-    # print(form_body)
-
-
-    ## WRITE TO EXISTING FORM ID DECLARED AT THE START OF THE SCRIPT
-
-    
    
 if __name__ == "__main__":
     main()

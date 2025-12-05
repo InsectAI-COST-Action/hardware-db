@@ -1,6 +1,8 @@
 <h1> Insect AI Hardware Database </h1>
 
-<img src="https://raw.githubusercontent.com/InsectAI-COST-Action/hardware-db/refs/heads/main/Hardware-dtb-image.png?token=GHSAT0AAAAAADPVNV2W44XLNXQH4JT34DI62JR32EA" width="540">
+<p align="center">
+<img src="./assets/Hardware-dtb-image.png" width="540"/>
+</p>
 
 <h2> Data submission pipeline for documentating of Insect AI hardware </h2>
 

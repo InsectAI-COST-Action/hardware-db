@@ -26,11 +26,11 @@ OAUTH_CLIENT_JSON = "C:/Users/gsmit/OneDrive/Documents/01_Career/03_Academia/05_
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body",
     "https://www.googleapis.com/auth/forms.responses.readonly",
-    "https://www.googleapis.com/auth/spreadsheets"
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
 ]
 
 DEBUG = False  # set True to enable verbose item-level debug output
-
 
 BATCH_SIZE = 50
 REQUIRED_FIELDS = ["question", "type", "formItemID"]
@@ -56,6 +56,7 @@ if not creds or not creds.valid:
 #### API SERVICES ####
 sheets_service = build("sheets", "v4", credentials=creds)
 forms_service = build("forms", "v1", credentials=creds)
+drive_service = build("drive", "v3", credentials=creds)
 
 ## --------------------------------------------------------------------------------------------- ##
 ## ---------------------------------------## FUNCTIONS ##--------------------------------------- ##
@@ -203,6 +204,16 @@ def build_json(row):
 ## -------------------- ##
 
 def create_json_info(form_title, doc_title, form_description):
+    
+    # Document title has to be updated directly via the Drive API and this is done here
+    rename = drive_service.files().update(
+    fileId=FORM_ID,
+    body={"name": doc_title},
+    fields="id, name"
+    ).execute()
+
+    print(f"Updated Drive file name to: {rename['name']}")
+    
     form_info_json = {
         "title": form_title,
         "documentTitle": doc_title,

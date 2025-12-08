@@ -15,8 +15,8 @@ import copy
 #### CONFIGURATION ####
 
 # Define constants which can be changed depending on form of interest - may change this later to have a basic formID too
-FORM_ID = "19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc"
-SHEETS_URL = "1DClwffVrkrwH0G5nuCVCJVVoLLdueuqHdJ_VXWPc_Pg"
+FORM_ID = "1skt2r59S_EZ6Osgp_s4XlVuRmm1DJEuuBmf6VtRQdE4"
+SHEETS_URL = "1nHGSLz4uwX9LUz91rZyvWalkX2ja1LEfwRXlYI-ific"
 SHEETS_RANGE = 'Master!A1:R100'
 SHEETS_METADATA_RANGE = 'FormSettings!A1:C10'
 

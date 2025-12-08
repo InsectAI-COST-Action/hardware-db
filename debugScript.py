@@ -20,7 +20,7 @@ SHEETS_URL = "1nHGSLz4uwX9LUz91rZyvWalkX2ja1LEfwRXlYI-ific"
 SHEETS_RANGE = 'Master!A1:R100'
 SHEETS_METADATA_RANGE = 'FormSettings!A1:C10'
 
-OAUTH_CLIENT_JSON = "C:/Users/gsmit/OneDrive/Documents/01_Career/03_Academia/05_PhD_Pollinator_diversity/16_STSM/insect-hdb_workspace/oauth_client.json"
+OAUTH_CLIENT_JSON = "D:\\hardware-db\\oatuh_client-WSL_laptop.json"
 
 # The scope within which the API has been declared to operate i.e. now the forms body can be edited, and so can the whole spreadsheet, but not the forms responses
 SCOPES = [

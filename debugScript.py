@@ -11,6 +11,7 @@ from googleapiclient.discovery import build
 import os
 import json
 import copy
+import csv
 
 #### CONFIGURATION ####
 
@@ -20,7 +21,10 @@ SHEETS_URL = "1nHGSLz4uwX9LUz91rZyvWalkX2ja1LEfwRXlYI-ific"
 SHEETS_RANGE = 'Master!A1:R100'
 SHEETS_METADATA_RANGE = 'FormSettings!A1:C10'
 
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\oatuh_client-WSL_laptop.json"
+OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+
+# add export directory (relative to this script)
+EXPORT_DIR = os.path.join(os.path.dirname(__file__), "export")
 
 # The scope within which the API has been declared to operate i.e. now the forms body can be edited, and so can the whole spreadsheet, but not the forms responses
 SCOPES = [
@@ -57,6 +61,9 @@ if not creds or not creds.valid:
 sheets_service = build("sheets", "v4", credentials=creds)
 forms_service = build("forms", "v1", credentials=creds)
 drive_service = build("drive", "v3", credentials=creds)
+
+# ensure export directory exists
+os.makedirs(EXPORT_DIR, exist_ok=True)
 
 ## --------------------------------------------------------------------------------------------- ##
 ## ---------------------------------------## FUNCTIONS ##--------------------------------------- ##
@@ -152,7 +159,8 @@ def read_body_sheet():
 def read_form():
     form_existing_json = forms_service.forms().get(formId=FORM_ID).execute()
 
-    with open("./json_existing.json", "w") as f:
+    # write to export directory
+    with open(os.path.join(EXPORT_DIR, "json_existing.json"), "w") as f:
         json.dump([], f)
         json.dump(form_existing_json, f, indent=4)    
     
@@ -220,13 +228,15 @@ def create_json_info(form_title, doc_title, form_description):
         "description": form_description
     }
 
-    with open("./json_info.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_info.json"), "w") as f:
         json.dump(form_info_json, f, indent=4)
 
     return form_info_json
 
 def create_json_body(rows):
-    with open("./json_body.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_body.json"), "w") as f:
         json.dump([], f)
         form_body_json = []
         for row in rows:
@@ -419,7 +429,8 @@ def apply_moves_creates(forms_service, form_id, form_info_request, form_requests
 
 def create_form(form_info_json, form_body_json):
 
-    with open("./json_form.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_form.json"), "w") as f:
         json.dump([], f)
         form_json = {
         "formId": FORM_ID,

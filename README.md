@@ -28,10 +28,23 @@ This is the [Master Sheet](https://docs.google.com/spreadsheets/d/1DClwffVrkrwH0
 
 This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc/edit) for detailed entry submission.
 
+# ToDos
+- [ ] Refactor big script into helper functions script, and various targeted script
+    - [ ] Bonus: add argparse to add exports, dry run and verbosity levels. 
+    - [x] move export into dedicated folder
+- [ ] Add github pages automation
+    - [ ] need to investigate the best way to store credentials
+- [ ] Create (or do we have one already?)  InsectAI Gmail account that an own the various spreadsheets, forms and eventually GDrive with the uploaded pictures. 
+- [ ] Restructure the README so that it has a quickstart section for contributors and link to the data at the top, explanation and maintenance notes after. 
+
+*Only after discussing with Graham & others:*
+- [ ] Change to new workflow with JSON-based database ontology that propagates in Google forms. 
+- [ ] Prepare exports in an easily accessible format: one JSON file per device (+ picture) or one single CSV dump for all devices (+link to pics)?
+
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Luca's dev notes</h2></summary>
 
-## Authorising Google API and running locally
+### Authorising Google API and running locally
 
 To test if the script compiles correctly, I need to authorise locally the script to access the Master Sheet and (?) the form. 
 

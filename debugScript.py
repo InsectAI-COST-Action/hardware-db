@@ -490,6 +490,90 @@ def create_form(form_info_json, form_body_json):
 
     # print(f"Form sync complete: {summary}")
 
+def read_form_responses():
+    """Fetch all responses from the Google Form."""
+    try:
+        result = forms_service.forms().responses().list(formId=FORM_ID).execute()
+        responses = result.get('responses', [])
+        return responses
+    except Exception as e:
+        print(f"Error fetching responses: {e}")
+        return []
+
+def export_responses_json(responses, filename="form_responses.json"):
+    """Export responses to JSON file with question titles instead of item IDs."""
+    # Get form structure for question mapping
+    form = forms_service.forms().get(formId=FORM_ID).execute()
+    items = form.get('items', [])
+    
+    # Map itemId to question title
+    id_to_question = {item.get('itemId'): item.get('title', 'Unknown') for item in items}
+    
+    # Transform responses with question titles
+    transformed_responses = []
+    for response in responses:
+        transformed_response = {
+            'responseId': response.get('responseId'),
+            'timestamp': response.get('createTime', ''),
+            'answers': {}
+        }
+        
+        answers = response.get('answers', {})
+        for item_id, answer_data in answers.items():
+            question_title = id_to_question.get(item_id, item_id)
+            
+            # Extract answer value
+            if 'textAnswers' in answer_data:
+                text_answers = answer_data['textAnswers'].get('answers', [])
+                transformed_response['answers'][question_title] = ', '.join([a.get('value', '') for a in text_answers])
+            else:
+                transformed_response['answers'][question_title] = answer_data
+        
+        transformed_responses.append(transformed_response)
+    
+    # write into export directory
+    fullpath = os.path.join(EXPORT_DIR, filename)
+    with open(fullpath, 'w') as f:
+        json.dump(transformed_responses, f, indent=4)
+    print(f"Exported {len(transformed_responses)} responses to {fullpath}")
+
+def export_responses_csv(responses, header, filename="form_responses.csv"):
+    """Export responses to CSV file."""
+    # Get form structure for question mapping
+    form = forms_service.forms().get(formId=FORM_ID).execute()
+    items = form.get('items', [])
+    
+    # Map itemId to question title
+    id_to_question = {item.get('itemId'): item.get('title', 'Unknown') for item in items}
+    
+    # Flatten responses into rows
+    rows = []
+    for response in responses:
+        row = {'responseId': response.get('responseId'), 'timestamp': response.get('createTime', '')}
+        answers = response.get('answers', {})
+        
+        for item_id, answer_data in answers.items():
+            question_title = id_to_question.get(item_id, item_id)
+            # Extract text or choice answer
+            if 'textAnswers' in answer_data:
+                text_answers = answer_data['textAnswers'].get('answers', [])
+                row[question_title] = ', '.join([a.get('value', '') for a in text_answers])
+            else:
+                row[question_title] = str(answer_data)
+        
+        rows.append(row)
+    
+    # Write CSV into export directory
+    if rows:
+        fullpath = os.path.join(EXPORT_DIR, filename)
+        with open(fullpath, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=list(set().union(*(r.keys() for r in rows))))
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"Exported {len(rows)} responses to {fullpath}")
+    else:
+        print("No responses to export")
+
 def main():
     
     ## READ IN INFORMATION FROM THE GOOGLE SHEET
@@ -498,7 +582,10 @@ def main():
     form_info_json = create_json_info(form_title, doc_title, form_description)
     form_body_json = create_json_body(rows)
     create_form(form_info_json, form_body_json)
-    read_form()
+    responses = read_form_responses()
+    export_responses_json(responses)
+    export_responses_csv(responses, header)
+
 
    
 if __name__ == "__main__":

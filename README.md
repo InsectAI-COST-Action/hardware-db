@@ -1,3 +1,5 @@
+⚠ Luca: I used this branch to modify the code run locally on my machine, as wella s using Google Sheets and Forms that I owned, to test transferability.  No further fetaure development beyond should be pushed here. ⚠
+
 # Insect AI Hardware Database
 
 <p align="center">
@@ -27,6 +29,13 @@ This is the [Master Sheet](https://docs.google.com/spreadsheets/d/1DClwffVrkrwH0
 #### Submission forms
 
 This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc/edit) for detailed entry submission.
+
+> [!CAUTION]
+> If, when running any of the scripts, you get an error like: 
+>``` python
+>google.auth.exceptions.RefreshError: ('invalid_grant: Bad Request', {'error': 'invalid_grant', 'error_description': 'Bad Request'})
+>```
+>It just means that the token is expired and re-authentication workflow is stuck. Simply remove the file `token.json` that gets saved in the same dir as the script and authenticate again. 
 
 # ToDos
 - [ ] Refactor big script into helper functions script, and various targeted script

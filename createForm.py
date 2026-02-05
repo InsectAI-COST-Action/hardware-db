@@ -1,17 +1,23 @@
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+from datetime import datetime
 import json
+
+
+DB_VERSION = "v0.1"
 
 creds = Credentials.from_authorized_user_file(
     "token.json",
-    scopes=["https://www.googleapis.com/auth/forms.body"]
+    scopes=["https://www.googleapis.com/auth/forms.body",
+            "https://www.googleapis.com/auth/drive",
+            ]
 )
 
-service = build("forms", "v1", credentials=creds)
-
+forms_service = build("forms", "v1", credentials=creds)
+drive_service = build("drive", "v3", credentials=creds)
 
 ### Create form
-form = service.forms().create(
+form = forms_service.forms().create(
     body={"info": {"title": "Multi-section test form from API"}}
 ).execute()
 
@@ -22,7 +28,15 @@ form_id = form["formId"]
 with open("formMultisectionTest.json", "r") as f:
     requests = json.load(f)
 
-service.forms().batchUpdate(
+forms_service.forms().batchUpdate(
     formId=form_id,
     body={"requests": requests}
+).execute()
+
+### Rename the form in Drive
+drive_service.files().update(
+    fileId=form_id,
+    body={
+        "name": "f{datetime.today().strftime('%Y-%m-%dT%H:%M:%S')} - InsectAI hardware database submission form, f{DB_VERSION}"
+    }
 ).execute()

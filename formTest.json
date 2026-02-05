@@ -1,0 +1,20 @@
+{
+    "createItem": {
+        "item": {
+            "title": "Are you adding new questions instead of erasing everything",
+            "questionItem": {
+                "question": {
+                    "required": true,
+                    "choiceQuestion": {
+                        "type": "RADIO",
+                        "options": [
+                            {"value": "Yep"},
+                            {"value": "Nope"}
+                        ]
+                    }
+                }
+            }
+        },
+        "location": {"index": 0}
+    }
+}

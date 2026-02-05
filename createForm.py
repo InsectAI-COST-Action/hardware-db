@@ -10,16 +10,16 @@ creds = Credentials.from_authorized_user_file(
 service = build("forms", "v1", credentials=creds)
 
 
-# ### Create form
-# form = service.forms().create(
-#     body={"info": {"title": "Test form from API"}}
-# ).execute()
+### Create form
+form = service.forms().create(
+    body={"info": {"title": "Multi-section test form from API"}}
+).execute()
 
-# form_id = form["formId"]
-form_id = "1b3EvmixvLWugaq8wnKANgeGrWxMC6Dr5V65KkSWbgig" # override ID for testing
+form_id = form["formId"]
+# form_id = "1b3EvmixvLWugaq8wnKANgeGrWxMC6Dr5V65KkSWbgig" # override ID for testing
 
 ### Using batch updates to input questions into form
-with open("formtest.json", "r") as f:
+with open("formMultisectionTest.json", "r") as f:
     requests = json.load(f)
 
 service.forms().batchUpdate(

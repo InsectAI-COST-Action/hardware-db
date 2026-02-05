@@ -37,6 +37,6 @@ forms_service.forms().batchUpdate(
 drive_service.files().update(
     fileId=form_id,
     body={
-        "name": "f{datetime.today().strftime('%Y-%m-%dT%H:%M:%S')} - InsectAI hardware database submission form, f{DB_VERSION}"
+        "name": f"{datetime.today().strftime('%Y-%m-%d_%H:%M:%S')} - InsectAI hardware database submission form, {DB_VERSION}"
     }
 ).execute()

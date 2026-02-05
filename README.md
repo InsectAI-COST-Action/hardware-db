@@ -22,6 +22,8 @@ Re-implementation TODO list:
 
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 
 
+The way this works currently is that it creates a new form with every rerun; *does not* append questions to existing form. The idea is that we could trigger re-building of the form upon changes to the underlying JSON ontology. For that, will need to implement a versioning or tagging system to keep track of which form is generated from which ontology. 
+
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Original README contents</h2></summary>
 # [OLD] Insect AI Hardware Database

@@ -8,6 +8,18 @@ DATABASE STRUCTURE JSON --- createForms.py ---> FULL FORM
 FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 ```
 
+Re-implementation TODO list: 
+- [x] Proof of concept JSON to Google Form
+- [ ] Transfer over actual questions into JSON format: 
+    - [ ] Basic form: [Form link](https://docs.google.com/forms/d/1mXaEkw1lydgeE5Ld0X5j2Xp82ABDgnQeQ79CvEJi_UQ/edit) or in `json_body.json` + `json_form.json` if generated from that. 
+    - [ ] Full form: [Form link](https://docs.google.com/forms/d/1k7RsEdOJrLW6ZDwOTHNdgDH2VSYWETfCI-1HyznB0m8/edit) or in `json_body.json` + `json_form.json` if generated from that. 
+- [ ] Implement collecting answers and parsing into human-readable JSON
+    - [ ] what about attached pictures?
+- [ ] Develop CI/CD workflow on Github
+*Extras*
+- [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
+- [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
+
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 
 
 <details>   <!-- this is to begin the "spoiler section" -->

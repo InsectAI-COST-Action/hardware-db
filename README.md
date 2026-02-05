@@ -8,6 +8,7 @@ DATABASE STRUCTURE JSON --- createForms.py ---> FULL FORM
 FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 ```
 
+Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 
 
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Original README contents</h2></summary>

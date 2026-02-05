@@ -25,8 +25,12 @@ Proof of concept with `createForm.py` and JSON-based questions successful. We ca
 
 The way this works currently is that it creates a new form with every rerun; *does not* append questions to existing form. The idea is that we could trigger re-building of the form upon changes to the underlying JSON ontology. For that, will need to implement a versioning or tagging system to keep track of which form is generated from which ontology. 
 
+> [!TIP]
+> Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!
+
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Original README contents</h2></summary>
+
 # [OLD] Insect AI Hardware Database
 
 <p align="center">

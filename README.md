@@ -1,6 +1,17 @@
 ⚠ Luca: I used this branch to modify the code run locally on my machine, as wella s using Google Sheets and Forms that I owned, to test transferability.  No further fetaure development beyond should be pushed here. ⚠
 
-# Insect AI Hardware Database
+# Redesigning approach dev notes
+
+The general idea is to implement this workflow: 
+```
+DATABASE STRUCTURE JSON --- createForms.py ---> FULL FORM
+FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
+```
+
+
+<details>   <!-- this is to begin the "spoiler section" -->
+  <summary><h2>Original README contents</h2></summary>
+# [OLD] Insect AI Hardware Database
 
 <p align="center">
 <img src="./assets/Hardware-dtb-image.png" width="540"/>
@@ -29,6 +40,8 @@ This is the [Master Sheet](https://docs.google.com/spreadsheets/d/1DClwffVrkrwH0
 #### Submission forms
 
 This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc/edit) for detailed entry submission.
+
+</details>   <!-- this is to end the "spoiler section" -->
 
 > [!CAUTION]
 > If, when running any of the scripts, you get an error like: 

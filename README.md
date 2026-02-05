@@ -14,6 +14,7 @@ Re-implementation TODO list:
     - [ ] Basic form: [Form link](https://docs.google.com/forms/d/1mXaEkw1lydgeE5Ld0X5j2Xp82ABDgnQeQ79CvEJi_UQ/edit) or in `json_body.json` + `json_form.json` if generated from that. 
     - [ ] Full form: [Form link](https://docs.google.com/forms/d/1k7RsEdOJrLW6ZDwOTHNdgDH2VSYWETfCI-1HyznB0m8/edit) or in `json_body.json` + `json_form.json` if generated from that. 
 - [ ] Implement collecting answers and parsing into human-readable JSON
+    - [ ] how to track response spreadsheet when form is re-generated at every JSON update?
     - [ ] what about attached pictures?
 - [ ] Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)
 - [ ] Develop CI/CD workflow on Github

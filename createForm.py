@@ -101,13 +101,47 @@ def main():
     form = forms_service.forms().create(
         body={
             "info": {
-                "title": schema["info"]["title"],
-                "description": schema["info"].get("description", "")
+                "title": schema["info"]["title"]
             }
         }
     ).execute()
 
     form_id = form["formId"]
+    
+    # -----------------------------------------------------------------
+    # 1b. Add description and any top‑level settings
+    # -----------------------------------------------------------------
+    form_updates = []
+
+    # description
+    if "description" in schema["info"]:
+        desc_text = schema["info"]["description"].replace("\\n", "\n")
+        form_updates.append({
+            "updateFormInfo": {
+            "info": {"description": desc_text},
+            "updateMask": "description"
+            }
+        })
+
+    # # settings (email collection, etc.)
+    # if "settings" in schema:
+    #     # Example: only emailCollectionType is defined in your schema
+    #     form_updates.append({
+    #         "updateSettings": {
+    #             "settings": {
+    #                 "emailCollectionType": schema["settings"].get(
+    #                     "emailCollectionType", "DO_NOT_COLLECT"
+    #                 )
+    #             },
+    #             "updateMask": "settings.emailCollectionType"
+    #         }
+    #     })
+
+    if form_updates:
+        forms_service.forms().batchUpdate(
+            formId=form_id,
+            body={"requests": form_updates}
+        ).execute()
 
     # -------------------------------------------------
     # 2. Create sections + questions (NO logic yet)

@@ -3,11 +3,46 @@ from googleapiclient.discovery import build
 from datetime import datetime
 import json
 
-### Variables
+### =====================
+### CONFIG
+### =====================
 DB_VERSION = "v0.1"
+SCOPES = [
+    "https://www.googleapis.com/auth/forms.body",
+    "https://www.googleapis.com/auth/drive",
+]
 
-### Functions
-def build_question_item(q):
+SCHEMA_FILE = "hardware-db_schema.json"
+TOKEN_FILE = "token.json"
+
+
+### =====================
+### HELPERS
+### =====================
+def build_choice_options(q, section_id_map=None):
+    options = []
+
+    for opt in q["options"]:
+        option = {"value": opt}
+
+        # Only resolve logic if section_id_map is provided
+        if section_id_map and "logic" in q:
+            logic = q["logic"].get(opt)
+            if logic:
+                target = logic["go_to"]
+
+                if target == "next":
+                    option["goToAction"] = "NEXT_SECTION"
+                elif target == "submit":
+                    option["goToAction"] = "SUBMIT_FORM"
+                else:
+                    option["goToSectionId"] = section_id_map[target]
+
+        options.append(option)
+
+    return options
+
+def build_question_item(q, section_id_map=None):
     question = {"required": q.get("required", False)}
 
     if q["type"] == "text":
@@ -18,7 +53,7 @@ def build_question_item(q):
     elif q["type"] == "choice":
         question["choiceQuestion"] = {
             "type": q.get("choiceType", "RADIO"),
-            "options": [{"value": opt} for opt in q["options"]]
+            "options": build_choice_options(q, section_id_map)
         }
 
     elif q["type"] == "scale":
@@ -35,86 +70,138 @@ def build_question_item(q):
         "questionItem": {"question": question}
     }
 
-def build_section_item(section):
-    return {
-        "title": section["title"],
-        "pageBreakItem": {}
-    }
-
-def flatten_form(schema):
-    items = []
-
-    for section in schema["sections"]:
-        # Section header
-        items.append(build_section_item(section))
-
-        # Section questions
-        for q in section.get("questions", []):
-            items.append(build_question_item(q))
-
-    return items
-
 def build_batch_requests(items):
-    requests = []
-    for idx, item in enumerate(items):
-        requests.append({
+    return [
+        {
             "createItem": {
                 "item": item,
                 "location": {"index": idx}
             }
-        })
-    return requests
-
-### Load JSON schema & authenticate
-with open("hardware-db_schema.json") as f:
-    schema = json.load(f)
-
-creds = Credentials.from_authorized_user_file(
-    "token.json",
-    scopes=["https://www.googleapis.com/auth/forms.body",
-            "https://www.googleapis.com/auth/drive",
-            ]
-)
-
-forms_service = build("forms", "v1", credentials=creds)
-drive_service = build("drive", "v3", credentials=creds)
-
-### Create form
-form = forms_service.forms().create(
-    body={
-        "info": {
-            "title": schema["info"]["title"],
-            # "description": schema["info"].get("description", "") ## I'LL NEED TO ADD IT BACK LATER WITH batchUpdate()
         }
-    }
-).execute()
+        for idx, item in enumerate(items)
+    ]
 
-form_id = form["formId"]
-# form_id = "1b3EvmixvLWugaq8wnKANgeGrWxMC6Dr5V65KkSWbgig" # override ID for testing
 
-### Build items
-items = flatten_form(schema)
-requests = build_batch_requests(items)
+### =====================
+### MAIN
+### =====================
+def main():
+    # Load schema
+    with open(SCHEMA_FILE) as f:
+        schema = json.load(f)
 
-### Apply structure
-forms_service.forms().batchUpdate(
-    formId=form_id,
-    body={"requests": requests}
-).execute()
+    # Authenticate
+    creds = Credentials.from_authorized_user_file(TOKEN_FILE, scopes=SCOPES)
+    forms_service = build("forms", "v1", credentials=creds)
+    drive_service = build("drive", "v3", credentials=creds)
 
-# ### Using batch updates to input questions into form
-# with open("formMultisectionTest.json", "r") as f:
-#     requests = json.load(f)
-# 
-# forms_service.forms().batchUpdate(
-#     formId=form_id,
-#     body={"requests": requests}
-# ).execute()
+    # -------------------------------------------------
+    # 1. Create empty form
+    # -------------------------------------------------
+    form = forms_service.forms().create(
+        body={
+            "info": {
+                "title": schema["info"]["title"],
+                "description": schema["info"].get("description", "")
+            }
+        }
+    ).execute()
 
-### Rename the form in Drive
-drive_service.files().update(
-    fileId=form_id,
-    body={
-        "name": f"{datetime.today().strftime('%Y-%m-%d_%H:%M:%S')} - InsectAI hardware database submission form, {DB_VERSION}"
-    }
-).execute()
+    form_id = form["formId"]
+
+    # -------------------------------------------------
+    # 2. Create sections + questions (NO logic yet)
+    # -------------------------------------------------
+    items = []
+    section_positions = {}  # section_id → index in item list
+
+    for section in schema["sections"]:
+        section_positions[section["id"]] = len(items)
+
+        # Section header
+        items.append({
+            "title": section["title"],
+            "pageBreakItem": {}
+        })
+
+        # Questions in this section
+        for q in section["questions"]:
+            items.append(build_question_item(q))
+
+    resp = forms_service.forms().batchUpdate(
+        formId=form_id,
+        body={"requests": build_batch_requests(items)}
+    ).execute()
+
+    # -------------------------------------------------
+    # 3. Map symbolic section IDs → Google itemIds
+    # -------------------------------------------------
+    section_id_map = {}
+    replies = resp["replies"]
+
+    for section_id, item_index in section_positions.items():
+        section_id_map[section_id] = replies[item_index]["createItem"]["itemId"]
+
+    # -------------------------------------------------
+    # 4. Patch branching logic (choice questions only)
+    # -------------------------------------------------
+    logic_requests = []
+    reply_index = 0          # keeps the position of the current item in the form
+    section_start_indices = {}   # map section id → first item index (pageBreak)
+
+    for section in schema["sections"]:
+        # The pageBreak that starts the section occupies one index
+        section_start_indices[section["id"]] = reply_index
+        reply_index += 1      # pageBreak itself
+
+        for q in section["questions"]:
+            if q["type"] == "choice" and "logic" in q:
+                # The item that holds the question is the next index after the pageBreak
+                item_id = replies[reply_index]["createItem"]["itemId"]
+
+                # Build the update request – note the added `location`
+                logic_requests.append({
+                    "updateItem": {
+                        "item": {
+                            "itemId": item_id,
+                            "questionItem": {
+                                "question": {
+                                    "choiceQuestion": {
+                                        "type": q.get("choiceType", "RADIO"),
+                                        "options": build_choice_options(q, section_id_map)
+                                    }
+                                }
+                            }
+                        },
+                        "location": {
+                            "index": reply_index
+                        },
+                        "updateMask": "questionItem.question.choiceQuestion"
+                    }
+                })
+            
+            reply_index += 1
+    
+    if logic_requests:
+        forms_service.forms().batchUpdate(
+            formId=form_id,
+            body={"requests": logic_requests}
+        ).execute()
+
+    # -------------------------------------------------
+    # 5. Rename Drive file
+    # -------------------------------------------------
+    drive_service.files().update(
+        fileId=form_id,
+        body={
+            "name": f"{datetime.today().strftime('%Y-%m-%d_%H:%M:%S')} "
+                    f"- InsectAI hardware database submission form ({DB_VERSION})"
+        }
+    ).execute()
+
+    print("Form created successfully:")
+    print(f"https://docs.google.com/forms/d/{form_id}/edit")
+
+
+if __name__ == "__main__":
+    main()

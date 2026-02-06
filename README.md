@@ -105,6 +105,17 @@ Example JSON schema below:
     }
 }
 ```
+Trying to add logic handling from the JSON schema, using unique `id`s as anchors. 
+
+Adding `logic` block to JSON, that has a `got_to` key that maps to API actions: 
+
+| Value          | API equivalent                        | Meaning              |
+| -------------- | ------------------------------------- | -------------------- |
+| `"section_id"` | `goToSectionId: "<pageBreak itemId>"` | Jump to that section |
+| `"next"`       | `goToAction: "NEXT_SECTION"`          | Go to next section   |
+| `"submit"`     | `goToAction: "SUBMIT_FORM"`           | Submit form          |
+
+Now testing new parser... 
 
 
 > [!TIP]

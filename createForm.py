@@ -42,6 +42,12 @@ def build_choice_options(q, section_id_map=None):
 
     return options
 
+def build_section_header(section):
+    hdr = {"title": section["title"], "pageBreakItem": {}}
+    if "description" in section and section["description"]:
+        hdr["description"] = section["description"]
+    return hdr
+
 def build_question_item(q, section_id_map=None):
     question = {"required": q.get("required", False)}
 
@@ -65,10 +71,10 @@ def build_question_item(q, section_id_map=None):
     else:
         raise ValueError(f"Unknown question type: {q['type']}")
 
-    return {
-        "title": q["title"],
-        "questionItem": {"question": question}
-    }
+    item = {"title": q["title"], "questionItem": {"question": question}}
+    if "description" in q and q["description"]:
+        item["description"] = q["description"]
+    return item
 
 def build_batch_requests(items):
     return [
@@ -153,10 +159,7 @@ def main():
         section_positions[section["id"]] = len(items)
 
         # Section header
-        items.append({
-            "title": section["title"],
-            "pageBreakItem": {}
-        })
+        items.append(build_section_header(section))
 
         # Questions in this section
         for q in section["questions"]:

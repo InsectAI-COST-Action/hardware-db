@@ -46,6 +46,66 @@ Importantly, the `id` field is what I will use to collect the answers, as a shor
 
 The order the questions will appear in the form is determined by their order within the JSON, nested within `section[]`. 
 
+The general syntax is as follows: 
+ - There's an `info` block, that contains general details for form. 
+ - This is followed by `settings`, currently only manages whether sign-in is required. 
+ - Then there's the `section` block, that takes a unique `id` and other details
+ - Nested within `section`, there's `questions`, that itself takes a unique `id` and the question, its description and type as well as allowed options (for some types). 
+
+Within-block syntax follows quite closely Google Forms API's syntax. 
+Example JSON schema below:
+```json
+{
+  "info": {
+    "title": "The form title here (not the file name)",
+    "description": "You description here."
+  },
+  "settings": {
+    "emailCollectionType": "DO_NOT_COLLECT"
+  },
+  "sections": [
+    {
+      "id": "sec1",
+      "title": "Section 1",
+      "description": null,
+      "questions": [
+        {
+          "id": "q1",
+          "title": "Question 1",
+          "required": true,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Yes",
+            "No"
+          ]
+        },
+        {
+          "id": "q2",
+          "title": "Question 2",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "sec2",
+      "title": "Section 2",
+      "description": "Your section description here.",
+      "questions": [
+        {
+          "id": "q3",
+          "title": "Question 3",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    }
+}
+```
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

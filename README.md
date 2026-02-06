@@ -42,6 +42,10 @@ Also added section and questions syntax to improves readability and facilitates 
 | Section order  | insertion order    |
 | Symbolic `id`  | not sent to Google |
 
+Importantly, the `id` field is what I will use to collect the answers, as a shorthand for the question. It needs to be unique. 
+
+The order the questions will appear in the form is determined by their order within the JSON, nested within `section[]`. 
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

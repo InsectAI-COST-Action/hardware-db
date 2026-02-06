@@ -22,9 +22,26 @@ Re-implementation TODO list:
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 
+## Proof of concept
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 
 
 The way this works currently is that it creates a new form with every rerun; *does not* append questions to existing form. The idea is that we could trigger re-building of the form upon changes to the underlying JSON ontology. For that, will need to implement a versioning or tagging system to keep track of which form is generated from which ontology. 
+
+## Migrating to JSON-based schema
+I figures it would be easier to start from the full form and modify its structure to produce JSON for the database schema. 
+
+`extractingQuestions_temp.py` grabs the info from the existing full form, and additionally removes unnecessary info like questionsId and similar (fun `sanitise_form`), since they will be lost anyway during form creation. 
+Also added section and questions syntax to improves readability and facilitates modification down the line. These map to Google Forms API's terms like so: 
+
+| JSON schema    | Google Forms API   |
+| -------------- | ------------------ |
+| `form.title`   | `info.title`       |
+| `sections[]`   | `pageBreakItem`    |
+| `questions[]`  | `questionItem`     |
+| Question order | insertion order    |
+| Section order  | insertion order    |
+| Symbolic `id`  | not sent to Google |
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

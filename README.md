@@ -25,6 +25,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 
 **Outstanding issues:**
+ - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
  - [ ] Updating existing record
   - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
   - [ ] How to retrieve info and pre-populate form with it? 
@@ -126,6 +127,15 @@ Adding `logic` block to JSON, *only choice questions supported*, that has a `got
 The logic for the new parser (still names `createForm.py`) is that it first creates all sections, then adds the questions under the appropriate section, then adds logic (i.e. if q1 "yes" then go to sec2, if "no" go to sec3). 
 It's necessary to do two passes of the form, because the API only allows redirection to a specific sectionID, and these are non-meaningful (i.e. create on the fly), so you need to query the form you just created to retrieve these ids and then apply the logic to them. 
 Now parses descriptions of sections as well (and not just the overall form description at the top).
+
+## Aligning with Wildlab's The Inventory
+To find out what are the required fields, and what values they take, I typed in *by hand* all the info in their submission form... It is in `WildlabsInventory_schema.json`, formatted as JSON. 
+Each top-level item correspond to a page/view, that would be a section in a Google Form. 
+Data types are guessed, and should be fairly self-explanatory. 
+
+
+
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

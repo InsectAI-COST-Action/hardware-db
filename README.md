@@ -115,7 +115,8 @@ Adding `logic` block to JSON, *only choice questions supported*, that has a `got
 | `"next"`       | `goToAction: "NEXT_SECTION"`          | Go to next section   |
 | `"submit"`     | `goToAction: "SUBMIT_FORM"`           | Submit form          |
 
-Now testing new parser... 
+The logic for the new parser (still names `createForm.py`) is that it first creates all sections, then adds the questions under the appropriate section, then adds logic (i.e. if q1 "yes" then go to sec2, if "no" go to sec3). 
+It's necessary to do two passes of the form, because the API only allows redirection to a specific sectionID, and these are non-meaningful (i.e. create on the fly), so you need to query the form you just created to retrieve these ids and then apply the logic to them. 
 
 
 > [!TIP]

@@ -21,7 +21,14 @@
           "options": [
             "Yes",
             "No"
-          ]
+          ],
+          "logic": {
+            "Yes": {
+              "go_to": "new_device_version"
+            },
+            "No": {
+              "go_to": "contributor_details"
+            }
         }
       ]
     },
@@ -252,7 +259,7 @@
       "description": "n/a",
       "questions": [
         {
-          "id": "power_source",
+          "id": "power_sources",
           "title": "Power source(s)",
           "required": false,
           "type": "choice",
@@ -265,42 +272,42 @@
           ]
         },
         {
-          "id": "power_storage_type",
+          "id": "power_storage_type_used_if_any_eg_nonrechargeable_alkaline_rechargeable_lithiumion",
           "title": "Power storage type used (if any - e.g. Non-rechargeable: Alkaline, Rechargeable: Lithium-ion)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "power_storage_capacity",
+          "id": "power_storage_capacity_mah",
           "title": "Power storage capacity (mAh)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "power_duration_continuous",
+          "id": "power_duration_under_continuous_use",
           "title": "Power duration under continuous use",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "power_duration_standard",
+          "id": "power_duration_under_standard_use",
           "title": "Power duration under standard use",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "main_sensor_type",
+          "id": "main_sensor_type_eg_optical",
           "title": "Main sensor type (e.g. Optical)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "main_sensor_model",
+          "id": "main_sensor_model_name",
           "title": "Main sensor model name",
           "required": false,
           "type": "text",
@@ -340,7 +347,7 @@
           ]
         },
         {
-          "id": "supported_file_types",
+          "id": "capturedsupported_file_types",
           "title": "Captured/supported file types",
           "required": false,
           "type": "choice",
@@ -359,21 +366,21 @@
           ]
         },
         {
-          "id": "data_storage_type",
+          "id": "data_storage_types_eg_microsd_ssd_hdd_etc",
           "title": "Data storage type(s) (e.g. microSD, SSD, HDD etc.)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "maximum_data_storage_capacity",
+          "id": "maximum_data_storage_capacity_gb",
           "title": "Maximum data storage capacity (GB)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "data_transfer_method",
+          "id": "data_transfer_methods",
           "title": "Data transfer methods",
           "required": false,
           "type": "choice",
@@ -393,7 +400,7 @@
           "paragraph": false
         },
         {
-          "id": "wireless_connectivity",
+          "id": "wireless_connectivity_options",
           "title": "Wireless connectivity options",
           "required": false,
           "type": "choice",
@@ -411,7 +418,7 @@
           ]
         },
         {
-          "id": "physical_connectivity",
+          "id": "physical_connectivity_options",
           "title": "Physical connectivity options",
           "required": false,
           "type": "choice",
@@ -439,7 +446,7 @@
           ]
         },
         {
-          "id": "lens_mounting_options",
+          "id": "lens_mounting_options_if_any",
           "title": "Lens mounting option(s) (if any)",
           "required": false,
           "type": "choice",
@@ -465,28 +472,28 @@
           ]
         },
         {
-          "id": "lens_focal_range",
+          "id": "lens_focal_range_or_focal_distance_if_fixed",
           "title": "Lens focal range (or focal distance if fixed)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "lens_diameter",
+          "id": "lens_diameter_mm",
           "title": "Lens diameter (mm)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "lens_aperture",
+          "id": "lens_aperture_fnumber",
           "title": "Lens aperture (f-number)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "additional_external_sensors",
+          "id": "additional_external_environmental_sensors",
           "title": "Additional external environmental sensors",
           "required": false,
           "type": "choice",
@@ -511,7 +518,7 @@
           ]
         },
         {
-          "id": "additional_internal_sensors",
+          "id": "additional_internal_environmental_sensors",
           "title": "Additional internal environmental sensors",
           "required": false,
           "type": "choice",
@@ -566,7 +573,7 @@
       ]
     },
     {
-      "id": "intended_usage_scope",
+      "id": "intended_usage_scope_and_operational_constraints",
       "title": "Intended usage scope and operational constraints",
       "description": "n/a",
       "questions": [
@@ -592,7 +599,7 @@
           "paragraph": false
         },
         {
-          "id": "subject_size_range",
+          "id": "subject_size_range_mm",
           "title": "Subject size range (mm)",
           "required": false,
           "type": "text",
@@ -606,15 +613,15 @@
           "paragraph": false
         },
         {
-          "id": "operational_temperature_range",
+          "id": "operational_temperature_range_c",
           "title": "Operational temperature range (\u00b0C)",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "operational_elevation_range",
-          "title": "Operational elevation range (metres above sea level)",
+          "id": "operational_altitude_range_metres_above_sea_level",
+          "title": "Operational altitude range (metres above sea level)",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -633,7 +640,7 @@
           ]
         },
         {
-          "id": "operational_locality_tested",
+          "id": "operational_locality_tested_eg_northern_uk_and_southern_france_western_europe",
           "title": "Operational locality tested (e.g. northern UK and southern France = Western Europe)",
           "required": false,
           "type": "text",

@@ -8,11 +8,13 @@ DATABASE STRUCTURE JSON --- createForms.py ---> FULL FORM
 FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 ```
 
-Re-implementation TODO list: 
+**Re-implementation TODO list:**
 - [x] Proof of concept JSON to Google Form
 - [x] Transfer over actual questions into JSON format: 
     - [x] Basic form: [Form link](https://docs.google.com/forms/d/1mXaEkw1lydgeE5Ld0X5j2Xp82ABDgnQeQ79CvEJi_UQ/edit) or in `json_body.json` + `json_form.json` if generated from that. *apparently this is the same as the full version now?*
     - [x] Full form: [Form link](https://docs.google.com/forms/d/1k7RsEdOJrLW6ZDwOTHNdgDH2VSYWETfCI-1HyznB0m8/edit) or in `json_body.json` + `json_form.json` if generated from that. 
+- [ ] Re-hash the form so that the basic questions line up with Wildlab's [The Inventory](https://wildlabs.net/inventory). 
+  - [ ] Add further branching in the logic for basic VS full form. 
 - [ ] Implement collecting answers and parsing into human-readable JSON
     - [ ] how to track response spreadsheet when form is re-generated at every JSON update?
     - [ ] what about attached pictures?
@@ -21,6 +23,12 @@ Re-implementation TODO list:
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
+
+**Outstanding issues:**
+ - [ ] Updating existing record
+  - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
+  - [ ] How to retrieve info and pre-populate form with it? 
+  - [ ] We might also just ask them to contact us and/or resubmit... 
 
 ## Proof of concept
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 

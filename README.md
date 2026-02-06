@@ -107,7 +107,7 @@ Example JSON schema below:
 ```
 Trying to add logic handling from the JSON schema, using unique `id`s as anchors. 
 
-Adding `logic` block to JSON, that has a `got_to` key that maps to API actions: 
+Adding `logic` block to JSON, *only choice questions supported*, that has a `got_to` key that maps to API actions: 
 
 | Value          | API equivalent                        | Meaning              |
 | -------------- | ------------------------------------- | -------------------- |

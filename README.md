@@ -1,5 +1,3 @@
-⚠ Luca: I used this branch to modify the code run locally on my machine, as wella s using Google Sheets and Forms that I owned, to test transferability.  No further fetaure development beyond should be pushed here. ⚠
-
 # Redesigning approach dev notes
 
 The general idea is to implement this workflow: 
@@ -20,9 +18,11 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
     - [ ] what about attached pictures?
 - [ ] Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)
 - [ ] Develop CI/CD workflow on Github
+
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
+
 
 **Outstanding issues:**
  - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???

@@ -1,15 +1,15 @@
 {
   "info": {
     "title": "InsectAI hardware form - full version",
-    "description": "Welcome! This form is to provide or update the full range of details for your InsectAI hardware to the hardware database. \\n \\n Already submitted hardware or have a new version? You may also use this form to submit new versions of existing hardware or add/update existing hardware details. If so, please provide your latest deviceID where prompted. \\n\\n Unsure if you have already submitted? If you are unsure what has already been submitted to the database please either 1. check your email for a deviceID 2. access the public database here: ___ or 3. contact the current handler whose details will be available here: ___ providing them with some basic hardware details. \\n\\n Basic version: If you only want to submit basic details for now, please use this form instead: https://forms.gle/4GrQGKkTEToSKbgs5 \\n \\n Deployments form:  There is a form is for adding new deployments (i.e. setups) of an approved device. This form will eventually be available here:"
+    "description": "Welcome! This form is to provide or update for your insect monitoring hardware to the InsectAI hardware database. \\n \\n Already submitted hardware or have a new version? You may also use this form to submit new versions of existing hardware or add/update existing hardware details. If so, please provide your latest deviceID where prompted. \\n\\n Unsure if you have already submitted? If you are unsure what has already been submitted to the database please either 1. check your email for a deviceID 2. access the public database here: ___ or 3. contact the current handler whose details will be available here: ___ providing them with some basic hardware details. \\n\\n "
   },
   "settings": {
     "emailCollectionType": "DO_NOT_COLLECT"
   },
   "sections": [
     {
-      "id": "intro",
-      "title": "Introduction",
+      "id": "device_id_section",
+      "title": "Device ID and version",
       "description": null,
       "questions": [
         {
@@ -27,7 +27,7 @@
               "go_to": "new_device_version"
             },
             "No": {
-              "go_to": "contributor_details"
+              "go_to": "basic_info"
             }
           }
         }
@@ -48,10 +48,84 @@
       ]
     },
     {
+      "id": "basic_info",
+      "title": "Basic information",
+      "questions": [
+        {
+          "id": "contact_name",
+          "title": "Contact name",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contact_email",
+          "title": "Contact email",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_name",
+          "title": "Device name",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_description",
+          "title": "Device description",
+          "required": true,
+          "type": "text",
+          "paragraph": true
+        }
+      ]
+    },
+    {
+      "id": "fill_in_full_form",
+      "title": "Proceed with filling in full form?",
+      "description": "Would you like to proceed with filling in the full form? \\n\\n There are 6 sections in total with a total of 70 questions: \\n - Contributor details (7 questions); \\n - Device links (4 questions); \\n - Device details (11 questions); \\n - Component details (27 questions); \\n - Maintenance and repairs (3 questions); \\n - Usage scope (12 questions). \\n\\n  If you would like to stop here, please click 'No' and then Submit on the next page. ",
+      "questions": [
+        {
+          "id": "to_full_form",
+          "title": "Proceed with filling in full form?",
+          "required": true,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Yes, take me to the questions",
+            "No, I want to submit with just the basic information"
+          ],
+          "logic": {
+            "Yes": {
+              "go_to": "contributor_details"
+            },
+            "No": {
+              "go_to": "submit_form"
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "contributor_details",
       "title": "Contributor details",
-      "description": "New version: This section is for providing a distinct new device version. /n/n Help: To help decide if your device has entered a new version, the following is an adaption of semantic reasoning (used for software versioning) for electronics/hardware is useful: https://www.maskset.net/blog/2023/02/26/semantic-versioning-for-hardware/ \\n \\n Existing devices: If you want to update an existing device, please use the linked form at the top of this form instead",
+      "description": "New version: This section is for providing a distinct new device version. \\n\\n Help: To help decide if your device has entered a new version, the following is an adaption of semantic reasoning (used for software versioning) for electronics/hardware is useful: https://www.maskset.net/blog/2023/02/26/semantic-versioning-for-hardware/ \\n \\n Existing devices: If you want to update an existing device, please use the linked form at the top of this form instead",
       "questions": [
+        {
+          "id": "contributor_name",
+          "title": "Contributor name (can be the same as contact name)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contributor_email",
+          "title": "Contributor email (can be the same as contact email)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
         {
           "id": "institution_name",
           "title": "Institution name(s)",
@@ -69,35 +143,21 @@
         {
           "id": "device_creator_email",
           "title": "Device creator email(s)",
-          "required": true,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "contributor_name",
-          "title": "Contributor name",
-          "required": true,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "contributor_email",
-          "title": "Contributor email",
-          "required": true,
+          "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "maintainer_name",
           "title": "Maintainer name",
-          "required": true,
+          "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "maintainer_email",
           "title": "Maintainer email",
-          "required": true,
+          "required": false,
           "type": "text",
           "paragraph": false
         }
@@ -143,20 +203,6 @@
       "title": "Device details",
       "description": "n/a",
       "questions": [
-        {
-          "id": "device_name",
-          "title": "Device name",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "device_description",
-          "title": "Device description",
-          "required": false,
-          "type": "text",
-          "paragraph": true
-        },
         {
           "id": "device_version_name",
           "title": "Device version name",
@@ -287,21 +333,21 @@
           "paragraph": false
         },
         {
-          "id": "power_duration_under_continuous_use",
+          "id": "power_duration_continuous",
           "title": "Power duration under continuous use",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "power_duration_under_standard_use",
+          "id": "power_duration_standard",
           "title": "Power duration under standard use",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "main_sensor_type_eg_optical",
+          "id": "main_sensor_type",
           "title": "Main sensor type (e.g. Optical)",
           "required": false,
           "type": "text",
@@ -348,7 +394,7 @@
           ]
         },
         {
-          "id": "capturedsupported_file_types",
+          "id": "supported_file_types",
           "title": "Captured/supported file types",
           "required": false,
           "type": "choice",
@@ -367,7 +413,7 @@
           ]
         },
         {
-          "id": "data_storage_types_eg_microsd_ssd_hdd_etc",
+          "id": "data_storage_types",
           "title": "Data storage type(s) (e.g. microSD, SSD, HDD etc.)",
           "required": false,
           "type": "text",
@@ -447,7 +493,7 @@
           ]
         },
         {
-          "id": "lens_mounting_options_if_any",
+          "id": "lens_mounting_options",
           "title": "Lens mounting option(s) (if any)",
           "required": false,
           "type": "choice",
@@ -473,7 +519,7 @@
           ]
         },
         {
-          "id": "lens_focal_range_or_focal_distance_if_fixed",
+          "id": "lens_focal_range",
           "title": "Lens focal range (or focal distance if fixed)",
           "required": false,
           "type": "text",
@@ -621,8 +667,8 @@
           "paragraph": false
         },
         {
-          "id": "operational_altitude_range_metres_above_sea_level",
-          "title": "Operational altitude range (metres above sea level)",
+          "id": "operational_elevation_range",
+          "title": "Operational elevation range (metres above sea level)",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -641,7 +687,7 @@
           ]
         },
         {
-          "id": "operational_locality_tested_eg_northern_uk_and_southern_france_western_europe",
+          "id": "operational_locality_tested",
           "title": "Operational locality tested (e.g. northern UK and southern France = Western Europe)",
           "required": false,
           "type": "text",

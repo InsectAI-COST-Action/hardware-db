@@ -33,7 +33,7 @@ def build_choice_options(q, section_id_map=None):
 
                 if target == "next":
                     option["goToAction"] = "NEXT_SECTION"
-                elif target == "submit":
+                elif target == "submit_form":
                     option["goToAction"] = "SUBMIT_FORM"
                 else:
                     option["goToSectionId"] = section_id_map[target]

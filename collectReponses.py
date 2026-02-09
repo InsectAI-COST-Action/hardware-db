@@ -19,14 +19,14 @@ TOKEN_FILE = "token_collectResponses.json"
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
 
+DEBUG = False
+
 
 ### Authenticatation flow
-creds = None
-
 if os.path.exists(TOKEN_FILE):
     creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-
-if not creds or not creds.valid:
+else: 
+    creds = None
     flow = InstalledAppFlow.from_client_secrets_file(
         OAUTH_CLIENT_JSON, SCOPES
     )
@@ -34,10 +34,6 @@ if not creds or not creds.valid:
 
     with open(TOKEN_FILE, "w") as token:
         token.write(creds.to_json())
-
-# creds = Credentials.from_authorized_user_file(TOKEN_FILE, scopes=SCOPES)
-# forms_service = build("forms", "v1", credentials=creds)
-# # drive_service = build("drive", "v3", credentials=creds)
 
 forms_service = build(
     "forms",
@@ -50,10 +46,13 @@ forms_service = build(
 
 ### Grab form details - we need this for the questionId's
 form_info = forms_service.forms().get(formId=FORM_ID).execute()
-# print(form_info)
+if DEBUG:
+    print(form_info)
 
 form_info = form_info.get("items")
-# print(form_info)
+if DEBUG:
+    print("form_info:")
+    print(form_info)
 
 # Make dictionary of question IDs (idQ) to question titles (titleQ)
 idQ_to_titleQ = {}
@@ -62,7 +61,9 @@ for item in form_info:
     if "questionItem" in item:
         idQ_to_titleQ[item["questionItem"]["question"]["questionId"]] = item["title"]
 
-print(idQ_to_titleQ)
+if DEBUG:
+    print("idQ_to_titleQ:")
+    print(idQ_to_titleQ)
 
 
 ### grab JSON schema, parse into handy dictionary - we need to match questionId to question title
@@ -84,13 +85,14 @@ for section in schema["sections"]:
 
 ### Grab the responses - this contains the answers proper
 responses = forms_service.forms().responses().list(formId=FORM_ID).execute()
-# print(responses)
+if DEBUG:
+    print("responses:")
+    print(responses)
 
 responses = responses.get("responses", [])
 print(f"Found {len(responses)} responses")
 
-####################
-
+### Parse responses into questionId to answer
 parsed_rows = []
 
 for response in responses:
@@ -121,8 +123,7 @@ for response in responses:
     parsed_rows.append(answer_map)
 
 ### Finally, match question IDs to question shorthands, and append answers.
-
-# invert shorthand->title to title->shorthand
+# invert shorthand -> title to title -> shorthand
 title_to_short = {title: short for short, title in shortQ_to_titleQ.items()}
 
 # map Google question IDs -> shorthand (when title matches)
@@ -142,7 +143,9 @@ for row in parsed_rows:
             mapped[short] = ans
     responses_shorthand.append(mapped)
 
-print(responses_shorthand)
+if DEBUG:
+    print("responses_shorthand:")
+    print(responses_shorthand)
 
 
 ### Export files in usable formats

@@ -223,7 +223,7 @@ So the only mandatory fields in our basic form would be (and their correspondenc
 | `device_name`          | `Product_name`                  |
 | `device_description`   | `Overview`                      |
 
-
+Keeping the old schema to rebuild the full form as Graham envisioned it as `hardware-db_schema_OLD_fFullForm.json`. 
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

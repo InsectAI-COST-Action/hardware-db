@@ -1,0 +1,678 @@
+{
+  "info": {
+    "title": "InsectAI hardware form - full version",
+    "description": "Welcome! This form is to provide or update the full range of details for your InsectAI hardware to the hardware database. \\n \\n Already submitted hardware or have a new version? You may also use this form to submit new versions of existing hardware or add/update existing hardware details. If so, please provide your latest deviceID where prompted. \\n\\n Unsure if you have already submitted? If you are unsure what has already been submitted to the database please either 1. check your email for a deviceID 2. access the public database here: ___ or 3. contact the current handler whose details will be available here: ___ providing them with some basic hardware details. \\n\\n Basic version: If you only want to submit basic details for now, please use this form instead: https://forms.gle/4GrQGKkTEToSKbgs5 \\n \\n Deployments form:  There is a form is for adding new deployments (i.e. setups) of an approved device. This form will eventually be available here:"
+  },
+  "settings": {
+    "emailCollectionType": "DO_NOT_COLLECT"
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Introduction",
+      "description": null,
+      "questions": [
+        {
+          "id": "have_deviceID",
+          "title": "Do you already have a deviceID for this hardware?",
+          "required": true,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "logic": {
+            "Yes": {
+              "go_to": "new_device_version"
+            },
+            "No": {
+              "go_to": "contributor_details"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "new_device_version",
+      "title": "New device version",
+      "description": "Information about who the device was created by, who is contributing to this entry and who will be responsible in future for queries about and updates to this entry. \\n \\n These may all be the same individual in some cases and there may be co-creators. In the case of multiple individuals separate the names and emails of the creators with ';' (e.g. Alan Turner; Dave Johnson)",
+      "questions": [
+        {
+          "id": "previous_deviceID",
+          "title": "Previous deviceID",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "contributor_details",
+      "title": "Contributor details",
+      "description": "New version: This section is for providing a distinct new device version. /n/n Help: To help decide if your device has entered a new version, the following is an adaption of semantic reasoning (used for software versioning) for electronics/hardware is useful: https://www.maskset.net/blog/2023/02/26/semantic-versioning-for-hardware/ \\n \\n Existing devices: If you want to update an existing device, please use the linked form at the top of this form instead",
+      "questions": [
+        {
+          "id": "institution_name",
+          "title": "Institution name(s)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_creator",
+          "title": "Device creator(s)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_creator_email",
+          "title": "Device creator email(s)",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contributor_name",
+          "title": "Contributor name",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contributor_email",
+          "title": "Contributor email",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "maintainer_name",
+          "title": "Maintainer name",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "maintainer_email",
+          "title": "Maintainer email",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "device_links",
+      "title": "Device links",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "publication_DOI",
+          "title": "Publication DOI",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "github_link",
+          "title": "Github link",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "documentation_link",
+          "title": "Documentation link",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "documentation_upload",
+          "title": "Documentation upload",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "device_details",
+      "title": "Device details",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "device_name",
+          "title": "Device name",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_description",
+          "title": "Device description",
+          "required": false,
+          "type": "text",
+          "paragraph": true
+        },
+        {
+          "id": "device_version_name",
+          "title": "Device version name",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_licence",
+          "title": "Device licence (e.g. CC-BY-4.0)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_construction",
+          "title": "Device construction",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Off-the-shelf: Purchased and used as-is",
+            "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
+            "Partly custom: Assembled from off-the-shelf and/or open-source components",
+            "with some user design or modification",
+            "Fully custom: Designed and fabricated by the user (hardware and potentially software)"
+          ]
+        },
+        {
+          "id": "device_cost",
+          "title": "Device cost (\u20ac) - excluding operational costs",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_billofmaterials",
+          "title": "Device bill-of-materials (if available)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_size",
+          "title": "Device size (m\u00b2)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_weight",
+          "title": "Device weight (kg)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device__image",
+          "title": "Device or schematic image",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_colour",
+          "title": "Device colour(s)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_material",
+          "title": "Device material(s)",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Option 1"
+          ]
+        },
+        {
+          "id": "device_mobility",
+          "title": "Device mobility",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Static / fixed: Permanently installed; cannot be moved without disassembly",
+            "Manually movable (limited): Can be repositioned by hand but not designed for frequent movement (e.g. repositioned tripod)",
+            "Manually movable (portable): Designed to be carried or repositioned easily.",
+            "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting",
+            "rolling",
+            "or robotic motion)."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "component_details",
+      "title": "Component details",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "power_sources",
+          "title": "Power source(s)",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Mains",
+            "Solar",
+            "Rechargeable battery",
+            "Non-rechargeable battery"
+          ]
+        },
+        {
+          "id": "power_storage_type_used_if_any_eg_nonrechargeable_alkaline_rechargeable_lithiumion",
+          "title": "Power storage type used (if any - e.g. Non-rechargeable: Alkaline, Rechargeable: Lithium-ion)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "power_storage_capacity_mah",
+          "title": "Power storage capacity (mAh)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "power_duration_under_continuous_use",
+          "title": "Power duration under continuous use",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "power_duration_under_standard_use",
+          "title": "Power duration under standard use",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_type_eg_optical",
+          "title": "Main sensor type (e.g. Optical)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_model_name",
+          "title": "Main sensor model name",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_bitrate",
+          "title": "Main sensor bit-rate",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_framerate",
+          "title": "Main sensor frame-rate",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_resolution",
+          "title": "Main sensor resolution",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "capture_modes",
+          "title": "Capture modes",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Video",
+            "Still image",
+            "Timelapse"
+          ]
+        },
+        {
+          "id": "capturedsupported_file_types",
+          "title": "Captured/supported file types",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            ".jpeg",
+            ".png",
+            ".tiff",
+            ".bmp",
+            ".pdf",
+            ".raw",
+            ".gif",
+            ".mp4",
+            ".mov",
+            ".avi"
+          ]
+        },
+        {
+          "id": "data_storage_types_eg_microsd_ssd_hdd_etc",
+          "title": "Data storage type(s) (e.g. microSD, SSD, HDD etc.)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "maximum_data_storage_capacity_gb",
+          "title": "Maximum data storage capacity (GB)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "data_transfer_methods",
+          "title": "Data transfer methods",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Cable",
+            "Removable storage",
+            "Wireless (nearby)",
+            "Wireless (remote)"
+          ]
+        },
+        {
+          "id": "processing_unit",
+          "title": "Processing unit",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "wireless_connectivity_options",
+          "title": "Wireless connectivity options",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Wi-Fi",
+            "Bluetooth",
+            "Cellular (e.g. 3G/4G/5G",
+            "LTE-M",
+            "NB-IoT)",
+            "GPS / GNSS",
+            "NFC",
+            "Serial (UART/RS232/RS485)",
+            "Satellite Links"
+          ]
+        },
+        {
+          "id": "physical_connectivity_options",
+          "title": "Physical connectivity options",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Ethernet",
+            "HDMI",
+            "DisplayPort",
+            "Audio jack",
+            "Embedded connectors (I2C/SPI/GPIO)"
+          ]
+        },
+        {
+          "id": "model_processing",
+          "title": "Model processing",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "On-device (edge processing)",
+            "Local computing (near edge processing using locally connected computers on the network)",
+            "Offboard processing (data transfer to and processing on separate computer)",
+            "Cloud processing",
+            "Hybrid"
+          ]
+        },
+        {
+          "id": "lens_mounting_options_if_any",
+          "title": "Lens mounting option(s) (if any)",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "C-Mount",
+            "CS-Mount",
+            "S-Mount / M12 (Board camera lenses)",
+            "M13 / M16 / M25",
+            "Custom"
+          ]
+        },
+        {
+          "id": "lens_focusing",
+          "title": "Lens focusing",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Fixed distance",
+            "Manual",
+            "Automatic"
+          ]
+        },
+        {
+          "id": "lens_focal_range_or_focal_distance_if_fixed",
+          "title": "Lens focal range (or focal distance if fixed)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "lens_diameter_mm",
+          "title": "Lens diameter (mm)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "lens_aperture_fnumber",
+          "title": "Lens aperture (f-number)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "additional_external_environmental_sensors",
+          "title": "Additional external environmental sensors",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Temperature",
+            "Humidity",
+            "UV",
+            "Visible light",
+            "Infrared radiation",
+            "Sound",
+            "pH",
+            "Wind speed",
+            "Wind direction",
+            "Air quality",
+            "Water quality",
+            "Movement",
+            "Contact",
+            "Pressure",
+            "Load (weight)",
+            "Rainfall"
+          ]
+        },
+        {
+          "id": "additional_internal_environmental_sensors",
+          "title": "Additional internal environmental sensors",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Temperature",
+            "Humidity",
+            "Visible light",
+            "Impact",
+            "Pressure",
+            "Power (voltage/current)",
+            "Processing load",
+            "Position and orientation (accelerometer)"
+          ]
+        },
+        {
+          "id": "other_device_peripherals",
+          "title": "Other device peripherals",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "maintenance_and_repairs",
+      "title": "Maintenance and repairs",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "repairability_score",
+          "title": "Repairability score",
+          "required": false,
+          "type": "scale",
+          "low": 1,
+          "high": 5
+        },
+        {
+          "id": "firmware_update_frequency",
+          "title": "Firmware update frequency",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "firmware_update_method",
+          "title": "Firmware update method",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "intended_usage_scope_and_operational_constraints",
+      "title": "Intended usage scope and operational constraints",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "taxonomic_groups",
+          "title": "Taxonomic group(s)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "functional_guilds",
+          "title": "Functional guild(s)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "habitats",
+          "title": "Habitats",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "subject_size_range_mm",
+          "title": "Subject size range (mm)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_height_range",
+          "title": "Operational height range",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_temperature_range_c",
+          "title": "Operational temperature range (\u00b0C)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_altitude_range_metres_above_sea_level",
+          "title": "Operational altitude range (metres above sea level)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_environment",
+          "title": "Operational environment",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Aquatic",
+            "Semi-aquatic",
+            "Terrestrial",
+            "Aerial"
+          ]
+        },
+        {
+          "id": "operational_locality_tested_eg_northern_uk_and_southern_france_western_europe",
+          "title": "Operational locality tested (e.g. northern UK and southern France = Western Europe)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_context",
+          "title": "Operational context",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Lab-based",
+            "Field-based"
+          ]
+        },
+        {
+          "id": "weatherproofing",
+          "title": "Weatherproofing",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_costs",
+          "title": "Operational costs (\u20ac)",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    }
+  ]
+}

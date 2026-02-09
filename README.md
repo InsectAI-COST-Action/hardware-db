@@ -133,7 +133,95 @@ To find out what are the required fields, and what values they take, I typed in 
 Each top-level item correspond to a page/view, that would be a section in a Google Form. 
 Data types are guessed, and should be fairly self-explanatory. 
 
+### Changing the required fields in the schema
+As it is, the only `"required": true` items in the schema are (some details omitted): 
+```json
+{
+{
+    "questions": [
+        {
+            "id": "have_deviceID",
+            "title": "Do you already have a deviceID for this hardware?",
+            "required": true,
+            "type": "choice",
+            "choiceType": "RADIO",
+            "options": [
+                "Yes",
+                "No"
+            ],
+            "logic": {
+                "Yes": {
+                    "go_to": "new_device_version"
+                },
+                "No": {
+                    "go_to": "contributor_details"
+                }
+            }
+        },
+        {
+            "id": "previous_deviceID",
+            "title": "Previous deviceID",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        },
+        {
+            "id": "device_creator_email",
+            "title": "Device creator email(s)",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        },
+        {
+            "id": "contributor_name",
+            "title": "Contributor name",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        },
+        {
+            "id": "contributor_email",
+            "title": "Contributor email",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        },
+        {
+            "id": "maintainer_name",
+            "title": "Maintainer name",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        },
+        {
+            "id": "maintainer_email",
+            "title": "Maintainer email",
+            "required": true,
+            "type": "text",
+            "paragraph": false
+        }
+    ]
+}
+``` 
 
+In my opinion, it doesn't make a lot of sense to have this many names & contact details mandatory, and not make mandatory the device name or description. 
+
+What I suggest to be mandatory, also to better align with Wildlabs's schema, is: 
+```
+Replace all "device creator", "contributor" and "maintainer" names + email combo with "contact" name +  email. 
+The other specifications for other roles can be in the full form, non-mandatory. 
+
+Make "device_name" and "device_description" mandatory. 
+```
+
+So the only mandatory fields in our basic form would be (and their correspondence in Wildlab's Inventory):
+
+| InsectAI `hardware-db` | Wildlab's Inventory             |
+| ---------------------- | ------------------------------- |
+| `contact_name`         | `Name` (collected via sign-in)  |
+| `contact_email`        | `Email` (collected via sign-in) |
+| `device_name`          | `Product_name`                  |
+| `device_description`   | `Overview`                      |
 
 
 

@@ -13,6 +13,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
     - [x] Full form: [Form link](https://docs.google.com/forms/d/1k7RsEdOJrLW6ZDwOTHNdgDH2VSYWETfCI-1HyznB0m8/edit) or in `json_body.json` + `json_form.json` if generated from that. 
 - [x] Re-hash the form so that the basic questions line up with Wildlab's [The Inventory](https://wildlabs.net/inventory). 
   - [x] Add further branching in the logic for basic VS full form. 
+- [ ] Get some dummy answers in the form to test.
 - [ ] Implement collecting answers and parsing into human-readable JSON
     - [ ] how to track response spreadsheet when form is re-generated at every JSON update?
     - [ ] what about attached pictures?

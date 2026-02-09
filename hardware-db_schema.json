@@ -319,7 +319,7 @@
           ]
         },
         {
-          "id": "power_storage_type_used_if_any_eg_nonrechargeable_alkaline_rechargeable_lithiumion",
+          "id": "power_storage_type",
           "title": "Power storage type used (if any - e.g. Non-rechargeable: Alkaline, Rechargeable: Lithium-ion)",
           "required": false,
           "type": "text",

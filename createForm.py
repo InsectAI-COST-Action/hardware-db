@@ -6,7 +6,7 @@ import json
 ### =====================
 ### CONFIG
 ### =====================
-DB_VERSION = "v0.1"
+DB_VERSION = "v0.2.0"
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body",
     "https://www.googleapis.com/auth/drive",

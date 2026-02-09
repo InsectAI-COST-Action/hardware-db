@@ -145,3 +145,39 @@ for row in parsed_rows:
 print(responses_shorthand)
 
 
+### Export files in usable formats
+output_dir = Path("data")
+output_dir.mkdir(exist_ok=True)
+
+### Write CSV with shorthand keys as headers, and answers as rows
+csv_file = output_dir / "form_responses.csv"
+
+with open(csv_file, "w", newline="", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    
+    header = list(responses_shorthand[0].keys())
+    writer.writerow(header)
+
+    for item in responses_shorthand:
+        writer.writerow(list(item.values()))
+
+print(f"CSV written to {csv_file}")
+
+### Write individual JSON files for each response, with shorthand keys
+def sanitize_filename(name):
+    name = name.strip()
+    name = re.sub(r"\s+", "_", name)
+    name = re.sub(r"[^\w\-]", "", name)
+    return name
+
+for item in responses_shorthand:
+
+    device_name = item.get("device_name")
+    filename = sanitize_filename(device_name)
+
+    json_path = output_dir / f"{filename}.json"
+
+    with open(json_path, "w", encoding="utf-8") as jf:
+        json.dump(item, jf, indent=2, ensure_ascii=False)
+
+print(f"JSON files written to {output_dir}")

@@ -89,3 +89,59 @@ responses = forms_service.forms().responses().list(formId=FORM_ID).execute()
 responses = responses.get("responses", [])
 print(f"Found {len(responses)} responses")
 
+####################
+
+parsed_rows = []
+
+for response in responses:
+    answer_map = {}
+
+    answers = response.get("answers", {})
+
+    for question_id in idQ_to_titleQ.keys():
+
+        if question_id in answers:
+            answer_obj = answers[question_id]
+
+            # Handle different answer types
+            if "textAnswers" in answer_obj:
+                values = [
+                    a["value"] for a in answer_obj["textAnswers"]["answers"]
+                ]
+                answer_value = "; ".join(values)
+
+            else:
+                answer_value = ""
+
+        else:
+            answer_value = ""
+
+        answer_map[question_id] = answer_value
+
+    parsed_rows.append(answer_map)
+
+### Finally, match question IDs to question shorthands, and append answers.
+
+# invert shorthand->title to title->shorthand
+title_to_short = {title: short for short, title in shortQ_to_titleQ.items()}
+
+# map Google question IDs -> shorthand (when title matches)
+idQ_to_shortQ = {}
+for qid, title in idQ_to_titleQ.items():
+    short = title_to_short.get(title)
+    if short:
+        idQ_to_shortQ[qid] = short
+
+# build list of responses where keys are shorthand (preserve schema order)
+responses_shorthand = []
+for row in parsed_rows:
+    mapped = {short: "" for short in ordered_shortQ_to_titleQ}
+    for qid, ans in row.items():
+        short = idQ_to_shortQ.get(qid)
+        if short:
+            mapped[short] = ans
+    responses_shorthand.append(mapped)
+
+print(responses_shorthand)
+
+

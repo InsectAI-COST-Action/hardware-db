@@ -1,7 +1,7 @@
 ### Custom ignores
 # Secrets
 *oauth*.json
-token.json
+*token*.json
 # Exports and dumps
 export/*.json
 export/*.csv

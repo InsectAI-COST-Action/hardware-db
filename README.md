@@ -14,9 +14,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [x] Re-hash the form so that the basic questions line up with Wildlab's [The Inventory](https://wildlabs.net/inventory). 
   - [x] Add further branching in the logic for basic VS full form. 
 - [x] Get some dummy answers in the form to test.
-- [ ] Implement collecting answers and parsing into human-readable JSON
-    - [ ] how to track response spreadsheet when form is re-generated at every JSON update?
-    - [ ] what about attached pictures?
+- [x] Implement collecting answers and parsing into human-readable JSON
 - [ ] Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)
 - [ ] Develop CI/CD workflow on Github
 
@@ -26,8 +24,11 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 
 
 **Outstanding issues:**
- - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
- - [ ] Updating existing record
+- [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
+- [ ] Collating answers
+  - [ ] how to track response spreadsheet when form is re-generated at every JSON schema update?
+  - [ ] what about attached pictures?
+- [ ] Updating existing record
   - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
   - [ ] How to retrieve info and pre-populate form with it? 
   - [ ] We might also just ask them to contact us and/or resubmit... 

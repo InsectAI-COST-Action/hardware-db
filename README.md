@@ -226,9 +226,19 @@ So the only mandatory fields in our basic form would be (and their correspondenc
 
 Keeping the old schema to rebuild the full form as Graham envisioned it as `hardware-db_schema_OLD_fFullForm.json`. 
 
+## Collecting and parsing responses
+The script `collectResponses.py` queries the existing Form via its ID, and gets the responses. 
+
+There is, as far as I can see, no way to trigger the creation of a Google Spreadsheet via the API, in practice there is no analogue to the "Response" > "Link to Sheets" button in the Forms GUI. 
+
+This means that we have to find some other way of integrating responses from different versions of the form, we cannot do it via a spreadsheet, at least there isn't a documented way of doing so. 
+
+Focussing now on parsing the responses in separate JSON files (one-per-response) and one unified CSV (with all responses). 
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!
+
 
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Original README contents</h2></summary>

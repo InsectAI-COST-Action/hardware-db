@@ -14,6 +14,7 @@ SCOPES = [
 
 SCHEMA_FILE = "hardware-db_schema.json"
 TOKEN_FILE = "token.json"
+PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
 
 
 ### =====================
@@ -226,7 +227,7 @@ def main():
         ).execute()
 
     # -------------------------------------------------
-    # 5. Rename Drive file
+    # 5. Rename & move Drive file
     # -------------------------------------------------
     drive_service.files().update(
         fileId=form_id,
@@ -234,6 +235,22 @@ def main():
             "name": f"{datetime.today().strftime('%Y-%m-%d_%H:%M:%S')} "
                     f"- InsectAI hardware database submission form ({DB_VERSION})"
         }
+    ).execute()
+    
+    # Get current parents
+    file = drive_service.files().get(
+        fileId=form_id,
+        fields="parents"
+    ).execute()
+
+    previous_parents = ",".join(file.get("parents"))
+
+    # Move the form
+    drive_service.files().update(
+        fileId=form_id,
+        addParents=PARENT_DIR,
+        removeParents=previous_parents,
+        fields="id, parents"
     ).execute()
 
     print("Form created successfully:")

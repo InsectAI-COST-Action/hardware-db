@@ -3,6 +3,12 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 import os
 
+import json
+import csv
+import re
+from pathlib import Path
+
+
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body.readonly",
     "https://www.googleapis.com/auth/forms.responses.readonly",
@@ -14,7 +20,7 @@ DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
 
 
-# Authenticatation flow
+### Authenticatation flow
 creds = None
 
 if os.path.exists(TOKEN_FILE):
@@ -41,11 +47,45 @@ forms_service = build(
     static_discovery=False,
 )
 
-# Prints the title of the sample form:
-form_id = FORM_ID
-result = forms_service.forms().get(formId=form_id).execute()
-print(result)
 
-# Prints all results from the form:
-result = forms_service.forms().responses().list(formId=form_id).execute()
-print(result)
+### Grab form details - we need this for the questionId's
+form_info = forms_service.forms().get(formId=FORM_ID).execute()
+# print(form_info)
+
+form_info = form_info.get("items")
+# print(form_info)
+
+# Make dictionary of question IDs (idQ) to question titles (titleQ)
+idQ_to_titleQ = {}
+for item in form_info:
+    # print(item)
+    if "questionItem" in item:
+        idQ_to_titleQ[item["questionItem"]["question"]["questionId"]] = item["title"]
+
+print(idQ_to_titleQ)
+
+
+### grab JSON schema, parse into handy dictionary - we need to match questionId to question title
+with open("hardware-db_schema.json", "r", encoding="utf-8") as f:
+    schema = json.load(f)
+
+# shortQ -> shorthand for question
+# titleQ -> actual question text
+shortQ_to_titleQ = {}
+ordered_shortQ_to_titleQ = []
+
+for section in schema["sections"]:
+    for q in section["questions"]:
+        qid = q["id"]
+        title = q["title"]
+        shortQ_to_titleQ[qid] = title
+        ordered_shortQ_to_titleQ.append(qid)
+
+
+### Grab the responses - this contains the answers proper
+responses = forms_service.forms().responses().list(formId=FORM_ID).execute()
+# print(responses)
+
+responses = responses.get("responses", [])
+print(f"Found {len(responses)} responses")
+

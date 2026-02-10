@@ -254,6 +254,10 @@ We need to generate a service account authentication token.
   - Generate a JSON key for the service account
   - Copy the JSON content and set it as the env var (e.g., in a .secret file or system env).
 
+Ok, so I managed to set up the authentication workflow with some secrets management locally. But the form is not being created, probably because the service account cannot access files in my account's Drive (I read somewhere that service accounts can have their own Drive space, but I didn't activate it and in any case it would not be accessible to anyone but the service account). 
+
+I will now try to create a shared Drive folder from my own Drive and share it with the service account... 
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

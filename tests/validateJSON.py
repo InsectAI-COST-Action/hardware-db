@@ -8,9 +8,11 @@ from jsonschema import validate
 # Describe what kind of json you expect.
 schema = {
     "type": "object",
+    "additionalProperties": False,
     "properties": {
         "info": {
             "type": "object",
+            "additionalProperties": False,
             "properties": {
                 "title": {"type": "string"},
                 "description": {"type": "string"}
@@ -19,66 +21,64 @@ schema = {
         },
         "settings": {
             "type": "object",
+            "additionalProperties": False,
             "properties": {
                 "emailCollectionType": {"type": "string"}
             },
             "required": ["emailCollectionType"]
         },
         "sections": {
-            "type": "object",
-            "properties": {
-                "id": {"type": "string"},
-                "title": {"type": "string"},
-                "description": {"type": "string"},
-                "questions": {
-                    "type": "object",
-                    "properties": {
-                        "id": {"type": "string"},
-                        "title": {"type": "string"},
-                        "required": {"type": "boolean"},
-                        "type": {"type": "string"},
-                        "paragraph": {"type": "boolean"},
-                        "options": {
-                            "type": "array",
-                            "items": {"type": "string"}
-                        },
-                        "logic": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "id": {"type": "string"},
+                    "title": {"type": "string"},
+                    "description": {
+                        "type": ["string", "null"]
+                    },
+                    "questions": {
+                        "type": "array",
+                        "items": {
                             "type": "object",
+                            "additionalProperties": False,
                             "properties": {
-                                "Yes": {
-                                    "type": "object",
-                                    "properties": {
-                                        "go_to": {"type": "string"}
-                                    },
-                                    "required": ["go_to"]
+                                "id": {"type": "string"},
+                                "title": {"type": "string"},
+                                "required": {"type": "boolean"},
+                                "type": {"type": "string"},
+                                "paragraph": {"type": "boolean"},
+                                "choiceType": {"type": "string"},
+                                "low": {"type": "number"},
+                                "high": {"type": "number"},
+                                "options": {
+                                    "type": "array",
+                                    "items": {"type": "string"}
                                 },
-                                "No": {
+                                "logic": {
                                     "type": "object",
-                                    "properties": {
-                                        "go_to": {"type": "string"}
-                                    },
-                                    "required": ["go_to"]
+                                    "additionalProperties": {
+                                        "type": "object",
+                                        "additionalProperties": False,
+                                        "properties": {
+                                            "go_to": {"type": "string"}
+                                        },
+                                        "required": ["go_to"]
+                                    }
                                 }
                             },
-                            "required": ["Yes", "No"]
+                            "required": ["id", "title", "required", "type"]
                         }
-                    },
-                    "required": [
-                        "id",
-                        "title",
-                        "required",
-                        "type",
-                        "paragraph",
-                        "options",
-                        "logic"
-                    ]
-                }
-            },
-            "required": ["id", "title", "description", "questions"]
+                    }
+                },
+                "required": ["id", "title", "questions"]
+            }
         }
     },
     "required": ["info", "settings", "sections"]
 }
+
 
 
 # Convert json to python object.
@@ -111,7 +111,7 @@ my_json = {
     "settings": {
         "emailCollectionType": "optional"
     },
-    "sections": {
+    "sections": [{
         "id": "section1",
         "title": "Section 1",
         "description": "This is the first section.",
@@ -125,10 +125,8 @@ my_json = {
             "logic": {
                 "Yes": {"go_to": "section2"},
                 "No": {"go_to": "section3"}
-            }
+            }}}]
         }
-    }
-}
 
 try:
     validate(instance=my_json, schema=schema)

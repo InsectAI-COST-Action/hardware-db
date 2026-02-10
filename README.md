@@ -15,12 +15,14 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Add further branching in the logic for basic VS full form. 
 - [x] Get some dummy answers in the form to test.
 - [x] Implement collecting answers and parsing into human-readable JSON
+- [x] Add schema's validation for valid JSON
 - [ ] Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)
 - [ ] Develop CI/CD workflow on Github
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
+- [ ] Other tests?
 
 
 **Outstanding issues:**

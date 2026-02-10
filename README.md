@@ -258,6 +258,12 @@ Ok, so I managed to set up the authentication workflow with some secrets managem
 
 I will now try to create a shared Drive folder from my own Drive and share it with the service account... 
 
+Need to create the form first as a regular Google Drive file (with appropriate MIME type), then update the form with questions and stuff. 
+
+⛔ Turns out, I cannot use a service account to interact with a personal Google Drive, this is a limitation that google imposes... 
+
+Will need to find another way to not have to re-authenticate frequently with OAuth2 tokens on Github. 
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

@@ -1,4 +1,4 @@
-import os
+import os, io
 import json
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -39,8 +39,39 @@ credentials = service_account.Credentials.from_service_account_info(
     scopes=SCOPES
 )
 
-# Build Forms API service
+drive_service = build("drive", "v3", credentials=credentials)
 forms_service = build("forms", "v1", credentials=credentials)
+
+
+### Create Drive file first, then update
+file_metadata = {
+    "name": "Insect Monitoring Form",
+    "mimeType": "application/vnd.google-apps.form",
+    "parents": [secrets_dict.get("DRIVE_FORMS_FOLDER")]
+}
+
+import io
+from googleapiclient.http import MediaIoBaseUpload
+file_content = "Hello! This is the content of the text file."
+media = MediaIoBaseUpload(io.BytesIO(file_content.encode("utf-8")), mimetype="text/plain")
+
+file = drive_service.files().create(
+    body={
+        "name": "test.txt",
+        "mimeType": "text/plain",
+        "parents": [secrets_dict.get("DRIVE_FORMS_FOLDER")],
+    },
+    media_body=media,
+    supportsAllDrives=True,
+    fields="id, parents"
+).execute() ### this now fails too
+
+drive_service.files().create(
+    body=file_metadata,
+    supportsAllDrives=True,
+    fields="id"
+).execute()
+
 
 # -----------------------------
 # 1. Create a new form

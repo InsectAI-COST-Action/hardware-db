@@ -238,6 +238,22 @@ This means that we have to find some other way of integrating responses from dif
 
 Focussing now on parsing the responses in separate JSON files (one-per-response) and one unified CSV (with all responses). 
 
+## Changing authentication method
+Let's now work on changing the OAuth2-based method (good for personal accounts) to a service account authentication method (good for machine-to-machine auth, automated workflows). 
+
+Borrowing from [ACCESS-2026](https://github.com/darsa-group/ACCESS-2026/tree/source?tab=readme-ov-file#secrets-management), let;s create a new token for my @wsl.ch Google account.
+As an aside, I had to enable 2FA to be able to use Google Cloud Console. 
+
+We need to generate a service account authentication token. 
+
+`GOOGLE_SERVICE_JSON_KEY`: this is the JSON content of a Google Cloud service account key. To get it:
+  - Go to the [Google Cloud Console](https://console.cloud.google.com/).
+  - Create or select a project - I selected the pre-existing `InsectAI-hardwareDB-backend`
+  - Enable the Google Forms API. 
+  - Create a service account (IAM & Admin > Service Accounts).
+  - Generate a JSON key for the service account
+  - Copy the JSON content and set it as the env var (e.g., in a .secret file or system env).
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

@@ -2,6 +2,8 @@
 # Secrets
 *oauth*.json
 *token*.json
+*.secret*
+
 # Exports and dumps
 export/*.json
 export/*.csv

@@ -82,8 +82,17 @@ schema = {
 
 
 # Convert json to python object.
-with open ("../hardware-db_schema.json", "r") as f:
-    my_json = json.load(f)
+try: 
+    with open ("../hardware-db_schema.json", "r") as f:
+        my_json = json.load(f)
+    try:
+        validate(instance=my_json, schema=schema)
+    except Exception as e:
+        print("Validation failed:", e)
+    
+except Exception as e:
+    print("Failed to load, probably because of a malformed JSON:", e)
+    my_json = None
 
 # Validate will raise exception if given json is not what is described in schema.
 validate(instance=my_json, schema=schema)

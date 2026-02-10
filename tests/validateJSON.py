@@ -6,78 +6,8 @@ import json
 from jsonschema import validate
 
 # Describe what kind of json you expect.
-schema = {
-    "type": "object",
-    "additionalProperties": False,
-    "properties": {
-        "info": {
-            "type": "object",
-            "additionalProperties": False,
-            "properties": {
-                "title": {"type": "string"},
-                "description": {"type": "string"}
-            },
-            "required": ["title", "description"]
-        },
-        "settings": {
-            "type": "object",
-            "additionalProperties": False,
-            "properties": {
-                "emailCollectionType": {"type": "string"}
-            },
-            "required": ["emailCollectionType"]
-        },
-        "sections": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "properties": {
-                    "id": {"type": "string"},
-                    "title": {"type": "string"},
-                    "description": {
-                        "type": ["string", "null"]
-                    },
-                    "questions": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "additionalProperties": False,
-                            "properties": {
-                                "id": {"type": "string"},
-                                "title": {"type": "string"},
-                                "required": {"type": "boolean"},
-                                "type": {"type": "string"},
-                                "paragraph": {"type": "boolean"},
-                                "choiceType": {"type": "string"},
-                                "low": {"type": "number"},
-                                "high": {"type": "number"},
-                                "options": {
-                                    "type": "array",
-                                    "items": {"type": "string"}
-                                },
-                                "logic": {
-                                    "type": "object",
-                                    "additionalProperties": {
-                                        "type": "object",
-                                        "additionalProperties": False,
-                                        "properties": {
-                                            "go_to": {"type": "string"}
-                                        },
-                                        "required": ["go_to"]
-                                    }
-                                }
-                            },
-                            "required": ["id", "title", "required", "type"]
-                        }
-                    }
-                },
-                "required": ["id", "title", "questions"]
-            }
-        }
-    },
-    "required": ["info", "settings", "sections"]
-}
+with open("validation_schema.json", "r") as f: 
+    schema = json.load(f)
 
 # Convert json to python object.
 try: 

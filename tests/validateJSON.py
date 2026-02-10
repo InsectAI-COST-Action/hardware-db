@@ -7,33 +7,79 @@ from jsonschema import validate
 
 # Describe what kind of json you expect.
 schema = {
-    "info": {
-        "title": {"type": "string"},
-        "description": {"type": "string"},
-    },
-    "settings": {
-        "emailCollectionType": {"type": "string"}
+    "type": "object",
+    "properties": {
+        "info": {
+            "type": "object",
+            "properties": {
+                "title": {"type": "string"},
+                "description": {"type": "string"}
+            },
+            "required": ["title", "description"]
         },
-    "sections": {
-        "id": {"type": "string"},
-        "title": {"type": "string"},
-        "description": {"type": "string"},
-        "questions": {
-            "id": {"type": "string"},
-            "title": {"type": "string"},
-            "required": {"type": "boolean"},
-            "type": {"type": "string"},
-            "paragraph": {"type": "boolean"},
-            "options": [
-                {"type": "string"}
-            ],
-            "logic": {
-                "Yes": {"go_to": {"type": "string"}},
-                "No": {"go_to": {"type": "string"}}
-            }
+        "settings": {
+            "type": "object",
+            "properties": {
+                "emailCollectionType": {"type": "string"}
+            },
+            "required": ["emailCollectionType"]
+        },
+        "sections": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "title": {"type": "string"},
+                "description": {"type": "string"},
+                "questions": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "title": {"type": "string"},
+                        "required": {"type": "boolean"},
+                        "type": {"type": "string"},
+                        "paragraph": {"type": "boolean"},
+                        "options": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        },
+                        "logic": {
+                            "type": "object",
+                            "properties": {
+                                "Yes": {
+                                    "type": "object",
+                                    "properties": {
+                                        "go_to": {"type": "string"}
+                                    },
+                                    "required": ["go_to"]
+                                },
+                                "No": {
+                                    "type": "object",
+                                    "properties": {
+                                        "go_to": {"type": "string"}
+                                    },
+                                    "required": ["go_to"]
+                                }
+                            },
+                            "required": ["Yes", "No"]
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "title",
+                        "required",
+                        "type",
+                        "paragraph",
+                        "options",
+                        "logic"
+                    ]
+                }
+            },
+            "required": ["id", "title", "description", "questions"]
         }
-    }
+    },
+    "required": ["info", "settings", "sections"]
 }
+
 
 # Convert json to python object.
 with open ("../hardware-db_schema.json", "r") as f:

@@ -4,6 +4,7 @@ on:
   push:
     # paths:
     #   - '*schema*.json'
+  workflow_dispatch:
 
 jobs:
   validate_json:

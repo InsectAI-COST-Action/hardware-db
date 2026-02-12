@@ -20,7 +20,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [ ] Develop CI/CD workflow on Github
   - [x] Testing workflow: validate JSON + G Drive file ops
   - [x] Create forms
-  - [ ] Read responses, generate exports
+  - [x] Read responses, generate exports
   - [ ] Get order of operations right
 
 *Extras*

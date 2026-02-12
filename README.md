@@ -21,6 +21,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Testing workflow: validate JSON + G Drive file ops
   - [x] Create forms
   - [ ] Read responses, generate exports
+  - [ ] Get order of operations right
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
@@ -287,6 +288,15 @@ Finally some progress! It now complains that there is no runnable browser, becau
 I need to provide also a *refresh token* alongside the OAuth2 key, to allow the headless workflow to request short-lived access tokens with no interaction. Handy post on how to [here](https://medium.com/@4suman12/generating-refresh-tokens-for-google-oauth-credentials-fd6a9ce54570). 
 
 Thank goodness it works now! See commits: e6a5a41, c7f7470, bfbeb16. Next, clean up a bit the scripts an workflow. 
+
+Managed to get most of the way there, found out that `workflow_run` conditions only get triggered if you are on the main branch (se thread [here](https://github.com/orgs/community/discussions/66512))...
+
+The solution is to fork the repo, merge whatever feature branch you are working on into main and tests deployments there. 
+
+I verified that `tests.yml` runs fine, and `createForm.yml` starts after Tests has completed, and also runs fine. 
+`collectResponses.yml` gets correctly triggered after Tests, and passes the check for success of that workflow, but then it fails for some reason. 
+
+Gosh darn it, will I ever learn to spell properly? It was the python script filename misspelled that was causing the issue...
 
 
 > [!TIP]

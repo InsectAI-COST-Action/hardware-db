@@ -19,7 +19,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [ ] ~~Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)~~ - this is not supported by Google API
 - [ ] Develop CI/CD workflow on Github
   - [x] Testing workflow: validate JSON + G Drive file ops
-  - [ ] Create forms
+  - [x] Create forms
   - [ ] Read responses, generate exports
 
 *Extras*

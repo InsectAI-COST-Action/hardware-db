@@ -1,9 +1,10 @@
 name: Collect Responses
 
 on:
-  schedule:
-    - cron: '0 4 * * *' # daily at 04:00 UTC
-  workflow_dispatch:
+  push:
+#   schedule:
+#     - cron: '0 4 * * *' # daily at 04:00 UTC
+#   workflow_dispatch:
 
 permissions:
   contents: write
@@ -53,7 +54,7 @@ jobs:
           pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
       - name: Run collect responses
-        run: python collectReponses.py
+        run: python collectResponses.py
 
       - name: Commit and push data outputs
         run: |

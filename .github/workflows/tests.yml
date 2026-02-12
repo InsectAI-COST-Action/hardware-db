@@ -1,5 +1,4 @@
 name: Tests
-
 on:
   push:
 
@@ -29,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OAUTH_CLIENT_JSON_SECRET: ${{ secrets.OAUTH_CLIENT_JSON }}
-    if: ${{ secrets.OAUTH_CLIENT_JSON != '' }}
+    if: ${{ env.OAUTH_CLIENT_JSON_SECRET != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -45,7 +44,7 @@ jobs:
 
       - name: Write OAuth client secret
         run: |
-          printf '%s' "${{ secrets.OAUTH_CLIENT_JSON }}" > $GITHUB_WORKSPACE/OAuth_client.json
+          printf '%s' "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $GITHUB_WORKSPACE/OAuth_client.json
 
       - name: Run Drive auth test
         env:

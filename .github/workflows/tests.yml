@@ -28,11 +28,11 @@ jobs:
     needs: validate_json
     runs-on: ubuntu-latest
     env:
-        OAUTH_CLIENT_JSON_SECRET: ${{ secrets.OAUTH_CLIENT_JSON }}
+        OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
     steps:
       - name: Check OAuth secret
         id: secret_check
-        if: ${{ env.OAUTH_CLIENT_JSON_SECRET != '' }}
+        if: ${{ env.OAUTH_CLIENT_JSON != '' }}
         run: echo "has_secret=true" >> "$GITHUB_OUTPUT"
 
       - name: Skip remaining steps when secret is absent
@@ -55,9 +55,9 @@ jobs:
 
     #   - name: Write OAuth client secret
     #     run: |
-    #       printf '%s' "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $GITHUB_WORKSPACE/OAuth_client.json
+    #       printf '%s' "${{ env.OAUTH_CLIENT_JSON }}" > $GITHUB_WORKSPACE/OAuth_client.json
 
       - name: Run Drive auth test
         env:
-          OAUTH_CLIENT_JSON: ${{ env.OAUTH_CLIENT_JSON_SECRET }}
+          OAUTH_CLIENT_JSON: ${{ env.OAUTH_CLIENT_JSON }}
         run: python tests/testAuth.py

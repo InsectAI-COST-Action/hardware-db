@@ -1,13 +1,13 @@
 name: Collect Responses
 
 on:
+  push:
+  schedule:
+    - cron: '0 4 * * *' # daily at 04:00 UTC
   workflow_run:
     workflows: ["Tests"]
     types:
       - completed  
-#   schedule:
-#     - cron: '0 4 * * *' # daily at 04:00 UTC
-#   workflow_dispatch:
 
 permissions:
   contents: write

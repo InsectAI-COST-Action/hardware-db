@@ -53,11 +53,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
-    #   - name: Write OAuth client secret
-    #     run: |
-    #       printf '%s' "${{ env.OAUTH_CLIENT_JSON }}" > $GITHUB_WORKSPACE/OAuth_client.json
+      - name: Write OAuth client secret to a file
+        id: write_secret
+        run: |
+          # The secret is the raw JSON payload.
+          echo "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $HOME/oauth_client.json
+          echo "path=$HOME/oauth_client.json" >> "$GITHUB_OUTPUT"
 
       - name: Run Drive auth test
         env:
-          OAUTH_CLIENT_JSON: ${{ env.OAUTH_CLIENT_JSON }}
+          OAUTH_CLIENT_JSON: ${{ steps.write_secret.outputs.path }}
         run: python tests/testAuth.py

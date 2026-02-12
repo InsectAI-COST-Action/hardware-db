@@ -1,7 +1,7 @@
 name: Collect Responses
 
 on:
-  push:
+#   push:
   schedule:
     - cron: '0 4 * * *' # daily at 04:00 UTC
   workflow_run:

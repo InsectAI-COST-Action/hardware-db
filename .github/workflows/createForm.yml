@@ -1,10 +1,10 @@
 name: Create Form
 
 on:
-  push:
-  # workflow_run:
-  # workflows: ["Tests"]
-  # types: [completed]
+  workflow_run:
+    workflows: ["Tests"]
+    types: 
+      - completed
 
 permissions:
   contents: write

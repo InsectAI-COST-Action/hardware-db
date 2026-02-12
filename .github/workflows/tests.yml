@@ -29,17 +29,18 @@ jobs:
     runs-on: ubuntu-latest
     env:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
+        REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
     steps:
-      - name: Check OAuth secret
-        id: secret_check
-        if: ${{ env.OAUTH_CLIENT_JSON != '' }}
-        run: echo "✅ OAUTH_CLIENT_JSON secret is set."
+    #   - name: Check OAuth secret
+    #     id: secret_check
+    #     if: ${{ env.OAUTH_CLIENT_JSON != '' }}
+    #     run: echo "✅ OAUTH_CLIENT_JSON secret is set."
 
-      - name: Skip remaining steps when secret is absent
-        if: ${{ steps.secret_check.outcome == 'skipped' }}
-        run: |
-          echo "⚠️ OAUTH_CLIENT_JSON secret not set – skipping auth test."
-          exit 0
+    #   - name: Skip remaining steps when secret is absent
+    #     if: ${{ steps.secret_check.outcome == 'skipped' }}
+    #     run: |
+    #       echo "⚠️ OAUTH_CLIENT_JSON secret not set – skipping auth test."
+    #       exit 0
 
       - uses: actions/checkout@v4
 
@@ -61,6 +62,6 @@ jobs:
     #       echo "path=$HOME/oauth_client.json" >> "$GITHUB_OUTPUT"
 
       - name: Run Drive auth test
-        env:
-            OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
+        # env:
+        #     OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         run: python tests/testAuth.py

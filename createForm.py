@@ -145,7 +145,15 @@ def main():
         # Persist the fresh token for the next local run
         with open(TOKEN_FILE, "w", encoding="utf-8") as token:
             token.write(creds.to_json())
-
+    
+    ### Create services with stored credentials
+    forms_service = build(
+        "forms",
+        "v1",
+        credentials=creds,
+        discoveryServiceUrl=DISCOVERY_DOC,
+        static_discovery=False,
+        )
     drive_service = build("drive", "v3", credentials=creds)
 
     # -------------------------------------------------

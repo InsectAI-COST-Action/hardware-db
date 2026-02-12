@@ -25,23 +25,12 @@ jobs:
 
   test_auth:
     name: Drive auth & file ops (optional)
-    needs: validate_json
+    # needs: validate_json
     runs-on: ubuntu-latest
     env:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
     steps:
-    #   - name: Check OAuth secret
-    #     id: secret_check
-    #     if: ${{ env.OAUTH_CLIENT_JSON != '' }}
-    #     run: echo "✅ OAUTH_CLIENT_JSON secret is set."
-
-    #   - name: Skip remaining steps when secret is absent
-    #     if: ${{ steps.secret_check.outcome == 'skipped' }}
-    #     run: |
-    #       echo "⚠️ OAUTH_CLIENT_JSON secret not set – skipping auth test."
-    #       exit 0
-
       - uses: actions/checkout@v4
 
       - name: Set up Python
@@ -54,14 +43,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
-    #   - name: Write OAuth client secret to a file
-    #     id: write_secret
-    #     run: |
-    #       # The secret is the raw JSON payload.
-    #       echo "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $HOME/oauth_client.json
-    #       echo "path=$HOME/oauth_client.json" >> "$GITHUB_OUTPUT"
-
       - name: Run Drive auth test
-        # env:
-        #     OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         run: python tests/testAuth.py

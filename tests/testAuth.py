@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""
-Google Drive auth + simple file ops.
-
-Works with:
-  • OAUTH_CLIENT_JSON = path to a JSON file   (local .secrets or env var)
-  • OAUTH_CLIENT_JSON = raw JSON string       (GitHub Actions secret)
-"""
-
 import os
 import io
 import json
@@ -35,9 +26,9 @@ def resolve_oauth_path() -> str:
     Return a filesystem path that points to a valid OAuth client JSON file.
 
     Preference order:
-      1️⃣ OAUTH_CLIENT_JSON env var that already points to an existing file.
-      2️⃣ OAUTH_CLIENT_JSON env var that contains the raw JSON payload.
-      3️⃣ .secrets file with a line like: OAUTH_CLIENT_JSON=/full/path/to/client.json
+      - OAUTH_CLIENT_JSON env var that already points to an existing file.
+      - OAUTH_CLIENT_JSON env var that contains the raw JSON payload.
+      - .secrets file with a line like: OAUTH_CLIENT_JSON=/full/path/to/client.json
     Raises:
       FileNotFoundError if nothing usable is found.
     """
@@ -58,7 +49,7 @@ def resolve_oauth_path() -> str:
         # Write the JSON to a temp file and hand that path back.
         return _write_json_to_tmp(env_val)
 
-    # ----- 2️⃣ .secrets fallback (local dev) -----
+    # ----- .secrets fallback (local dev) -----
     secrets_file = ".secrets"
     if os.path.isfile(secrets_file):
         with open(secrets_file, "r", encoding="utf-8") as f:
@@ -86,7 +77,7 @@ def resolve_oauth_path() -> str:
 # ----------------------------------------------------------------------
 # Configuration
 # ----------------------------------------------------------------------
-OAUTH_CLIENT_JSON = resolve_oauth_path()          # <-- resolved path
+OAUTH_CLIENT_JSON = resolve_oauth_path()
 TOKEN_FILE = os.getenv("TOKEN_TESTAUTH", "token_testAuth.json")
 PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S"   # hardware‑db Forms folder
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
@@ -98,11 +89,11 @@ SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 # ----------------------------------------------------------------------
 creds = None
 
-# 1️⃣ Try to load a persisted token file (useful when you run locally)
+# Try to load a persisted token file (useful when you run locally)
 if os.path.exists(TOKEN_FILE):
     creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
-# 2️⃣ If we have a refresh‑token secret (CI), load it and build Credentials
+# If we have a refresh‑token secret (CI), load it and build Credentials
 if not creds or not creds.valid:
     # Look for the REFRESH_TOKEN_JSON secret (exposed as env var)
     refresh_blob_raw = os.getenv("REFRESH_TOKEN_JSON")
@@ -125,7 +116,7 @@ if not creds or not creds.valid:
                 "Failed to parse REFRESH_TOKEN_JSON – ensure the secret contains the full JSON blob."
             ) from exc
 
-# 3️⃣ If we still have no credentials, fall back to the interactive flow (local dev)
+# If we still have no credentials, fall back to the interactive flow (local dev)
 if not creds or not creds.valid:
     flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
     creds = flow.run_local_server(port=0)   # opens a browser – only works locally
@@ -145,7 +136,7 @@ media = MediaIoBaseUpload(
     io.BytesIO(file_content.encode("utf-8")), mimetype="text/plain"
 )
 
-# 1️⃣ Create the file
+# Create the file
 created = (
     drive_service.files()
     .create(body={"name": "test.txt"}, media_body=media, fields="id")
@@ -154,14 +145,14 @@ created = (
 file_id = created["id"]
 print(f"✅ Created test file – ID: {file_id}")
 
-# 2️⃣ Rename the file
+# Rename the file
 drive_service.files().update(
     fileId=file_id,
     body={"name": f"Test File - {datetime.now():%Y-%m-%d_%H:%M:%S}"},
 ).execute()
 print("🔄 Renamed file")
 
-# 3️⃣ Retrieve current parents (need the ID field here)
+# Retrieve current parents (need the ID field here)
 metadata = (
     drive_service.files()
     .get(fileId=file_id, fields="id,parents")
@@ -169,7 +160,7 @@ metadata = (
 )
 previous_parents = ",".join(metadata.get("parents", []))
 
-# 4️⃣ Move the file into the target folder
+# Move the file into the target folder
 drive_service.files().update(
     fileId=file_id,
     addParents=PARENT_DIR,
@@ -178,6 +169,6 @@ drive_service.files().update(
 ).execute()
 print(f"📂 Moved file to folder {PARENT_DIR}")
 
-# 5️⃣ Clean‑up (optional)
+# Clean‑up (optional)
 drive_service.files().delete(fileId=file_id).execute()
 print("🗑️ Deleted test file – cleanup complete")

@@ -18,6 +18,9 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [x] Add schema's validation for valid JSON
 - [ ] ~~Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)~~ - this is not supported by Google API
 - [ ] Develop CI/CD workflow on Github
+  - [x] Testing workflow: validate JSON + G Drive file ops
+  - [ ] Create forms
+  - [ ] Read responses, generate exports
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
@@ -283,6 +286,7 @@ Finally some progress! It now complains that there is no runnable browser, becau
 
 I need to provide also a *refresh token* alongside the OAuth2 key, to allow the headless workflow to request short-lived access tokens with no interaction. Handy post on how to [here](https://medium.com/@4suman12/generating-refresh-tokens-for-google-oauth-credentials-fd6a9ce54570). 
 
+Thank goodness it works now! See commits: e6a5a41, c7f7470, bfbeb16. Next, clean up a bit the scripts an workflow. 
 
 
 > [!TIP]

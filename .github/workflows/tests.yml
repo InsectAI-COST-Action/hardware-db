@@ -20,7 +20,8 @@ jobs:
           pip install jsonschema google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
       - name: Run schema validation
-        run: python tests/validateJSON.py
+        run: python validateJSON.py
+        working-directory: tests
 
   test_auth:
     name: Drive auth & file ops (optional)
@@ -33,7 +34,7 @@ jobs:
         run: echo 'This step will only run if the secret has a value set.'
       - if: ${{ env.OAUTH_CLIENT_JSON_SECRET == '' }}
         run: echo 'This step will only run if the secret does not have a value set.'
-        
+
         # uses: actions/checkout@v4
 
     #   - name: Set up Python

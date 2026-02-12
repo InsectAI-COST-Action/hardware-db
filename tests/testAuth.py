@@ -27,7 +27,7 @@ file = drive_service.files().create(
     fields="id"
 ).execute()
 
-print("Created file ID:", file["id"])
+print("Created test file")
 
 
 ### Rename and move file to specified folder
@@ -47,7 +47,7 @@ file = drive_service.files().get(
 
 previous_parents = ",".join(file.get("parents"))
 
-# Move the form
+# Move the file
 drive_service.files().update(
     fileId=file["id"],
     addParents=PARENT_DIR,
@@ -55,5 +55,10 @@ drive_service.files().update(
     fields="id, parents"
 ).execute()
 
-print("File renamed and moved successfully:")
-print(f"https://docs.google.com/forms/d/{file["id"]}/edit")
+print("File renamed and moved successfully")
+
+
+### Delete test file
+drive_service.files().delete(fileId=file["id"]).execute()
+
+print("Cleaning up: deleted test file")

@@ -35,10 +35,9 @@ def resolve_oauth_path() -> str:
     Return a filesystem path that points to a valid OAuth client JSON file.
 
     Preference order:
-      1️⃣  OAUTH_CLIENT_JSON env var that already points to an existing file.
-      2️⃣  OAUTH_CLIENT_JSON env var that contains the raw JSON payload.
-      3️⃣  .secrets file with a line like:
-          OAUTH_CLIENT_JSON=/full/path/to/client.json
+      1️⃣ OAUTH_CLIENT_JSON env var that already points to an existing file.
+      2️⃣ OAUTH_CLIENT_JSON env var that contains the raw JSON payload.
+      3️⃣ .secrets file with a line like: OAUTH_CLIENT_JSON=/full/path/to/client.json
     Raises:
       FileNotFoundError if nothing usable is found.
     """
@@ -93,20 +92,49 @@ PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S"   # hardware‑db Forms folder
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 # ----------------------------------------------------------------------
-# Authentication flow
+# Authentication flow – supports:
+#   * Fresh token via local server (when you run the script locally)
+#   * Re‑using a stored refresh token (CI)
 # ----------------------------------------------------------------------
 creds = None
+
+# 1️⃣ Try to load a persisted token file (useful when you run locally)
 if os.path.exists(TOKEN_FILE):
     creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
+# 2️⃣ If we have a refresh‑token secret (CI), load it and build Credentials
+if not creds or not creds.valid:
+    # Look for the REFRESH_TOKEN_JSON secret (exposed as env var)
+    refresh_blob_raw = os.getenv("REFRESH_TOKEN_JSON")
+    if refresh_blob_raw:
+        try:
+            refresh_blob = json.loads(refresh_blob_raw)
+            creds = Credentials(
+                token=refresh_blob.get("token"),
+                refresh_token=refresh_blob.get("refresh_token"),
+                token_uri=refresh_blob.get("token_uri"),
+                client_id=refresh_blob.get("client_id"),
+                client_secret=refresh_blob.get("client_secret"),
+                scopes=refresh_blob.get("scopes"),
+            )
+            # Force a refresh if the access token is expired or missing
+            if not creds.valid or creds.expired:
+                creds.refresh(Request())
+        except Exception as exc:
+            raise RuntimeError(
+                "Failed to parse REFRESH_TOKEN_JSON – ensure the secret contains the full JSON blob."
+            ) from exc
+
+# 3️⃣ If we still have no credentials, fall back to the interactive flow (local dev)
 if not creds or not creds.valid:
     flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
-    creds = flow.run_local_server(port=0)
+    creds = flow.run_local_server(port=0)   # opens a browser – only works locally
 
-    # Persist the refreshed token for later runs
+    # Persist the fresh token for the next local run
     with open(TOKEN_FILE, "w", encoding="utf-8") as token:
         token.write(creds.to_json())
 
+### Create service with stored credentials
 drive_service = build("drive", "v3", credentials=creds)
 
 # ----------------------------------------------------------------------

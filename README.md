@@ -279,6 +279,11 @@ Man... The Github Actions YAML syntax gets me every time... What a pain to confi
 
 Anyway, the version of `testAuth.py` in commit c484f3d works in local both setting the credentials as an environmental variable and with the .secrets file method. Trying now to make it work on GH Actions too. 
 
+Finally some progress! It now complains that there is no runnable browser, because it's running in a headless environment. 
+
+I need to provide also a *refresh token* alongside the OAuth2 key, to allow the headless workflow to request short-lived access tokens with no interaction. Handy post on how to [here](https://medium.com/@4suman12/generating-refresh-tokens-for-google-oauth-credentials-fd6a9ce54570). 
+
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

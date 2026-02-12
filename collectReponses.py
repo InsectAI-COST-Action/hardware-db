@@ -24,19 +24,50 @@ FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
 DEBUG = False
 
 
-### Authenticatation flow
+# ----------------------------------------------------------------------
+# Authentication flow – supports:
+#   * Fresh token via local server (when you run the script locally)
+#   * Re‑using a stored refresh token (CI)
+# ----------------------------------------------------------------------
+creds = None
+
+# Try to load a persisted token file (useful when you run locally)
 if os.path.exists(TOKEN_FILE):
     creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-else: 
-    creds = None
-    flow = InstalledAppFlow.from_client_secrets_file(
-        OAUTH_CLIENT_JSON, SCOPES
-    )
-    creds = flow.run_local_server(port=0)
 
-    with open(TOKEN_FILE, "w") as token:
+# If we have a refresh‑token secret (CI), load it and build Credentials
+if not creds or not creds.valid:
+    # Look for the REFRESH_TOKEN_JSON secret (exposed as env var)
+    refresh_blob_raw = os.getenv("REFRESH_TOKEN_JSON")
+    if refresh_blob_raw:
+        try:
+            refresh_blob = json.loads(refresh_blob_raw)
+            creds = Credentials(
+                token=refresh_blob.get("token"),
+                refresh_token=refresh_blob.get("refresh_token"),
+                token_uri=refresh_blob.get("token_uri"),
+                client_id=refresh_blob.get("client_id"),
+                client_secret=refresh_blob.get("client_secret"),
+                scopes=refresh_blob.get("scopes"),
+            )
+            # Force a refresh if the access token is expired or missing
+            if not creds.valid or creds.expired:
+                creds.refresh(Request())
+        except Exception as exc:
+            raise RuntimeError(
+                "Failed to parse REFRESH_TOKEN_JSON – ensure the secret contains the full JSON blob."
+            ) from exc
+
+# If we still have no credentials, fall back to the interactive flow (local dev)
+if not creds or not creds.valid:
+    flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
+    creds = flow.run_local_server(port=0)   # opens a browser – only works locally
+
+    # Persist the fresh token for the next local run
+    with open(TOKEN_FILE, "w", encoding="utf-8") as token:
         token.write(creds.to_json())
 
+### Create services with stored credentials
 forms_service = build(
     "forms",
     "v1",

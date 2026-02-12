@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  validate_json:
+    name: Validate JSON schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
+
+      - name: Run schema validation
+        run: python tests/validateJSON.py
+
+  test_auth:
+    name: Drive auth & file ops (optional)
+    needs: validate_json
+    runs-on: ubuntu-latest
+    if: ${{ secrets.OAUTH_CLIENT_JSON != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
+
+      - name: Write OAuth client secret
+        run: |
+          printf '%s' "${{ secrets.OAUTH_CLIENT_JSON }}" > $GITHUB_WORKSPACE/OAuth_client.json
+
+      - name: Run Drive auth test
+        env:
+          OAUTH_CLIENT_JSON: ${{ github.workspace }}/OAuth_client.json
+        run: python tests/testAuth.py

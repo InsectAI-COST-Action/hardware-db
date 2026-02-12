@@ -5,8 +5,10 @@ import io, os
 from googleapiclient.http import MediaIoBaseUpload
 from datetime import datetime
 
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
-TOKEN_FILE = "token_testAuth.json"
+OAUTH_CLIENT_JSON = os.environ.get(
+    "OAUTH_CLIENT_JSON", "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+)
+TOKEN_FILE = os.environ.get("TOKEN_TESTAUTH", "token_testAuth.json")
 PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
 
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]

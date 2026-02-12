@@ -27,6 +27,8 @@ jobs:
     name: Drive auth & file ops (optional)
     needs: validate_json
     runs-on: ubuntu-latest
+    env:
+      OAUTH_CLIENT_JSON_SECRET: ${{ secrets.OAUTH_CLIENT_JSON }}
     if: ${{ secrets.OAUTH_CLIENT_JSON != '' }}
     steps:
       - uses: actions/checkout@v4

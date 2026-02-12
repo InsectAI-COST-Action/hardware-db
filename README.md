@@ -16,7 +16,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [x] Get some dummy answers in the form to test.
 - [x] Implement collecting answers and parsing into human-readable JSON
 - [x] Add schema's validation for valid JSON
-- [ ] Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)
+- [ ] ~~Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)~~ - this is not supported by Google API
 - [ ] Develop CI/CD workflow on Github
 
 *Extras*
@@ -263,6 +263,11 @@ Need to create the form first as a regular Google Drive file (with appropriate M
 ⛔ Turns out, I cannot use a service account to interact with a personal Google Drive, this is a limitation that google imposes... 
 
 Will need to find another way to not have to re-authenticate frequently with OAuth2 tokens on Github. 
+
+## Developing CD/CI pipeline on github
+The first step is making sure that the authentication workflow can work on GitHub Actions. 
+
+Adding a simple test `test/testAuth.py` to verify the ability to write files etc to Google Drive with an OAuth2 token. 
 
 
 > [!TIP]

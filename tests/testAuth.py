@@ -5,12 +5,51 @@ import io, os
 from googleapiclient.http import MediaIoBaseUpload
 from datetime import datetime
 
-OAUTH_CLIENT_JSON = os.environ.get(
-    "OAUTH_CLIENT_JSON", "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
-)
-TOKEN_FILE = os.environ.get("TOKEN_TESTAUTH", "token_testAuth.json")
-PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
+# ----------------------------------------------------------------------
+# Helper: Resolve the OAuth client JSON location
+# ----------------------------------------------------------------------
+def resolve_oauth_path() -> str:
+    """
+    Return the absolute path to the OAuth client JSON file.
 
+    Preference order:
+      1. Environment variable OAUTH_CLIENT_JSON
+      2. .secrets file in the current working directory
+    Raises:
+      FileNotFoundError if no valid path can be determined.
+    """
+    # 1️⃣ Env var (GitHub Actions)
+    env_path = os.getenv("OAUTH_CLIENT_JSON")
+    if env_path:
+        return env_path.strip()
+
+    # 2️⃣ .secrets file (local development)
+    secrets_file = ".secrets"
+    if os.path.isfile(secrets_file):
+        with open(secrets_file, "r", encoding="utf-8") as f:
+            for line in f:
+                # ignore comments / empty lines
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if line.startswith("OAUTH_CLIENT_JSON="):
+                    # everything after the first "=" is the path
+                    return line.split("=", 1)[1].strip()
+
+    # Nothing found – give a helpful message
+    raise FileNotFoundError(
+        "Unable to locate OAuth client JSON. Set the OAUTH_CLIENT_JSON "
+        "environment variable (GitHub Actions) or create a '.secrets' file "
+        "containing a line like:\n"
+        "OAUTH_CLIENT_JSON=/full/path/to/OAuth_client.json"
+    )
+
+# ----------------------------------------------------------------------
+# Configuration
+# ----------------------------------------------------------------------
+OAUTH_CLIENT_JSON = resolve_oauth_path()
+TOKEN_FILE = os.getenv("TOKEN_TESTAUTH", "token_testAuth.json")
+PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S"   # hardware‑db Forms folder
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 

@@ -269,6 +269,11 @@ The first step is making sure that the authentication workflow can work on GitHu
 
 Adding a simple test `test/testAuth.py` to verify the ability to write files etc to Google Drive with an OAuth2 token. 
 
+Ok, I can use status checks from this to test authentication success before building forms etc. 
+
+### Github Actions
+Starting dev on automated workflow
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

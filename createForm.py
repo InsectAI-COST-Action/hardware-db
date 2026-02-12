@@ -3,6 +3,9 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from datetime import datetime
 import json
+import os
+
+from src.authFlow_helpers import resolve_oauth_path
 
 ### =====================
 ### CONFIG
@@ -14,9 +17,10 @@ SCOPES = [
 ]
 
 SCHEMA_FILE = "hardware-db_schema.json"
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+OAUTH_CLIENT_JSON = resolve_oauth_path()
 TOKEN_FILE = "token_createForm.json"
 PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
+DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
 
 ### =====================
@@ -113,6 +117,17 @@ def main():
 
         with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
+
+    # Build Google APIs clients
+    forms_service = build(
+        "forms",
+        "v1",
+        credentials=creds,
+        discoveryServiceUrl=DISCOVERY_DOC,
+        static_discovery=False,
+    )
+
+    drive_service = build("drive", "v3", credentials=creds)
 
     # -------------------------------------------------
     # 1. Create empty form

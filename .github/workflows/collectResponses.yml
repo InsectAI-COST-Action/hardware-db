@@ -2,48 +2,48 @@ name: Collect Responses
 
 on:
   push:
-#   schedule:
-#     - cron: '0 4 * * *' # daily at 04:00 UTC
-#   workflow_run:
-#     workflows: ["Tests"]
-#     types:
-#       - completed  
+  schedule:
+    - cron: '0 4 * * *' # daily at 04:00 UTC
+  workflow_run:
+    workflows: ["Tests"]
+    types:
+      - completed  
 
 permissions:
   contents: write
   actions: read
 
 jobs:
-#   check_tests:
-#     runs-on: ubuntu-latest
-#     outputs:
-#       tests_ok: ${{ steps.check.outputs.tests_ok }}
-#     steps:
-#       - name: Check latest tests run success
-#         id: check
-#         uses: actions/github-script@v6
-#         with:
-#           script: |
-#             const runs = await github.rest.actions.listWorkflowRuns({
-#               owner: context.repo.owner,
-#               repo: context.repo.repo,
-#               workflow_id: 'tests.yml',
-#               per_page: 1
-#             });
-#             if (!runs.data.workflow_runs || runs.data.workflow_runs.length === 0) {
-#               core.setOutput('tests_ok', 'false');
-#             } else {
-#               const conclusion = runs.data.workflow_runs[0].conclusion;
-#               core.setOutput('tests_ok', conclusion === 'success' ? 'true' : 'false');
-#             }
+  check_tests:
+    runs-on: ubuntu-latest
+    outputs:
+      tests_ok: ${{ steps.check.outputs.tests_ok }}
+    steps:
+      - name: Check latest tests run success
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'tests.yml',
+              per_page: 1
+            });
+            if (!runs.data.workflow_runs || runs.data.workflow_runs.length === 0) {
+              core.setOutput('tests_ok', 'false');
+            } else {
+              const conclusion = runs.data.workflow_runs[0].conclusion;
+              core.setOutput('tests_ok', conclusion === 'success' ? 'true' : 'false');
+            }
 
   collect_responses:
-    # needs: check_tests
+    needs: check_tests
     runs-on: ubuntu-latest
     env:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
-    # if: ${{ needs.check_tests.outputs.tests_ok == 'true' }}
+    if: ${{ needs.check_tests.outputs.tests_ok == 'true' }}
     steps:
       - uses: actions/checkout@v4
 

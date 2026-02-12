@@ -33,7 +33,7 @@ jobs:
       - name: Check OAuth secret
         id: secret_check
         if: ${{ env.OAUTH_CLIENT_JSON != '' }}
-        run: echo "has_secret=true" >> "$GITHUB_OUTPUT"
+        run: echo "✅ OAUTH_CLIENT_JSON secret is set."
 
       - name: Skip remaining steps when secret is absent
         if: ${{ steps.secret_check.outcome == 'skipped' }}
@@ -53,14 +53,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
-      - name: Write OAuth client secret to a file
-        id: write_secret
-        run: |
-          # The secret is the raw JSON payload.
-          echo "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $HOME/oauth_client.json
-          echo "path=$HOME/oauth_client.json" >> "$GITHUB_OUTPUT"
+    #   - name: Write OAuth client secret to a file
+    #     id: write_secret
+    #     run: |
+    #       # The secret is the raw JSON payload.
+    #       echo "${{ env.OAUTH_CLIENT_JSON_SECRET }}" > $HOME/oauth_client.json
+    #       echo "path=$HOME/oauth_client.json" >> "$GITHUB_OUTPUT"
 
       - name: Run Drive auth test
         env:
-          OAUTH_CLIENT_JSON: ${{ steps.write_secret.outputs.path }}
+            OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         run: python tests/testAuth.py

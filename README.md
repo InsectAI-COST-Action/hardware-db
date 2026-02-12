@@ -273,7 +273,11 @@ Adding a simple test `test/testAuth.py` to verify the ability to write files etc
 Ok, I can use status checks from this to test authentication success before building forms etc. 
 
 ### Github Actions
-Starting dev on automated workflow
+Starting dev on automated workflow. 
+
+Man... The Github Actions YAML syntax gets me every time... What a pain to configure scripts to run both locally and on GH actions... 
+
+Anyway, the version of `testAuth.py` in commit c484f3d works in local both setting the credentials as an environmental variable and with the .secrets file method. Trying now to make it work on GH Actions too. 
 
 
 > [!TIP]

@@ -8,13 +8,15 @@ import csv
 import re
 from pathlib import Path
 
+from src.authFlow_helpers import resolve_oauth_path
+
 
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body.readonly",
     "https://www.googleapis.com/auth/forms.responses.readonly",
 ]
 
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+OAUTH_CLIENT_JSON = resolve_oauth_path()
 TOKEN_FILE = "token_collectResponses.json"
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"

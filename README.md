@@ -29,10 +29,14 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
+ - [ ] What about github releases and tags?
 - [ ] Add response validation, e.g. valid email address, etc. 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 - [x] Make a better landing page for OAuth authorisation, in Google Cloud console
 - [ ] Other tests?
+- [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
+  - [ ] Add changelog
+  - [ ] Add licence
 
 
 **Outstanding issues:**

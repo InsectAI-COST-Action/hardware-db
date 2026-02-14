@@ -22,16 +22,20 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Create forms
   - [x] Read responses, generate exports
   - [x] Get order of operations right
+- [ ] Refactor scripts to make them a bit more robust and orderly
+  - [ ] Change all python scripts into `if __name__ == "__main__":` construct
+  - [ ] Add `argparse` to allow passing inputs manually
+- [ ] Automatically update link to form at every form re-creation
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
+- [ ] Add response validation, e.g. valid email address, etc. 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 - [x] Make a better landing page for OAuth authorisation, in Google Cloud console
 - [ ] Other tests?
 
 
 **Outstanding issues:**
-- [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
 - [ ] Collating answers
   - [ ] how to track response spreadsheet when form is re-generated at every JSON schema update?
   - [ ] what about attached pictures?
@@ -39,6 +43,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
   - [ ] How to retrieve info and pre-populate form with it? 
   - [ ] We might also just ask them to contact us and/or resubmit... 
+- [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
 
 ## Proof of concept
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 

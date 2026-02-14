@@ -26,7 +26,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
-- [ ] Make a better landing page for OAuth authorisation, in Google Cloud console
+- [x] Make a better landing page for OAuth authorisation, in Google Cloud console
 - [ ] Other tests?
 
 

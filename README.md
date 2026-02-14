@@ -17,11 +17,11 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [x] Implement collecting answers and parsing into human-readable JSON
 - [x] Add schema's validation for valid JSON
 - [ ] ~~Change from OAuth token-based authentication to service account-based authentication (i.e. like for ACCESS website)~~ - this is not supported by Google API
-- [ ] Develop CI/CD workflow on Github
+- [x] Develop CI/CD workflow on Github
   - [x] Testing workflow: validate JSON + G Drive file ops
   - [x] Create forms
   - [x] Read responses, generate exports
-  - [ ] Get order of operations right
+  - [x] Get order of operations right
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 

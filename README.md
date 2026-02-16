@@ -26,10 +26,14 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [ ] Change all python scripts into `if __name__ == "__main__":` construct
   - [ ] Add `argparse` to allow passing inputs manually
 - [ ] Automatically update link to form at every form re-creation
+- [ ] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
+  - [ ] Can put devnotes and TODOs in separate files linked in the README
+- [ ] Add `pyproject.toml` with installs, in place of conda environments.
+  - [ ] Maybe can have different installs for CI/CD and local
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
- - [ ] What about github releases and tags?
+  - [ ] What about github releases and tags?
 - [ ] Add response validation, e.g. valid email address, etc. 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 - [x] Make a better landing page for OAuth authorisation, in Google Cloud console

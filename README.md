@@ -23,8 +23,9 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Read responses, generate exports
   - [x] Get order of operations right
 - [ ] Refactor scripts to make them a bit more robust and orderly
-  - [ ] Change all python scripts into `if __name__ == "__main__":` construct
-  - [ ] Add `argparse` to allow passing inputs manually
+  - [x] Change all python scripts into `if __name__ == "__main__":` construct
+  - [x] Add `argparse` to allow passing inputs manually
+  - [ ] Make sure configuration parser passes appropriate arguments with all three scenarios (flags during call, .secrets file or env variables)
 - [ ] Automatically update link to form at every form re-creation
 - [ ] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
   - [ ] Can put devnotes and TODOs in separate files linked in the README
@@ -39,7 +40,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [x] Make a better landing page for OAuth authorisation, in Google Cloud console
 - [ ] Other tests?
 - [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
-  - [ ] Add changelog
+  - [x] Add changelog
   - [ ] Add licence
 
 
@@ -310,6 +311,19 @@ I verified that `tests.yml` runs fine, and `createForm.yml` starts after Tests h
 `collectResponses.yml` gets correctly triggered after Tests, and passes the check for success of that workflow, but then it fails for some reason. 
 
 Gosh darn it, will I ever learn to spell properly? It was the python script filename misspelled that was causing the issue...
+
+# Refactoring and adding argparse
+Added `src/configParsing.py` with functions to handle variable names passed via either CLI, in th .secrets file (for local exec) and hardcoded in the script (as fallback). 
+
+Eventually, I would like to have nothing hardcoded so that I can pass stuff via env variables (CI/CD) or .secrets, but let's make this work first. 
+
+Situation @ f0bf9be : argparse works fine with the .secrets file, I can remove hardcoded vars from .py scripts and they work. 
+If I take away the .secrets file, it does not fall back to hardcoded vars though... 
+
+## Revising logic somewhat
+Actually scratch that, I only need to know if there are configs in the call, .secrets or env vars. Let's simplify the logic, ignoring vars hardcoded in the script (which is bad practice anyway). 
+
+
 
 
 > [!TIP]

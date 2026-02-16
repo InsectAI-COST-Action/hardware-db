@@ -8,18 +8,20 @@ import csv
 import re
 from pathlib import Path
 
-from src.authFlow_helpers import resolve_oauth_path
+from authFlow_helpers import resolve_oauth_path
+from misc_helpers import sanitize_filename
 
-
+### CONFIG
 SCOPES = [
     "https://www.googleapis.com/auth/forms.body.readonly",
     "https://www.googleapis.com/auth/forms.responses.readonly",
 ]
 
+FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
+
 OAUTH_CLIENT_JSON = resolve_oauth_path()
 TOKEN_FILE = "token_collectResponses.json"
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
 
 DEBUG = False
 
@@ -156,7 +158,7 @@ for response in responses:
     parsed_rows.append(answer_map)
 
 ### Finally, match question IDs to question shorthands, and append answers.
-# invert shorthand -> title to title -> shorthand
+# need to invert shorthand -> title to title -> shorthand
 title_to_short = {title: short for short, title in shortQ_to_titleQ.items()}
 
 # map Google question IDs -> shorthand (when title matches)
@@ -200,12 +202,6 @@ with open(csv_file, "w", newline="", encoding="utf-8") as f:
 print(f"CSV written to {csv_file}")
 
 ### Write individual JSON files for each response, with shorthand keys
-def sanitize_filename(name):
-    name = name.strip()
-    name = re.sub(r"\s+", "_", name)
-    name = re.sub(r"[^\w\-]", "", name)
-    return name
-
 for item in responses_shorthand:
 
     device_name = item.get("device_name")

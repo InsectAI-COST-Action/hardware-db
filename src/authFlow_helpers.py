@@ -1,7 +1,8 @@
 import os
-import io
 import json
 import tempfile
+from pathlib import Path
+from typing import Optional, Union
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
@@ -19,56 +20,81 @@ def _write_json_to_tmp(json_text: str) -> str:
     return tmp_path
 
 
-def resolve_oauth_path() -> str:
+def _is_json_string(s: str) -> bool:
     """
-    Return a filesystem path that points to a valid OAuth client JSON file.
-
-    Preference order:
-      - OAUTH_CLIENT_JSON env var that already points to an existing file.
-      - OAUTH_CLIENT_JSON env var that contains the raw JSON payload.
-      - .secrets file with a line like: OAUTH_CLIENT_JSON=/full/path/to/client.json
-    Raises:
-      FileNotFoundError if nothing usable is found.
+    Valid JSON check: True if the stripped string starts with `{` and ends with `}`.
     """
-    # ----- Existing file? -----
-    env_val = os.getenv("OAUTH_CLIENT_JSON")
-    if env_val:
-        if os.path.isfile(env_val):
-            # It's already a path – use it directly.
-            return env_val
+    s = s.strip()
+    return s.startswith("{") and s.endswith("}")
 
-        # Not a file → assume it is the raw JSON text.
+
+def resolve_oauth_path(value: Optional[Union[str, Path]]) -> Path:
+    """
+    Turn *any* representation of the OAuth client credentials into a concrete
+    filesystem Path that the Google libraries can consume.
+    
+    It support, in order of priority:
+    1. An explicit file path that already exists.
+    2. A raw JSON string (the full OAuth client JSON).
+    3. ``None`` – in which case we raise a clear error telling the caller
+       to supply the variable via CLI, .secrets, or the environment.
+    
+    Parameters
+    ----------
+    value:
+        The value obtained from the configuration layer.  It may be:
+        * ``Path`` or ``str`` pointing at a file,
+        * a raw JSON string,
+        * ``None``.
+
+    Returns
+    -------
+    pathlib.Path
+        Path to a real file containing the OAuth client definition.
+
+    Raises
+    ------
+    FileNotFoundError
+        If ``value`` is ``None`` or points at a non‑existent file.
+    ValueError
+        If ``value`` looks like JSON but cannot be parsed (protects against
+        accidental malformed strings).
+    """
+    
+    ### No value at all → Error, caller must provide something
+    if value is None:
+        raise FileNotFoundError(
+            "OAUTH_CLIENT_JSON not supplied. Provide it via a CLI argument, "
+            "a .secrets file, or an environment variable."
+        )
+    # Normalise to a string for the checks below
+    candidate = str(value).strip()
+
+    ### Existing file on disk?
+    path_candidate = Path(candidate).expanduser().resolve()
+    if path_candidate.is_file():
+        return path_candidate
+
+    ### Raw JSON string? (starts with { and ends with })
+    if _is_json_string(candidate):
         try:
-            json.loads(env_val)          # sanity‑check that it parses
-        except Exception as exc:
-            raise FileNotFoundError(
-                "OAUTH_CLIENT_JSON is set but is neither a valid file nor valid JSON."
+            # Validate that it is real JSON – this catches obvious typos.
+            json.loads(candidate)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Provided OAUTH_CLIENT_JSON looks like JSON but is malformed."
             ) from exc
-        # Write the JSON to a temp file and hand that path back.
-        return _write_json_to_tmp(env_val)
 
-    # ----- .secrets fallback (local dev) -----
-    secrets_file = ".secrets"
-    if os.path.isfile(secrets_file):
-        with open(secrets_file, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-                if line.startswith("OAUTH_CLIENT_JSON="):
-                    candidate = line.split("=", 1)[1].strip()
-                    if os.path.isfile(candidate):
-                        return candidate
-                    raise FileNotFoundError(
-                        f"The path '{candidate}' referenced in .secrets does not exist."
-                    )
+        # Write the JSON to a temporary file that will live for the process.
+        tmp_dir = Path(tempfile.gettempdir())
+        tmp_file = tmp_dir / f"oauth_client_{os.getpid()}.json"
+        tmp_file.write_text(candidate, encoding="utf-8")
+        return tmp_file
 
-    # ----- Nothing worked -----
+    ### Anything else is an error – cannot guess what the user meant.
     raise FileNotFoundError(
-        "Unable to locate OAuth client JSON. Either set the OAUTH_CLIENT_JSON "
-        "environment variable (to a path or to the raw JSON) or create a "
-        ".secrets file containing a line like:\n"
-        "OAUTH_CLIENT_JSON=/full/path/to/OAuth_client.json"
+        f"The value supplied for OAUTH_CLIENT_JSON ('{candidate}') is neither a "
+        "readable file nor a raw JSON string. Supply a valid path or raw JSON."
     )
 
 # ----------------------------------------------------------------------

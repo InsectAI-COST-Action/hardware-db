@@ -5,4 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "hardware-db"
 version = "0.2.0"
-packages = [{include = "src"}]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*"]

@@ -7,25 +7,32 @@ from datetime import datetime
 from googleapiclient.discovery import build
 
 from authFlow_helpers import resolve_oauth_path, make_creds
+from configParsing import build_config
+
+# ### CONFIG
+# DB_VERSION = "v0.2.0"
+# SCOPES = [
+#     "https://www.googleapis.com/auth/forms.body",
+#     "https://www.googleapis.com/auth/drive",
+# ]
+
+# SCHEMA_FILE = "hardware-db_schema.json"
+# PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
+
+# OAUTH_CLIENT_JSON = "OAuth_client-WSL_laptop.json"
+# TOKEN_CREATE_FORM = "token_createForm.json"
+# DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
 ### CONFIG
-DB_VERSION = "v0.2.0"
-SCOPES = [
-    "https://www.googleapis.com/auth/forms.body",
-    "https://www.googleapis.com/auth/drive",
-]
+SCOPES = []
+SCHEMA_FILE = ""
+FORM_ID = ""
+OAUTH_CLIENT_JSON = ""
+TOKEN_CREATE_FORM = ""
+DISCOVERY_DOC = ""
+DEBUG = False
 
-SCHEMA_FILE = "hardware-db_schema.json"
-PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
-
-OAUTH_CLIENT_JSON = resolve_oauth_path()
-TOKEN_FILE = "token_createForm.json"
-DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-
-
-### =====================
-### HELPERS
-### =====================
+### Functions for building request body
 def build_choice_options(q, section_id_map=None):
     options = []
 
@@ -94,18 +101,21 @@ def build_batch_requests(items):
         for idx, item in enumerate(items)
     ]
 
-
-### =====================
-### MAIN
-### =====================
+### ==================================================================
+### Main fun: call APIs, parse body, etc.
+### ==================================================================
 def main():
-    # Load schema
-    with open(SCHEMA_FILE) as f:
-        schema = json.load(f)
-
+    cfg = build_config(globals())
+    
+    oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
+        
     ### Make credentials
     creds = None
-    creds = make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES)
+    creds = make_creds(
+        OAUTH_CLIENT_JSON=oauth_path,
+        TOKEN_FILE=cfg["TOKEN_CREATE_FORM"],
+        SCOPES=cfg["SCOPES"],
+    )
     
     ### Create services with stored credentials
     forms_service = build(
@@ -116,6 +126,10 @@ def main():
         static_discovery=False,
         )
     drive_service = build("drive", "v3", credentials=creds)
+    
+    ### Load schema
+    with open(cfg["SCHEMA_FILE"]) as f:
+        schema = json.load(f)
 
     # -------------------------------------------------
     # 1. Create empty form
@@ -263,7 +277,7 @@ def main():
     # Move the form
     drive_service.files().update(
         fileId=form_id,
-        addParents=PARENT_DIR,
+        addParents=cfg["PARENT_DIR"],
         removeParents=previous_parents,
         fields="id, parents"
     ).execute()

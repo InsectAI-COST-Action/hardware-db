@@ -1,14 +1,14 @@
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-import os
-
 import json
 import csv
-import re
+import os
+# import re
 from pathlib import Path
 
-from authFlow_helpers import resolve_oauth_path
+# from google_auth_oauthlib.flow import InstalledAppFlow
+# from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+
+from authFlow_helpers import resolve_oauth_path, make_creds
 from misc_helpers import sanitize_filename
 
 ### CONFIG
@@ -25,49 +25,9 @@ DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
 DEBUG = False
 
-
-# ----------------------------------------------------------------------
-# Authentication flow – supports:
-#   * Fresh token via local server (when you run the script locally)
-#   * Re‑using a stored refresh token (CI)
-# ----------------------------------------------------------------------
+### Make credentials
 creds = None
-
-# Try to load a persisted token file (useful when you run locally)
-if os.path.exists(TOKEN_FILE):
-    creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
-
-# If we have a refresh‑token secret (CI), load it and build Credentials
-if not creds or not creds.valid:
-    # Look for the REFRESH_TOKEN_JSON secret (exposed as env var)
-    refresh_blob_raw = os.getenv("REFRESH_TOKEN_JSON")
-    if refresh_blob_raw:
-        try:
-            refresh_blob = json.loads(refresh_blob_raw)
-            creds = Credentials(
-                token=refresh_blob.get("token"),
-                refresh_token=refresh_blob.get("refresh_token"),
-                token_uri=refresh_blob.get("token_uri"),
-                client_id=refresh_blob.get("client_id"),
-                client_secret=refresh_blob.get("client_secret"),
-                scopes=refresh_blob.get("scopes"),
-            )
-            # Force a refresh if the access token is expired or missing
-            if not creds.valid or creds.expired:
-                creds.refresh(Request())
-        except Exception as exc:
-            raise RuntimeError(
-                "Failed to parse REFRESH_TOKEN_JSON – ensure the secret contains the full JSON blob."
-            ) from exc
-
-# If we still have no credentials, fall back to the interactive flow (local dev)
-if not creds or not creds.valid:
-    flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
-    creds = flow.run_local_server(port=0)   # opens a browser – only works locally
-
-    # Persist the fresh token for the next local run
-    with open(TOKEN_FILE, "w", encoding="utf-8") as token:
-        token.write(creds.to_json())
+creds = make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES)
 
 ### Create services with stored credentials
 forms_service = build(

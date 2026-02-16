@@ -13,18 +13,12 @@ from configParsing import build_config
 from misc_helpers import sanitize_filename
 
 ### CONFIG
-SCOPES = [
-    "https://www.googleapis.com/auth/forms.body.readonly",
-    "https://www.googleapis.com/auth/forms.responses.readonly",
-]
-
-SCHEMA_FILE = "hardware-db_schema.json"
-FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
-
-OAUTH_CLIENT_JSON = "OAuth_client-WSL_laptop.json"
-TOKEN_FILE = "token_collectResponses.json"
-DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-
+SCOPES = []
+SCHEMA_FILE = ""
+FORM_ID = ""
+OAUTH_CLIENT_JSON = ""
+TOKEN_COLLECT_RESPONSES = ""
+DISCOVERY_DOC = ""
 DEBUG = False
 
 
@@ -34,19 +28,21 @@ DEBUG = False
 def main():
     cfg = build_config(globals())
     
-    oauth_path = cfg["OAUTH_CLIENT_JSON"]
-    if oauth_path is None:
-        # fallback to the resolver (this will look at env vars, default locations, etc.)
-        oauth_path = resolve_oauth_path()
-    else:
-        # The helper may have given us a raw JSON string; the resolver can handle that.
-        oauth_path = resolve_oauth_path() if os.path.isfile(oauth_path) else oauth_path
+    oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
+    
+    # oauth_path = cfg["OAUTH_CLIENT_JSON"]
+    # if oauth_path is None:
+    #     # fallback to the resolver (this will look at env vars, default locations, etc.)
+    #     oauth_path = resolve_oauth_path()
+    # else:
+    #     # The helper may have given us a raw JSON string; the resolver can handle that.
+    #     oauth_path = resolve_oauth_path() if os.path.isfile(oauth_path) else oauth_path
     
     ### Make credentials
     creds = None
     creds = make_creds(
         OAUTH_CLIENT_JSON=oauth_path,
-        TOKEN_FILE=cfg["TOKEN_FILE"],
+        TOKEN_FILE=cfg["TOKEN_COLLECT_RESPONSES"],
         SCOPES=cfg["SCOPES"],
     )
 

@@ -9,6 +9,7 @@ from pathlib import Path
 from googleapiclient.discovery import build
 
 from authFlow_helpers import resolve_oauth_path, make_creds
+from configParsing import build_config
 from misc_helpers import sanitize_filename
 
 ### CONFIG
@@ -17,9 +18,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/forms.responses.readonly",
 ]
 
+SCHEMA_FILE = "hardware-db_schema.json"
 FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
 
-OAUTH_CLIENT_JSON = resolve_oauth_path()
+OAUTH_CLIENT_JSON = "OAuth_client-WSL_laptop.json"
 TOKEN_FILE = "token_collectResponses.json"
 DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
@@ -30,27 +32,41 @@ DEBUG = False
 ### Main fun: call APIs, parse responses, write outputs
 ### ===============================================================
 def main():
+    cfg = build_config(globals())
+    
+    oauth_path = cfg["OAUTH_CLIENT_JSON"]
+    if oauth_path is None:
+        # fallback to the resolver (this will look at env vars, default locations, etc.)
+        oauth_path = resolve_oauth_path()
+    else:
+        # The helper may have given us a raw JSON string; the resolver can handle that.
+        oauth_path = resolve_oauth_path() if os.path.isfile(oauth_path) else oauth_path
+    
     ### Make credentials
     creds = None
-    creds = make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES)
+    creds = make_creds(
+        OAUTH_CLIENT_JSON=oauth_path,
+        TOKEN_FILE=cfg["TOKEN_FILE"],
+        SCOPES=cfg["SCOPES"],
+    )
 
     ### Create services with stored credentials
     forms_service = build(
         "forms",
         "v1",
         credentials=creds,
-        discoveryServiceUrl=DISCOVERY_DOC,
+        discoveryServiceUrl=cfg["DISCOVERY_DOC"],
         static_discovery=False,
     )
 
 
     ### Grab form details - we need this for the questionId's
-    form_info = forms_service.forms().get(formId=FORM_ID).execute()
-    if DEBUG:
+    form_info = forms_service.forms().get(formId=cfg["FORM_ID"]).execute()
+    if cfg["DEBUG"]:
         print(form_info)
 
     form_info = form_info.get("items")
-    if DEBUG:
+    if cfg["DEBUG"]:
         print("form_info:")
         print(form_info)
 
@@ -61,14 +77,14 @@ def main():
         if "questionItem" in item:
             idQ_to_titleQ[item["questionItem"]["question"]["questionId"]] = item["title"]
 
-    if DEBUG:
+    if cfg["DEBUG"]:
         print("idQ_to_titleQ:")
         print(idQ_to_titleQ)
 
 
     ### Grab JSON schema, parse into handy dictionary,
     ### we need to match questionId to question title
-    with open("hardware-db_schema.json", "r", encoding="utf-8") as f:
+    with open(cfg["SCHEMA_FILE"], "r", encoding="utf-8") as f:
         schema = json.load(f)
 
     # shortQ -> shorthand for question
@@ -85,8 +101,8 @@ def main():
 
 
     ### Grab the responses - this contains the answers proper
-    responses = forms_service.forms().responses().list(formId=FORM_ID).execute()
-    if DEBUG:
+    responses = forms_service.forms().responses().list(formId=cfg["FORM_ID"]).execute()
+    if cfg["DEBUG"]:
         print("responses:")
         print(responses)
 
@@ -145,7 +161,7 @@ def main():
                 mapped[short] = ans
         responses_shorthand.append(mapped)
 
-    if DEBUG:
+    if cfg["DEBUG"]:
         print("responses_shorthand:")
         print(responses_shorthand)
 

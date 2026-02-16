@@ -26,6 +26,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Change all python scripts into `if __name__ == "__main__":` construct
   - [x] Add `argparse` to allow passing inputs manually
   - [ ] Make sure configuration parser passes appropriate arguments with all three scenarios (flags during call, .secrets file or env variables)
+  - [ ] Update CI/CD workflows with `pip install -e .` 
 - [ ] Automatically update link to form at every form re-creation
 - [ ] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
   - [ ] Can put devnotes and TODOs in separate files linked in the README

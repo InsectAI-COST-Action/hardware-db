@@ -91,6 +91,13 @@ def pick_cfg_value(
     """
     Returns the configuration value for *key* after applying precedence and
     type coercion.  Raises ``ValueError`` if the key cannot be satisfied.
+    
+    Precedence is:
+        1. CLI argument (if not None)
+        2. .secrets file entry (if present)
+        3. Environment variable (if present)
+        4. Defaults for some keys
+        5. Otherwise, error.
     """
     # 1️⃣ CLI argument – already the correct Python type because argparse does it.
     if cli_val is not None:

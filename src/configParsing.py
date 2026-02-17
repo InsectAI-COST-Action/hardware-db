@@ -148,7 +148,7 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     )
     parser.add_argument(
         "--schema-file",
-        default="hardware-db_schema.json",
+        # default="hardware-db_schema.json",
         help="Path to the form schema JSON file.",
     )
     parser.add_argument("--form-id", help="Google Form ID.")
@@ -170,8 +170,7 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     )
     parser.add_argument(
         "--debug",
-        action="store_true",
-        default=False,
+        # default=False,
         help="Enable verbose debug output.",
     )
     parser.add_argument(

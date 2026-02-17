@@ -32,13 +32,14 @@ jobs:
 
       - name: Testing config parsing from CLI
         run: |
-          python test_cfg.py --scopes thisismyscope1 thisismyscope2 --schema-file "this_is_a_test_schema.json" --debug > CLI_parsing.txt
+          python test_cfg.py --scopes thisismyscope1 thisismyscope2 --schema-file "this_is_a_test_schema.json"> CLI_parsing.txt
           cat <<'EXPECTED' > CLI_expected.txt
             SCOPES               -> ['thisismyscope1', 'thisismyscope2']   (list)
             DEBUG                -> True   (bool)
             SCHEMA_FILE          -> 'this_is_a_test_schema.json'   (str)
             EXPECTED
           diff -u CLI_expected.txt CLI_parsing.txt
+        working-directory: tests
     
       - name: Testing config parsing from env
         run: |
@@ -48,4 +49,5 @@ jobs:
             DEBUG                -> True   (bool)
             SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
             EXPECTED
-          diff -u Env_expected.txt Env_parsing.txt 
+          diff -u Env_expected.txt Env_parsing.txt
+        working-directory: tests

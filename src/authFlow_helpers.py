@@ -104,8 +104,13 @@ def resolve_oauth_path(value: Optional[Union[str, Path]]) -> Path:
 # ----------------------------------------------------------------------
 def make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES):
     # Try to load a persisted token file (useful when you run locally)
-    if os.path.exists(TOKEN_FILE):
-        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+    creds = None
+    if TOKEN_FILE and os.path.isfile(TOKEN_FILE):
+        try:
+            creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
+        except Exception as exc:          # e.g. malformed / stale file
+            print(f"⚠️  Could not load token file '{TOKEN_FILE}': {exc}")
+            creds = None
 
     # If we have a refresh‑token secret (CI), load it and build Credentials
     if not creds or not creds.valid:

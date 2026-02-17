@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
         SCOPES: "myenvscope1 myenvscope2"
-        DEBUG: "True"
         SCHEMA_FILE: "this_is_an_env_schema.json"
         # OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         # REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
@@ -46,7 +45,7 @@ jobs:
           python test_cfg.py > Env_parsing.txt
           cat <<'EXPECTED' > Env_expected.txt
           SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)
-          DEBUG                -> True   (bool)
+          DEBUG                -> False   (bool)
           SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
           EXPECTED
           diff -u Env_expected.txt Env_parsing.txt

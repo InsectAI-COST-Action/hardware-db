@@ -65,11 +65,11 @@ previous_parents = ",".join(metadata.get("parents", []))
 # Move the file into the target folder
 drive_service.files().update(
     fileId=file_id,
-    addParents=PARENT_DIR,
+    addParents=cfg["PARENT_DIR"],
     removeParents=previous_parents,
     fields="id,parents",
 ).execute()
-print(f"📂 Moved file to folder {PARENT_DIR}")
+print(f"📂 Moved file to folder {cfg["PARENT_DIR"]}")
 
 # Clean‑up (optional)
 drive_service.files().delete(fileId=file_id).execute()

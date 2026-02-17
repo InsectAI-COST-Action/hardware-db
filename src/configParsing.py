@@ -186,6 +186,11 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         default=".secrets",
         help="Path to a .secrets file (default: .secrets).",
     )
+    parser.add_argument(
+        "--env-file",
+        default=".env",
+        help="Path to a .env file (default: .env).",
+    )
 
     # ------------------------------------------------------------------
     # Parse CLI – this will automatically exit with a nice help message
@@ -194,9 +199,13 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     args = parser.parse_args()
 
     # ------------------------------------------------------------------
-    # Load .secrets (if it exists)
+    # Load .env and .secrets (if they exist)
     # ------------------------------------------------------------------
+    env_vals = load_secrets(Path(args.env_file))
     secret_vals = load_secrets(Path(args.secrets_file))
+    
+    # Merge with .secrets taking precedence over .env
+    all_config = {**env_vals, **secret_vals}
 
     # ------------------------------------------------------------------
     # Determine which upper‑case names the caller cares about.
@@ -219,7 +228,7 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         cfg[key] = pick_cfg_value(
             key,
             cli_val,
-            secret_vals,
+            all_config,
             caller_globals,
         )
 

@@ -24,7 +24,6 @@ cfg = build_config(globals())
 oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
 
 ### Make credentials
-creds = None
 creds = make_creds(oauth_path, cfg["TOKEN_TEST_AUTH"], cfg["SCOPES"])
 
 ### Create service with stored credentials
@@ -69,7 +68,7 @@ drive_service.files().update(
     removeParents=previous_parents,
     fields="id,parents",
 ).execute()
-print(f"📂 Moved file to folder {cfg["PARENT_DIR"]}")
+print(f"📂 Moved file to folder {cfg['PARENT_DIR']}")
 
 # Clean‑up (optional)
 drive_service.files().delete(fileId=file_id).execute()

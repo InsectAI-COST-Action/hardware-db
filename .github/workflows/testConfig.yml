@@ -52,5 +52,5 @@ jobs:
         working-directory: tests
 
       - name: Print out .env vars
-        run: python -c "from configParsing import build_config; cfg = build_config(globals()); print(cfg)"
+        run: python -c "from configParsing import build_config; SCOPES=[]; DEBUG=True; SCHEMA_FILE=''; cfg = build_config(globals()); print(cfg)"
         working-directory: tests

@@ -170,7 +170,7 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     )
     parser.add_argument(
         "--debug",
-        # default=False,
+        action="store_false",
         help="Enable verbose debug output.",
     )
     parser.add_argument(

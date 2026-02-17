@@ -10,19 +10,22 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
 
 from authFlow_helpers import resolve_oauth_path, make_creds
+from configParsing import build_config
 
 ### CONFIG
-SCOPES = ["https://www.googleapis.com/auth/drive.file"]
+SCOPES = []
+PARENT_DIR = ""
+OAUTH_CLIENT_JSON = ""
+TOKEN_TEST_AUTH = ""
 
-PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S"   # hardware‑db Forms folder
+### Get config values
+cfg = build_config(globals())
 
-OAUTH_CLIENT_JSON = resolve_oauth_path()
-TOKEN_FILE = os.getenv("TOKEN_TESTAUTH", "token_testAuth.json")
-
+oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
 
 ### Make credentials
 creds = None
-creds = make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES)
+creds = make_creds(oauth_path, cfg["TOKEN_TEST_AUTH"], cfg["SCOPES"])
 
 ### Create service with stored credentials
 drive_service = build("drive", "v3", credentials=creds)

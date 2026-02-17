@@ -35,6 +35,7 @@ jobs:
     env:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
+        SCOPES: "https://www.googleapis.com/auth/drive.file"
     steps:
       - uses: actions/checkout@v4
 

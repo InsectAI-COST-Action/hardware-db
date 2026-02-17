@@ -165,6 +165,10 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         help="Token cache file for createForm.py.",
     )
     parser.add_argument(
+        "--token-test_auth",
+        help="Token cache file for testAuth.py.",
+    )
+    parser.add_argument(
         "--discovery-doc",
         help="Forms API discovery doc URL.",
     )

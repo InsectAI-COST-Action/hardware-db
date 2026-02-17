@@ -56,7 +56,7 @@ jobs:
         # but vars not declared should be picked up from .env
         run: |
           # see what files are around
-          ls -lh
+          ls -alh
 
           # Print out cfg dictionary
           python <<'PY'
@@ -67,11 +67,12 @@ jobs:
           FORM_ID=""
           PARENT_DIR=""
           cfg = build_config(globals())
-          print(cfg)
+          for k, v in cfg.items():
+            print(f"{k}: {v!r}")
           PY
           
           # Check that vars only present in .env file are being picked up
-          python <<'PY' > Merged_config.txt
+          python <<'PY' > merged_config.txt
           from configParsing import build_config
           SCOPES=[]
           DEBUG=True
@@ -79,15 +80,20 @@ jobs:
           FORM_ID=""
           PARENT_DIR=""
           cfg = build_config(globals())
-          print(cfg)
+          assert re.fullmatch(r"[A-Za-z0-9_-]{5,}", cfg["FORM_ID"])
+          assert re.fullmatch(r"[A-Za-z0-9_-]{5,}", cfg["PARENT_DIR"])
+
+          print("IDs valid")
+          for k, v in cfg.items():
+            print(f"{k}: {v!r}")
           PY
           for key in FORM_ID PARENT_DIR; do
-            grep "^$key" Merged_config.txt \
+            grep "^$key" merged_config.txt \
               | grep -E ":[[:space:]]*'[A-Za-z0-9_-]{5,}'"
           done
 
           # Check that vars assigned in workflow take precedence over .env
-          sed -n '1,/FORM_ID/p' Merged_config.txt > filtered_output.txt
+          sed -n '1,/FORM_ID/p' merged_config.txt > filtered_output.txt
           cat <<'EXPECTED' > merged_expected.txt
           {'SCOPES': ['myenvscope1', 'myenvscope2'], 'DEBUG': False, 'SCHEMA_FILE': 'this_is_an_env_schema.json', 'FORM_ID':}
           EXPECTED

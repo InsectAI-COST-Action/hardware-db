@@ -56,23 +56,38 @@ jobs:
         # but vars not declared should be picked up from .env
         run: |
           # Print out cfg dictionary
-          python -c "from configParsing import build_config; SCOPES=[]; DEBUG=True; SCHEMA_FILE=""; FORM_ID=""; PARENT_DIR=""; cfg = build_config(globals()); print(cfg)"
+          python <<'PY'
+          from configParsing import build_config
+          SCOPES=[]
+          DEBUG=True
+          SCHEMA_FILE=""
+          FORM_ID=""
+          PARENT_DIR=""
+          cfg = build_config(globals())
+          print(cfg)
+          PY
           
           # Check that vars only present in .env file are being picked up
-          python -c "from configParsing import build_config; SCOPES=[]; DEBUG=True; SCHEMA_FILE=""; FORM_ID=""; PARENT_DIR=""; cfg = build_config(globals())" > Merged_config.txt
+          python <<'PY' > Merged_config.txt
+          from configParsing import build_config
+          SCOPES=[]
+          DEBUG=True
+          SCHEMA_FILE=""
+          FORM_ID=""
+          PARENT_DIR=""
+          cfg = build_config(globals())
+          print(cfg)
+          PY
           for key in FORM_ID PARENT_DIR; do
             grep "^$key" Merged_config.txt \
-              | grep -E "->[[:space:]]*'[A-Za-z0-9_-]{5,}'"
+              | grep -E ":[[:space:]]*'[A-Za-z0-9_-]{5,}'"
           done
 
           # Check that vars assigned in workflow take precedence over .env
           sed -n '1,/FORM_ID/p' Merged_config.txt > filtered_output.txt
-          cat <<'EXPECTED' > expected.txt
-          SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)
-          DEBUG                -> False   (bool)
-          SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
-          FORM_ID              ->
+          cat <<'EXPECTED' > merged_expected.txt
+          {'SCOPES': ['myenvscope1', 'myenvscope2'], 'DEBUG': False, 'SCHEMA_FILE': 'this_is_an_env_schema.json', 'FORM_ID':}
           EXPECTED
-          diff -u expected.txt filtered_output.txt
+          diff -u merged_expected.txt filtered_output.txt
         working-directory: tests
   

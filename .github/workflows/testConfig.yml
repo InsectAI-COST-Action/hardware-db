@@ -50,3 +50,7 @@ jobs:
           EXPECTED
           diff -u Env_expected.txt Env_parsing.txt
         working-directory: tests
+
+      - name: Print out .env vars
+        run: python -c "from configParsing import build_config; cfg = build_config(globals()); print(cfg)"
+        working-directory: tests

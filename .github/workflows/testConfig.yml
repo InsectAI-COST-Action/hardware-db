@@ -55,6 +55,9 @@ jobs:
         # The expected behaviour is that vars declared in this workflow supersede those in .env, 
         # but vars not declared should be picked up from .env
         run: |
+          # see what files are around
+          ls -lh
+
           # Print out cfg dictionary
           python <<'PY'
           from configParsing import build_config

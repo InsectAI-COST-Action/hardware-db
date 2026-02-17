@@ -89,5 +89,4 @@ jobs:
           {'SCOPES': ['myenvscope1', 'myenvscope2'], 'DEBUG': False, 'SCHEMA_FILE': 'this_is_an_env_schema.json', 'FORM_ID':}
           EXPECTED
           diff -u merged_expected.txt filtered_output.txt
-        working-directory: tests
   

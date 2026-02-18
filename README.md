@@ -1,8 +1,11 @@
-# [OLD-README] Insect AI Hardware Database
+# Insect AI Hardware Database
 
 <p align="center">
+**🚧 Under construction! 🚧**
 <img src="./assets/Hardware-dtb-image.png" width="540"/>
 </p>
+
+For progress see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHANGELOG).
 
 ## Data submission pipeline for documenting of Insect AI hardware
 

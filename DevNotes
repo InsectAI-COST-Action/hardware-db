@@ -51,53 +51,54 @@ Within-block syntax follows quite closely Google Forms API's syntax.
 Example JSON schema below:
 ```json
 {
-  "info": {
-    "title": "The form title here (not the file name)",
-    "description": "You description here."
-  },
-  "settings": {
-    "emailCollectionType": "DO_NOT_COLLECT"
-  },
-  "sections": [
-    {
-      "id": "sec1",
-      "title": "Section 1",
-      "description": null,
-      "questions": [
+    "info": {
+        "title": "The form title here (not the file name)",
+        "description": "You description here."
+    },
+    "settings": {
+        "emailCollectionType": "DO_NOT_COLLECT"
+    },
+    "sections": [
         {
-          "id": "q1",
-          "title": "Question 1",
-          "required": true,
-          "type": "choice",
-          "choiceType": "RADIO",
-          "options": [
-            "Yes",
-            "No"
-          ]
+            "id": "sec1",
+            "title": "Section 1",
+            "description": null,
+            "questions": [
+                {
+                    "id": "q1",
+                    "title": "Question 1",
+                    "required": true,
+                    "type": "choice",
+                    "choiceType": "RADIO",
+                    "options": [
+                        "Yes",
+                        "No"
+                    ]
+                },
+                {
+                    "id": "q2",
+                    "title": "Question 2",
+                    "required": true,
+                    "type": "text",
+                    "paragraph": false
+                }
+            ]
         },
         {
-          "id": "q2",
-          "title": "Question 2",
-          "required": true,
-          "type": "text",
-          "paragraph": false
+            "id": "sec2",
+            "title": "Section 2",
+            "description": "Your section description here.",
+            "questions": [
+                {
+                    "id": "q3",
+                    "title": "Question 3",
+                    "required": true,
+                    "type": "text",
+                    "paragraph": false
+                }
+            ]
         }
-      ]
-    },
-    {
-      "id": "sec2",
-      "title": "Section 2",
-      "description": "Your section description here.",
-      "questions": [
-        {
-          "id": "q3",
-          "title": "Question 3",
-          "required": true,
-          "type": "text",
-          "paragraph": false
-        }
-      ]
-    }
+    ]
 }
 ```
 Trying to add logic handling from the JSON schema, using unique `id`s as anchors. 

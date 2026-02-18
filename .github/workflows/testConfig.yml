@@ -69,6 +69,7 @@ jobs:
 
           cfg = build_config(globals())
           
+          print("cfg dictionary items: ")
           for k, v in cfg.items():
             print(f"{k}: {v!r}")
           
@@ -78,6 +79,7 @@ jobs:
           PY
           
           # Check that vars only present in .env file are being picked up and are of expected format
+          echo "Checking format of vars from .env file: "
           for key in GOOGLE_FORM_ID PARENT_DIR; do
             if grep -q "^$key" merged_config.txt &&
               grep "^$key" merged_config.txt | grep -q -E "[[:space:]]*->[[:space:]]*'[A-Za-z0-9_-]{5,}'"
@@ -90,6 +92,7 @@ jobs:
           done
 
           # Check that vars assigned in workflow take precedence over .env, strip away .env vars first
+          echo "Checking that env vars take precedence over those in .env file: "
           sed -n '1,/SCHEMA_FILE/p' merged_config.txt > filtered_output.txt
           cat <<'EXPECTED' > merged_expected.txt
           SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)

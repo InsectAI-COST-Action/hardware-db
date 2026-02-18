@@ -1,3 +1,37 @@
+# [OLD-README] Insect AI Hardware Database
+
+<p align="center">
+<img src="./assets/Hardware-dtb-image.png" width="540"/>
+</p>
+
+## Data submission pipeline for documenting of Insect AI hardware
+
+This repository contains the following:
+- Link to a Google Master spreadsheet - the schema defining accepted fields, validation criteria and metadata for Google form generation.
+- Link to the most up-to-date Google form(s) - the method of data input by contributors to the database entries
+- Script for generating Google forms from the Master spreadsheet
+- Table showcasing basic details of hardware submitted by contributors so far
+
+## Introduction
+
+### Scope
+
+#### Script
+
+`debugScript.py` is a Python script which converts the Master google spreadsheet of hardware (the ground truth for the database) into a JSON file which in turn is used to produce a google form. The generated Google Form requests details from hardware developers, modifiers and users and is the entry point for submission to the hardware database. Google sheet and Google form handling is achieved through their respective Google API's which are called in the script. Currently when running the script for the first time you will be prompted to log in to a google account to generate a token that will allow usage of the API's.
+
+#### Master spreadsheet
+
+This is the [Master Sheet](https://docs.google.com/spreadsheets/d/1DClwffVrkrwH0G5nuCVCJVVoLLdueuqHdJ_VXWPc_Pg/edit?gid=0#gid=0) that contains the form generation metadata. 
+
+#### Submission forms
+
+This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc/edit) for detailed entry submission.
+
+
+<details>   <!-- this is to begin the "spoiler section" -->
+  <summary><h2>Dev notes</h2></summary>
+
 # Redesigning approach dev notes
 
 The general idea is to implement this workflow: 
@@ -281,46 +315,9 @@ If I take away the .secrets file, it does not fall back to hardcoded vars though
 Actually scratch that, I only need to know if there are configs in the call, .secrets or env vars. Let's simplify the logic, ignoring vars hardcoded in the script (which is bad practice anyway). 
 
 
-
-
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!
 
-
-<details>   <!-- this is to begin the "spoiler section" -->
-  <summary><h2>Original README contents</h2></summary>
-
-# [OLD] Insect AI Hardware Database
-
-<p align="center">
-<img src="./assets/Hardware-dtb-image.png" width="540"/>
-</p>
-
-## Data submission pipeline for documenting of Insect AI hardware
-
-This repository contains the following:
-- Link to a Google Master spreadsheet - the schema defining accepted fields, validation criteria and metadata for Google form generation.
-- Link to the most up-to-date Google form(s) - the method of data input by contributors to the database entries
-- Script for generating Google forms from the Master spreadsheet
-- Table showcasing basic details of hardware submitted by contributors so far
-
-## Introduction
-
-### Scope
-
-#### Script
-
-`debugScript.py` is a Python script which converts the Master google spreadsheet of hardware (the ground truth for the database) into a JSON file which in turn is used to produce a google form. The generated Google Form requests details from hardware developers, modifiers and users and is the entry point for submission to the hardware database. Google sheet and Google form handling is achieved through their respective Google API's which are called in the script. Currently when running the script for the first time you will be prompted to log in to a google account to generate a token that will allow usage of the API's.
-
-#### Master spreadsheet
-
-This is the [Master Sheet](https://docs.google.com/spreadsheets/d/1DClwffVrkrwH0G5nuCVCJVVoLLdueuqHdJ_VXWPc_Pg/edit?gid=0#gid=0) that contains the form generation metadata. 
-
-#### Submission forms
-
-This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc/edit) for detailed entry submission.
-
-</details>   <!-- this is to end the "spoiler section" -->
 
 > [!CAUTION]
 > If, when running any of the scripts, you get an error like: 
@@ -330,7 +327,7 @@ This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCr
 >It just means that the token is expired and re-authentication workflow is stuck. Simply remove the file `token.json` that gets saved in the same dir as the script and authenticate again. 
 
 <details>   <!-- this is to begin the "spoiler section" -->
-  <summary><h2>Luca's dev notes</h2></summary>
+  <summary><h2>Old dev notes</h2></summary>
 
 ### Authorising Google API and running locally
 
@@ -393,5 +390,7 @@ FULL FORM, SIMPLE FORM --- (NEW) collectResponses.py ---> responses (JSON, CSV)
 
 When modification to the DB structure are needed, these can be made at the point DATABASE STRUCTURE JSON and propagate to the rest of the pipeline from there. 
 The frontend can then be served using the CSV or JSON exports as data sources. 
+
+</details>   <!-- this is to end the "spoiler section" -->
 
 </details>   <!-- this is to end the "spoiler section" -->

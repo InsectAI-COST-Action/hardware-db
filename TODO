@@ -25,8 +25,8 @@
 - [x] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
   - [x] Can put devnotes and TODOs in separate files linked in the README
   - [x] Explain briefly the logic and workflow in section below landing page
-- [ ] Add `pyproject.toml` with installs, in place of conda environments.
-  - [ ] Maybe can have different installs for CI/CD and local
+- [x] Add `pyproject.toml` with installs, in place of conda environments.
+  - [x] Maybe can have different installs for CI/CD and local
 
 
 *Extras*

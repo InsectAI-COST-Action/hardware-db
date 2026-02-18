@@ -74,10 +74,10 @@ jobs:
           
           with open("merged_config.txt", "w") as f:
             for k, v in cfg.items():
-              f.write(f"{k}: {v!r}\n")
+              f.write(f"{k:20} -> {repr(v)}   ({type(v).__name__})\n")
           PY
           
-          # Check that vars only present in .env file are being picked up
+          # Check that vars only present in .env file are being picked up and are of expected format
           for key in GOOGLE_FORM_ID PARENT_DIR; do
             if grep -q "^$key" merged_config.txt &&
               grep "^$key" merged_config.txt | grep -q -E "[[:space:]]*->[[:space:]]*'[A-Za-z0-9_-]{5,}'"
@@ -89,7 +89,7 @@ jobs:
             fi
           done
 
-          # Check that vars assigned in workflow take precedence over .env
+          # Check that vars assigned in workflow take precedence over .env, strip away .env vars first
           sed -n '1,/SCHEMA_FILE/p' merged_config.txt > filtered_output.txt
           cat <<'EXPECTED' > merged_expected.txt
           SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)

@@ -203,7 +203,7 @@ So the only mandatory fields in our basic form would be (and their correspondenc
 | `device_name`          | `Product_name`                  |
 | `device_description`   | `Overview`                      |
 
-Keeping the old schema to rebuild the full form as Graham envisioned it as `hardware-db_schema_OLD_fFullForm.json`. 
+Keeping the old schema to rebuild the full form as Graham envisioned it as `hardware-db_schema_OLD_FullForm.json`. 
 
 ## Collecting and parsing responses
 The script `collectResponses.py` queries the existing Form via its ID, and gets the responses. 
@@ -328,19 +328,6 @@ This is the [Full Form](https://docs.google.com/forms/d/19htB7BIDoh3ngRtvgURIyCr
 >google.auth.exceptions.RefreshError: ('invalid_grant: Bad Request', {'error': 'invalid_grant', 'error_description': 'Bad Request'})
 >```
 >It just means that the token is expired and re-authentication workflow is stuck. Simply remove the file `token.json` that gets saved in the same dir as the script and authenticate again. 
-
-# ToDos
-- [ ] Refactor big script into helper functions script, and various targeted script
-    - [ ] Bonus: add argparse to add exports, dry run and verbosity levels. 
-    - [x] move export into dedicated folder
-- [ ] Add github pages automation
-    - [ ] need to investigate the best way to store credentials
-- [ ] Create (or do we have one already?)  InsectAI Gmail account that an own the various spreadsheets, forms and eventually GDrive with the uploaded pictures. 
-- [ ] Restructure the README so that it has a quickstart section for contributors and link to the data at the top, explanation and maintenance notes after. 
-
-*Only after discussing with Graham & others:*
-- [ ] Change to new workflow with JSON-based database ontology that propagates in Google forms. 
-- [ ] Prepare exports in an easily accessible format: one JSON file per device (+ picture) or one single CSV dump for all devices (+link to pics)?
 
 <details>   <!-- this is to begin the "spoiler section" -->
   <summary><h2>Luca's dev notes</h2></summary>

@@ -19,6 +19,8 @@ If you want to submit a device to the database, you can find the form here:
 https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
 
+Form w/ responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
+
 ## Visualise data
 If you want to see the visualisation fo the data, you can click here: 
 <!-- FRONTEND-BEGIN comment to anchor auto-update of form link -->
@@ -46,7 +48,7 @@ The repo is set up to run certain workflows automatically, but if you want to ru
 What you need before getting started: 
  - Python >3.11
 
-All of the required third‑party libraries are declared in `pyproject.toml` so you can use **pip** directly; no conda/mamba environment is required.
+All of the required third‑party libraries are declared in `pyproject.toml` so you can use `pip` directly; no conda/mamba environment is required.
 
 You can clone the repo and install the package into a fresh virtual environment:
 

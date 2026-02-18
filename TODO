@@ -42,7 +42,7 @@
 
 
 **Outstanding issues:**
-- [ ] Collating answers
+- [ ] Collating responses across from versions:
   - [ ] how to track response spreadsheet when form is re-generated at every JSON schema update?
   - [ ] what about attached pictures?
 - [ ] Updating existing record
@@ -50,3 +50,6 @@
   - [ ] How to retrieve info and pre-populate form with it? 
   - [ ] We might also just ask them to contact us and/or resubmit... 
 - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
+- [ ] Reiterating over the schema of the database i.e. changing questions etc
+  - [ ] Think about activities for the annual meeting to progress database structure
+  

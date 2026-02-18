@@ -11,6 +11,7 @@
 
 For progress see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHANGELOG).
 
+
 # Quickstart
 ## Contribute data 
 If you want to submit a device to the database, you can find the form here: 
@@ -42,16 +43,17 @@ What you need before getting started:
  - Python >3.11
  - Conda / mamba
 
-The libraries required for the repo are in `pyproject.toml`, which in turn calls `hardware-db.yaml` to build the conda environment. 
+All of the required third‑party libraries are declared in `pyproject.toml` so you can use **pip** directly; no conda/mamba environment is required.
 
-You can clone the repo, and you should install the the project within a virtual environment:
+You can clone the repo and install the package into a fresh virtual environment:
 
 **Windows**
-```PowerShell
+```powershell
 git clone https://github.com/InsectAI-COST-Action/hardware-db.git
 chdir hardware-db
 python -m venv .venv
-pip install -e .
+.venv\Scripts\activate      # activate the venv
+pip install -e .            # runtime dependencies only
 ```
 
 **Linux/MacOS**
@@ -60,6 +62,12 @@ git clone https://github.com/InsectAI-COST-Action/hardware-db.git
 cd hardware-db
 python3 -m venv .venv
 pip install -e .
+```
+
+If you are running tests or building inside GitHub Actions you can install the extra dependencies with the `ci` extra:
+
+```powershell
+pip install -e .[ci]        # installs jsonschema etc. for CI/test runs
 ```
 
 Anytime you close / reopen the terminal, make sure the virtual environment is properly loaded: 
@@ -73,7 +81,6 @@ Anytime you close / reopen the terminal, make sure the virtual environment is pr
 ```bash
 source .venv/bin/activate
 ```
-
 
 ## The database schema
 We store the main database ontology in `hardware-db_schema.json`. This is a modified version of Google Forms API schema to make it easier to edit by hand. 
@@ -171,6 +178,7 @@ Below the mapping in out schema to their naming.
 | `contact_email`        | `Email` (collected via sign-in) |
 | `device_name`          | `Product_name`                  |
 | `device_description`   | `Overview`                      |
+
 
 # Authenticating in Google APIs
 We only support regular OAuth2 authentication via personal access token, not via service account tokens. This is because personal Google accounts (i.e. non-GSuite, non-Workspace accounts) cannot grant service accounts Drive storage space, and this creates issues with managing forms and responses. 
@@ -287,6 +295,7 @@ It then runs `collectResponses.py`, and pushes the CSV and JSON files to `data/`
 
 > [!WARNING]
 > Due to Github's design, `workflow_run` conditions only get triggered on the main branch, se thread [here](https://github.com/orgs/community/discussions/66512).
+
 
 # Contacts
 If you have questions please get in touch: [luca.pegoraro@wsl.ch](mailto:luca.pegoraro@wsl.ch)

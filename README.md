@@ -26,12 +26,14 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Change all python scripts into `if __name__ == "__main__":` construct
   - [x] Add `argparse` to allow passing inputs manually
   - [x] Make sure configuration parser passes appropriate arguments with all three scenarios (flags during call, .secrets file or env variables)
-  - [ ] Update CI/CD workflows with `pip install -e .` 
+  - [x] Update CI/CD workflows with `pip install -e .` 
+  - [ ] clean up unused code and comments
 - [ ] Automatically update link to form at every form re-creation
 - [ ] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
   - [ ] Can put devnotes and TODOs in separate files linked in the README
 - [ ] Add `pyproject.toml` with installs, in place of conda environments.
   - [ ] Maybe can have different installs for CI/CD and local
+
 
 *Extras*
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
@@ -39,7 +41,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
 - [ ] Add response validation, e.g. valid email address, etc. 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
 - [x] Make a better landing page for OAuth authorisation, in Google Cloud console
-- [ ] Other tests?
+- [x] Other tests? - added config_test
 - [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
   - [x] Add changelog
   - [ ] Add licence
@@ -54,6 +56,7 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [ ] How to retrieve info and pre-populate form with it? 
   - [ ] We might also just ask them to contact us and/or resubmit... 
 - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
+
 
 ## Proof of concept
 Proof of concept with `createForm.py` and JSON-based questions successful. We can even do simple logic navigation within the form. 

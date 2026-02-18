@@ -1,18 +1,18 @@
 import json
 import csv
 import os
-# import re
 from pathlib import Path
 
-# from google_auth_oauthlib.flow import InstalledAppFlow
-# from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 from authFlow_helpers import resolve_oauth_path, make_creds
 from configParsing import build_config
 from misc_helpers import sanitize_filename
 
-### CONFIG
+
+# ----------------------------------------------------------------------
+# Declare needed config keys for script's functioning
+# ----------------------------------------------------------------------
 SCOPES = []
 SCHEMA_FILE = ""
 GOOGLE_FORM_ID = ""
@@ -22,21 +22,13 @@ DISCOVERY_DOC = ""
 DEBUG = False
 
 
-### ==================================================================
-### Main fun: call APIs, parse responses, write outputs
-### ===============================================================
+# ==================================================================
+# Main fun: call APIs, parse responses, write outputs
+# ===============================================================
 def main():
     cfg = build_config(globals())
     
     oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
-    
-    # oauth_path = cfg["OAUTH_CLIENT_JSON"]
-    # if oauth_path is None:
-    #     # fallback to the resolver (this will look at env vars, default locations, etc.)
-    #     oauth_path = resolve_oauth_path()
-    # else:
-    #     # The helper may have given us a raw JSON string; the resolver can handle that.
-    #     oauth_path = resolve_oauth_path() if os.path.isfile(oauth_path) else oauth_path
     
     ### Make credentials
     creds = None

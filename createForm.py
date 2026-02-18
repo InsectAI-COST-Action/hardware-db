@@ -2,28 +2,15 @@ import os
 import json
 from datetime import datetime
 
-# from google_auth_oauthlib.flow import InstalledAppFlow
-# from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 from authFlow_helpers import resolve_oauth_path, make_creds
 from configParsing import build_config
 
-# ### CONFIG
-# DB_VERSION = "v0.2.0"
-# SCOPES = [
-#     "https://www.googleapis.com/auth/forms.body",
-#     "https://www.googleapis.com/auth/drive",
-# ]
 
-# SCHEMA_FILE = "hardware-db_schema.json"
-# PARENT_DIR = "1UBiv4UnuLzDrOJbOgcRzgwqN2Y4Gv75S" # hardware-db Forms folder
-
-# OAUTH_CLIENT_JSON = "OAuth_client-WSL_laptop.json"
-# TOKEN_CREATE_FORM = "token_createForm.json"
-# DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
-
-### CONFIG
+# ----------------------------------------------------------------------
+# Declare needed config keys for script's functioning
+# ----------------------------------------------------------------------
 SCOPES = []
 SCHEMA_FILE = ""
 GOOGLE_FORM_ID = ""
@@ -32,7 +19,10 @@ TOKEN_CREATE_FORM = ""
 DISCOVERY_DOC = ""
 DEBUG = False
 
-### Functions for building request body
+
+# ----------------------------------------------------------------------
+# Functions for building request body
+# ----------------------------------------------------------------------
 def build_choice_options(q, section_id_map=None):
     options = []
 
@@ -101,9 +91,9 @@ def build_batch_requests(items):
         for idx, item in enumerate(items)
     ]
 
-### ==================================================================
-### Main fun: call APIs, parse body, etc.
-### ==================================================================
+# ==================================================================
+# Main fun: call APIs, parse body, etc.
+# ==================================================================
 def main():
     cfg = build_config(globals())
     
@@ -131,9 +121,7 @@ def main():
     with open(cfg["SCHEMA_FILE"]) as f:
         schema = json.load(f)
 
-    # -------------------------------------------------
-    # 1. Create empty form
-    # -------------------------------------------------
+    ### 1. Create empty form
     form = forms_service.forms().create(
         body={
             "info": {
@@ -144,9 +132,7 @@ def main():
 
     form_id = form["formId"]
     
-    # -----------------------------------------------------------------
-    # 1b. Add description and any top‑level settings
-    # -----------------------------------------------------------------
+    # 1a. Add description and any top‑level settings
     form_updates = []
 
     # description
@@ -159,7 +145,7 @@ def main():
             }
         })
 
-    # # settings (email collection, etc.)
+    # # 1b. settings (email collection, etc.)
     # if "settings" in schema:
     #     # Example: only emailCollectionType is defined in your schema
     #     form_updates.append({
@@ -179,9 +165,7 @@ def main():
             body={"requests": form_updates}
         ).execute()
 
-    # -------------------------------------------------
-    # 2. Create sections + questions (NO logic yet)
-    # -------------------------------------------------
+    ### 2. Create sections + questions (NO logic yet)
     items = []
     section_positions = {}  # section_id → index in item list
 
@@ -200,18 +184,14 @@ def main():
         body={"requests": build_batch_requests(items)}
     ).execute()
 
-    # -------------------------------------------------
-    # 3. Map symbolic section IDs → Google itemIds
-    # -------------------------------------------------
+    ### 3. Map symbolic section IDs → Google itemIds
     section_id_map = {}
     replies = resp["replies"]
 
     for section_id, item_index in section_positions.items():
         section_id_map[section_id] = replies[item_index]["createItem"]["itemId"]
 
-    # -------------------------------------------------
-    # 4. Patch branching logic (choice questions only)
-    # -------------------------------------------------
+    ### 4. Patch branching logic (choice questions only)
     logic_requests = []
     reply_index = 0          # keeps the position of the current item in the form
     section_start_indices = {}   # map section id → first item index (pageBreak)
@@ -255,9 +235,7 @@ def main():
             body={"requests": logic_requests}
         ).execute()
 
-    # -------------------------------------------------
-    # 5. Rename & move Drive file
-    # -------------------------------------------------
+    ### 5. Rename & move Drive file
     drive_service.files().update(
         fileId=form_id,
         body={

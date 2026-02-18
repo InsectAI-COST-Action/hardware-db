@@ -22,15 +22,16 @@ FULL FORM --- collectResponses.py ---> responses (JSON, CSV)
   - [x] Create forms
   - [x] Read responses, generate exports
   - [x] Get order of operations right
-- [ ] Refactor scripts to make them a bit more robust and orderly
+- [x] Refactor scripts to make them a bit more robust and orderly
   - [x] Change all python scripts into `if __name__ == "__main__":` construct
   - [x] Add `argparse` to allow passing inputs manually
   - [x] Make sure configuration parser passes appropriate arguments with all three scenarios (flags during call, .secrets file or env variables)
   - [x] Update CI/CD workflows with `pip install -e .` 
-  - [ ] clean up unused code and comments
+  - [x] clean up unused code and comments
 - [ ] Automatically update link to form at every form re-creation
 - [ ] Change README so that it has a quick landing section and links to the form, visualisation (eventually) and various section. 
   - [ ] Can put devnotes and TODOs in separate files linked in the README
+  - [ ] Explain briefly the logic and workflow in section below landing page
 - [ ] Add `pyproject.toml` with installs, in place of conda environments.
   - [ ] Maybe can have different installs for CI/CD and local
 

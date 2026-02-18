@@ -27,8 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install jsonschema google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
-          pip install -e .
+          pip install -e .[ci]
 
       - name: Run schema validation
         run: python validateJSON.py
@@ -53,8 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
-          pip install -e .
+          pip install -e .[ci]
 
       - name: Run Drive auth test
         run: python tests/testAuth.py
@@ -78,8 +76,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install jsonschema google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
-          pip install -e .
+          pip install -e .[ci]
 
       - name: Testing config parsing from CLI
         run: |

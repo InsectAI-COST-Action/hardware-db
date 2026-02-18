@@ -78,8 +78,9 @@ def _type_for_key(key: str, caller_globals: Dict[str, Any]) -> Callable[[str], A
 # ----------------------------------------------------------------------
 # Choose the final value for a single key according to the required order:
 #   1 CLI argument (non‑None)
-#   2 .secrets entry (string → coerced)
-#   3 Environment variable (string → coerced)
+#   2 Environment variable (string → coerced)
+#   3 .secrets entry (string → coerced)
+#   4 Defaults for some keys
 # If none of the three sources provide a value we raise an error.
 # ----------------------------------------------------------------------
 def pick_cfg_value(
@@ -117,7 +118,7 @@ def pick_cfg_value(
     
     # 4. Defaults for some keys (handled in argparse)
 
-    # 5. Nothing found → explicit failure.
+    # Nothing found → explicit failure.
     raise ValueError(
         f"Configuration value for '{key}' not supplied. Provide it via CLI, a .secrets "
         f"file, or an environment variable."

@@ -6,20 +6,10 @@ from typing import Optional, Union
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
-# from googleapiclient.discovery import build
 
 # ----------------------------------------------------------------------
 # Helper: Turn the secret (path **or** raw JSON) into a real file path
 # ----------------------------------------------------------------------
-def _write_json_to_tmp(json_text: str) -> str:
-    """Write a JSON string to a temporary file and return the file path."""
-    fd, tmp_path = tempfile.mkstemp(suffix=".json", prefix="oauth_client_")
-    os.close(fd)
-    with open(tmp_path, "w", encoding="utf-8") as f:
-        f.write(json_text)
-    return tmp_path
-
-
 def _is_json_string(s: str) -> bool:
     """
     Valid JSON check: True if the stripped string starts with `{` and ends with `}`.

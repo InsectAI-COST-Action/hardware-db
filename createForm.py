@@ -11,6 +11,7 @@ from configParsing import build_config
 # ----------------------------------------------------------------------
 # Declare needed config keys for script's functioning
 # ----------------------------------------------------------------------
+DB_VERSION = "v0.2.0"
 SCOPES = []
 SCHEMA_FILE = ""
 GOOGLE_FORM_ID = ""

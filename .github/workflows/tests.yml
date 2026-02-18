@@ -2,8 +2,14 @@ name: Tests
 
 on:
   push:
-    # paths:
-    #   - '*schema*.json'
+    paths:
+      - '*schema*.json'
+      - 'tests/**'
+      - 'src/**'
+      - '.env'
+      - 'collectResponses.py'
+      - 'createForm.py'
+      - 'pyproject.toml'
   workflow_dispatch:
 
 jobs:

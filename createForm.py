@@ -26,7 +26,7 @@ from configParsing import build_config
 ### CONFIG
 SCOPES = []
 SCHEMA_FILE = ""
-FORM_ID = ""
+GOOGLE_FORM_ID = ""
 OAUTH_CLIENT_JSON = ""
 TOKEN_CREATE_FORM = ""
 DISCOVERY_DOC = ""

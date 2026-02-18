@@ -15,7 +15,7 @@ from misc_helpers import sanitize_filename
 ### CONFIG
 SCOPES = []
 SCHEMA_FILE = ""
-FORM_ID = ""
+GOOGLE_FORM_ID = ""
 OAUTH_CLIENT_JSON = ""
 TOKEN_COLLECT_RESPONSES = ""
 DISCOVERY_DOC = ""
@@ -57,7 +57,7 @@ def main():
 
 
     ### Grab form details - we need this for the questionId's
-    form_info = forms_service.forms().get(formId=cfg["FORM_ID"]).execute()
+    form_info = forms_service.forms().get(formId=cfg["GOOGLE_FORM_ID"]).execute()
     if cfg["DEBUG"]:
         print(form_info)
 
@@ -97,7 +97,7 @@ def main():
 
 
     ### Grab the responses - this contains the answers proper
-    responses = forms_service.forms().responses().list(formId=cfg["FORM_ID"]).execute()
+    responses = forms_service.forms().responses().list(formId=cfg["GOOGLE_FORM_ID"]).execute()
     if cfg["DEBUG"]:
         print("responses:")
         print(responses)

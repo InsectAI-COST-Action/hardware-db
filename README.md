@@ -41,7 +41,6 @@ The repo is set up to tun certain workflows automatically, but if you want to ru
 ### Install locally
 What you need before getting started: 
  - Python >3.11
- - Conda / mamba
 
 All of the required third‑party libraries are declared in `pyproject.toml` so you can use **pip** directly; no conda/mamba environment is required.
 

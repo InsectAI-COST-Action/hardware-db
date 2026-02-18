@@ -26,8 +26,12 @@ If you want to see the visualisation fo the data, you can click here:
 <!-- FRONTEND-END comment to anchor auto-update of form link -->
 
 # Documentation
-Below we explain what does in the repository and how to alter it. 
+Below we explain what does what in the repository and how to use it. 
 If you only want to contribute or read data, you should not need to read this section. 
+
+<!-- ### Beginning of spoiler section -->
+<details>
+  <summary>Expand section</summary>
 
 ## Intro
 The workflow is, at its most basic: 
@@ -36,7 +40,7 @@ hardware-db_schema.json --- createForms.py ---> Google Form
 Google Form --- collectResponses.py ---> data/ (JSON, CSV)
 ```
 
-The repo is set up to tun certain workflows automatically, but if you want to run things locally you will need to install it. 
+The repo is set up to run certain workflows automatically, but if you want to run things locally you will need to install it. 
 
 ### Install locally
 What you need before getting started: 
@@ -294,6 +298,9 @@ It then runs `collectResponses.py`, and pushes the CSV and JSON files to `data/`
 
 > [!WARNING]
 > Due to Github's design, `workflow_run` conditions only get triggered on the main branch, se thread [here](https://github.com/orgs/community/discussions/66512).
+
+<!-- ### End of spoilers section -->
+</details>
 
 
 # Contacts

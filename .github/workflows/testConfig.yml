@@ -56,9 +56,6 @@ jobs:
         # but vars not declared in workflow should be picked up from .env; 
         # parsing GOOGLE_FORM_ID and PARENT_DIR as examples, are Google file IDs (alphanumeric, hyphens, underscores). 
         run: |
-          # see what files are around
-          ls -alh
-
           # Print out cfg dictionary
           python <<'PY'
           import re
@@ -75,7 +72,7 @@ jobs:
           for k, v in cfg.items():
             print(f"{k}: {v!r}")
           
-            with open("merged_config.txt", "w") as f:
+          with open("merged_config.txt", "w") as f:
             for k, v in cfg.items():
               f.write(f"{k}: {v!r}\n")
           PY

@@ -94,28 +94,30 @@ def pick_cfg_value(
     
     Precedence is:
         1. CLI argument (if not None)
-        2. .secrets file entry (if present)
-        3. Environment variable (if present)
-        4. Defaults for some keys
+        2. Environment variable (if present)
+        3. .secrets and .env file entry (if present)
+        4. Defaults for some keys (e.g. debug, secrets-file)
         5. Otherwise, error.
     """
-    # 1️⃣ CLI argument – already the correct Python type because argparse does it.
+    # 1. CLI argument – already the correct Python type because argparse does it.
     if cli_val is not None:
         return cli_val
 
     # Determine the target type once (used for both .secrets and env).
     target_type = _type_for_key(key, caller_globals)
 
-    # 2️⃣ .secrets file – always a raw string, so we coerce.
-    if key in secret_dict:
-        return _coerce_value(secret_dict[key], target_type)
-
-    # 3️⃣ Environment variable – also a raw string.
+    # 2. Environment variable – also a raw string.
     env_raw = os.getenv(key)
     if env_raw is not None:
         return _coerce_value(env_raw, target_type)
 
-    # Nothing found → explicit failure.
+    # 3. .secrets file – always a raw string, so we coerce.
+    if key in secret_dict:
+        return _coerce_value(secret_dict[key], target_type)
+    
+    # 4. Defaults for some keys (handled in argparse)
+
+    # 5. Nothing found → explicit failure.
     raise ValueError(
         f"Configuration value for '{key}' not supplied. Provide it via CLI, a .secrets "
         f"file, or an environment variable."
@@ -151,7 +153,10 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         # default="hardware-db_schema.json",
         help="Path to the form schema JSON file.",
     )
-    parser.add_argument("--form-id", help="Google Form ID.")
+    parser.add_argument(
+        "--form-id", 
+        help="Google Form ID."
+    )
     parser.add_argument(
         "--oauth-client-json",
         help="Path or raw JSON for OAuth client credentials.",

@@ -44,4 +44,12 @@ jobs:
       - name: Run createForm
         # env:
         #   OAUTH_CLIENT_JSON: ${{ github.workspace }}/OAuth_client.json
-        run: python createForm.py
+        run: python createForm.py --update-links
+
+      - name: Commit and push changes
+        run: |
+          # git config --local user.email "action@github.com"
+          # git config --local user.name "GitHub Action"
+          git add .env README.md
+          git commit -m "Update form ID and link" || true
+          git push || true

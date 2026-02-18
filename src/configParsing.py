@@ -188,6 +188,11 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         help="Drive folder ID that will hold the created form.",
     )
     parser.add_argument(
+        "--update-links",
+        action="store_true",
+        help="Update form ID and links in README (default: False).",
+    )
+    parser.add_argument(
         "--secrets-file",
         default=".secrets",
         help="Path to a .secrets file (default: .secrets).",

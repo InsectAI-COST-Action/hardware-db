@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime
+from pathlib import Path
 
 from googleapiclient.discovery import build
 
@@ -19,6 +20,7 @@ OAUTH_CLIENT_JSON = ""
 TOKEN_CREATE_FORM = ""
 DISCOVERY_DOC = ""
 DEBUG = False
+UPDATE_LINKS = False
 
 
 # ----------------------------------------------------------------------
@@ -91,6 +93,70 @@ def build_batch_requests(items):
         }
         for idx, item in enumerate(items)
     ]
+
+# ----------------------------------------------------------------------
+# Functions to update .env and README
+# ----------------------------------------------------------------------
+def write_form_id_to_env(form_id: str, env_file: str = ".env"):
+    """Write the form ID to the GOOGLE_FORM_ID variable in .env file."""
+    env_path = Path(env_file)
+    
+    if not env_path.exists():
+        # Create new .env file if it doesn't exist
+        with env_path.open("w") as f:
+            f.write(f"GOOGLE_FORM_ID={form_id}\n")
+        return
+    
+    # Read the existing file
+    lines = []
+    found = False
+    with env_path.open("r") as f:
+        for line in f:
+            if line.startswith("GOOGLE_FORM_ID="):
+                lines.append(f"GOOGLE_FORM_ID={form_id}\n")
+                found = True
+            else:
+                lines.append(line)
+    
+    # If GOOGLE_FORM_ID wasn't found, append it
+    if not found:
+        lines.append(f"GOOGLE_FORM_ID={form_id}\n")
+    
+    # Write back
+    with env_path.open("w") as f:
+        f.writelines(lines)
+
+def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
+    """Update the form link in README.md between the GOOGLE_FORM_ID markers."""
+    readme_path = Path(readme_file)
+    
+    if not readme_path.exists():
+        print(f"Warning: {readme_file} not found, skipping README update")
+        return
+    
+    # Generate the new form link
+    new_link = f"https://docs.google.com/forms/d/e/{form_id}/viewform?usp=dialog"
+    
+    # Read the file
+    content = readme_path.read_text()
+    
+    # Find and replace the link between the markers
+    begin_marker = "<!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->"
+    end_marker = "<!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->"
+    
+    if begin_marker not in content or end_marker not in content:
+        print(f"Warning: Form ID markers not found in {readme_file}, skipping README update")
+        return
+    
+    # Extract parts before, between, and after the markers
+    before = content[:content.find(begin_marker) + len(begin_marker)]
+    after = content[content.find(end_marker):]
+    
+    # Reconstruct with new link
+    new_content = before + f"\n{new_link}\n" + after
+    
+    readme_path.write_text(new_content)
+
 
 # ----------------------------------------------------------------------
 # Main fun: call APIs, parse body, etc.
@@ -260,6 +326,14 @@ def main():
         removeParents=previous_parents,
         fields="id, parents"
     ).execute()
+
+    # Write form ID to .env
+    write_form_id_to_env(form_id)
+    
+    # Check if links should be updated
+    if cfg["UPDATE_LINKS"]:
+        write_form_id_to_env(form_id)   # Write form ID to .env
+        update_readme_form_link(form_id)   # Update link in README
 
     print("Form created successfully:")
     print(f"https://docs.google.com/forms/d/{form_id}/edit")

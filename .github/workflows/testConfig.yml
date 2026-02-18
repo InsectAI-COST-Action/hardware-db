@@ -52,50 +52,52 @@ jobs:
         working-directory: tests
 
       - name: Merge workflow and .env vars
-        # The expected behaviour is that vars declared in this workflow supersede those in .env, 
-        # but vars not declared should be picked up from .env
+        # The expected behaviour is that env vars declared in the workflow supersede those in .env, 
+        # but vars not declared in workflow should be picked up from .env; 
+        # parsing GOOGLE_FORM_ID and PARENT_DIR as examples, are Google file IDs (alphanumeric, hyphens, underscores). 
         run: |
           # see what files are around
           ls -alh
 
           # Print out cfg dictionary
           python <<'PY'
+          import re
           from configParsing import build_config
+          
           SCOPES=[]
           DEBUG=True
           SCHEMA_FILE=""
-          FORM_ID=""
+          GOOGLE_FORM_ID=""
           PARENT_DIR=""
+
           cfg = build_config(globals())
+          
           for k, v in cfg.items():
             print(f"{k}: {v!r}")
+          
+            with open("merged_config.txt", "w") as f:
+            for k, v in cfg.items():
+              f.write(f"{k}: {v!r}\n")
           PY
           
           # Check that vars only present in .env file are being picked up
-          python <<'PY' > merged_config.txt
-          from configParsing import build_config
-          SCOPES=[]
-          DEBUG=True
-          SCHEMA_FILE=""
-          FORM_ID=""
-          PARENT_DIR=""
-          cfg = build_config(globals())
-          assert re.fullmatch(r"[A-Za-z0-9_-]{5,}", cfg["FORM_ID"])
-          assert re.fullmatch(r"[A-Za-z0-9_-]{5,}", cfg["PARENT_DIR"])
-
-          print("IDs valid")
-          for k, v in cfg.items():
-            print(f"{k}: {v!r}")
-          PY
-          for key in FORM_ID PARENT_DIR; do
-            grep "^$key" merged_config.txt \
-              | grep -E ":[[:space:]]*'[A-Za-z0-9_-]{5,}'"
+          for key in GOOGLE_FORM_ID PARENT_DIR; do
+            if grep -q "^$key" merged_config.txt &&
+              grep "^$key" merged_config.txt | grep -q -E "[[:space:]]*->[[:space:]]*'[A-Za-z0-9_-]{5,}'"
+            then
+              echo "$key: OK"
+            else
+              echo "$key: NOT FOUND or INVALID"
+              exit 1
+            fi
           done
 
           # Check that vars assigned in workflow take precedence over .env
-          sed -n '1,/FORM_ID/p' merged_config.txt > filtered_output.txt
+          sed -n '1,/SCHEMA_FILE/p' merged_config.txt > filtered_output.txt
           cat <<'EXPECTED' > merged_expected.txt
-          {'SCOPES': ['myenvscope1', 'myenvscope2'], 'DEBUG': False, 'SCHEMA_FILE': 'this_is_an_env_schema.json', 'FORM_ID':}
+          SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)
+          DEBUG                -> False   (bool)
+          SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
           EXPECTED
           diff -u merged_expected.txt filtered_output.txt
   

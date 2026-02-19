@@ -12,7 +12,7 @@ from configParsing import build_config
 # ----------------------------------------------------------------------
 # Declare needed config keys for script's functioning
 # ----------------------------------------------------------------------
-DB_VERSION = "v0.2.0"
+# DB_VERSION = "v0.2.0"
 SCOPES = []
 SCHEMA_FILE = ""
 GOOGLE_FORM_ID = ""
@@ -307,7 +307,8 @@ def main():
         fileId=form_id,
         body={
             "name": f"{datetime.today().strftime('%Y-%m-%d_%H:%M:%S')} "
-                    f"- InsectAI hardware database submission form ({DB_VERSION})"
+                    # f"- InsectAI hardware database submission form ({DB_VERSION})"
+                    f"- InsectAI hardware database submission form (v0.2.0)"
         }
     ).execute()
     

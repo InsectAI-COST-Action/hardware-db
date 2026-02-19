@@ -44,12 +44,13 @@
 
 
 **Outstanding issues:**
-- [ ] Collating responses across from versions:
-  - [ ] how to track response spreadsheet when form is re-generated at every JSON schema update?
-  - [ ] what about attached pictures?
+- [ ] Collating responses across form / database versions:
+  - [ ] how to track responses when form is re-generated at every JSON schema update?
+  - [ ] what about attached pictures? (currently not implemented)
 - [ ] Updating existing record
   - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
   - [ ] How to retrieve info and pre-populate form with it? 
+  - [ ] 💡 it should be possible to reconstruct the link to edit the response from some info on the response itself; we could send the link to the email address listed as contact in the response (can import utils from lpego/CYBO)
   - [ ] We might also just ask them to contact us and/or resubmit... 
 - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
 - [ ] Reiterating over the schema of the database i.e. changing questions etc

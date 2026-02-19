@@ -1,6 +1,7 @@
 import json
 import csv
 import os
+import sys
 from pathlib import Path
 
 from googleapiclient.discovery import build
@@ -95,7 +96,13 @@ def main():
         print(responses)
 
     responses = responses.get("responses", [])
-    print(f"Found {len(responses)} responses")
+    count = len(responses)
+    print(f"Found {count} responses")
+
+    # Fail if no responses so workflows can detect the issue
+    if count == 0:
+        print("Error: no form responses found, cannot proceed.")
+        sys.exit(1)
 
 
     ### Parse responses into questionId to answer

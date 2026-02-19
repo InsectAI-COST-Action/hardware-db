@@ -179,7 +179,7 @@ def main():
         "forms",
         "v1",
         credentials=creds,
-        discoveryServiceUrl=DISCOVERY_DOC,
+        discoveryServiceUrl=cfg["DISCOVERY_DOC"],
         static_discovery=False,
         )
     drive_service = build("drive", "v3", credentials=creds)

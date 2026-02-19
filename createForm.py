@@ -328,9 +328,6 @@ def main():
         removeParents=previous_parents,
         fields="id, parents"
     ).execute()
-
-    # Write form ID to .env
-    write_form_id_to_env(form_id)
     
     # Check if links should be updated
     if cfg["UPDATE_LINKS"]:

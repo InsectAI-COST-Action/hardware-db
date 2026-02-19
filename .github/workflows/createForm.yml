@@ -17,10 +17,10 @@ jobs:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
     steps:
-      - name: Checkout commit that triggered tests
+      - name: Checkout branch that triggered tests
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Check if schema changed
         run: |

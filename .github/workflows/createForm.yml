@@ -14,6 +14,7 @@ jobs:
   create_form:
     runs-on: ubuntu-latest
     env:
+        TZ: Europe/Zurich
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
     steps:

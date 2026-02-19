@@ -136,7 +136,7 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
         return
     
     # Generate the new form link
-    new_link = f"https://docs.google.com/forms/d/e/{form_id}/viewform?usp=dialog"
+    new_link = f"https://docs.google.com/forms/d/{form_id}/viewform"
     
     # Read the file
     content = readme_path.read_text()

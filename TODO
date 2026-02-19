@@ -32,6 +32,7 @@
 
 
 *Extras*
+- [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)
 - [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
   - [ ] What about github releases and tags?
 - [ ] Add response validation, e.g. valid email address, etc. 

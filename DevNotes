@@ -288,6 +288,16 @@ If I take away the .secrets file, it does not fall back to hardcoded vars though
 Actually scratch that, I only need to know if there are configs in the call, .secrets or env vars. Let's simplify the logic, ignoring vars hardcoded in the script (which is bad practice anyway). 
 
 
+# Trying to implement a trigger for running workflows on new response submission
+The idea is to use a small AppScript project that detects when a new response is submitted, `onFormSubmit`, checks if a certain question has a certain answer, and if yes calls a Github repo endpoint. 
+
+Set up a github action workflow that listens to the `repository_dispatch` endpoint and triggers when called. 
+
+I can attach the AppScript to the form via the relative API, after form creation. 
+
+
+
+
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!
 

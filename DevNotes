@@ -295,6 +295,10 @@ Set up a github action workflow that listens to the `repository_dispatch` endpoi
 
 I can attach the AppScript to the form via the relative API, after form creation. 
 
+The general idea of `formtrigger.py` is that it adds the AppScript code in `handler_code` to the specified Google Form, if a specified question (i.e. specified by exact question title) has a specified response (i.e. exact match of string). 
+
+This script would get called by the Github Actions workflow `test-form-trigger.yml`, that in turn is listening to a `repository_dispatch` "hook" (not the proper term probably). FOr testing purposes the GH Action only prints the payload for now (event trigger, form ID and matched response). 
+
 
 
 

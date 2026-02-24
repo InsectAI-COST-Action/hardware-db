@@ -1,0 +1,22 @@
+name: Test Form Trigger
+
+on:
+  repository_dispatch:
+    types: [new_form_response]   # must match GITHUB_EVENT in the script
+
+jobs:
+  echo-payload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show received payload
+        run: |
+          echo "Event type: ${{ github.event.action }}"
+          echo "Form ID   : ${{ github.event.client_payload.formId }}"
+          echo "Answer    : ${{ github.event.client_payload.answer }}"
+
+      - name: Fail if payload missing (quick sanity check)
+        if: ${{ !github.event.client_payload.formId || !github.event.client_payload.answer }}
+        run: exit 1

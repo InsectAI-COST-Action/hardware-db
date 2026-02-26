@@ -2,7 +2,7 @@
 # Alternative approach: Use Google Forms API to poll for responses
 # instead of creating a bound script with triggers
 
-import json, os, sys, urllib.request, urllib.parse, time, datetime
+import json, os, sys, urllib.request, urllib.parse, datetime
 from authFlow_helpers import resolve_oauth_path, make_creds
 
 # ------------------------------------------------------------
@@ -17,12 +17,8 @@ MATCH_VALUE    = "newDevice"
 GITHUB_OWNER   = "InsectAI-COST-Action"
 GITHUB_REPO    = "hardware-db"
 GITHUB_EVENT   = "new_form_response"
-POLL_INTERVAL  = 300  # poll every 5 minutes in seconds
-# ------------------------------------------------------------
-
-TOKEN_URL = "https://oauth2.googleapis.com/token"
-FORMS_API = "https://forms.googleapis.com/v1"
-GITHUB_API = "https://api.github.com"
+# Note: Scheduling is handled by GitHub Actions workflow (cron: */5 * * * *)
+# This script runs once per workflow execution, not in a loop
 STATE_FILE = "formTrigger_state.json"
 
 def get_access_token():
@@ -174,40 +170,14 @@ def poll_and_process():
 def main():
     TOKEN = get_access_token()
     print(f"[debug] obtained access token")
-    
-    print(f"""
-╔══════════════════════════════════════════════════════════╗
-║         Forms API Response Polling Monitor               ║
-╚══════════════════════════════════════════════════════════╝
-
-Form ID:            {FORM_ID}
-Target Question:    {TARGET_Q_TITLE}
-Match Value:        {MATCH_VALUE}
-Poll Interval:      {POLL_INTERVAL}s ({POLL_INTERVAL//60}m)
-GitHub Repo:        {GITHUB_OWNER}/{GITHUB_REPO}
-
-💡 To use this script:
-   1. Set GH_TOKEN environment variable with PAT token
-   2. GitHub PAT needs 'repo' scope for dispatching workflows
-   3. Run this script in background: python formTrigger_v2_polling.py &
-   
-   To stop: Ctrl+C
-
-Starting monitoring...
-    """)
+    print(f"[*] Polling form: {FORM_ID}")
+    print(f"[*] Looking for: {TARGET_Q_TITLE} = {MATCH_VALUE}")
     
     try:
-        while True:
-            try:
-                poll_and_process()
-            except Exception as e:
-                print(f"[error] Polling cycle failed: {e}")
-            
-            next_check = datetime.datetime.now() + datetime.timedelta(seconds=POLL_INTERVAL)
-            print(f"[*] Next check at {next_check.strftime('%H:%M:%S')}")
-            time.sleep(POLL_INTERVAL)
-    except KeyboardInterrupt:
-        print("\n[*] Monitoring stopped by user")
+        poll_and_process()
+    except Exception as e:
+        print(f"[error] Polling failed: {e}")
+        raise
 
 if __name__ == "__main__":
     main()

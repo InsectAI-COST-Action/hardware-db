@@ -299,6 +299,16 @@ The general idea of `formtrigger.py` is that it adds the AppScript code in `hand
 
 This script would get called by the Github Actions workflow `test-form-trigger.yml`, that in turn is listening to a `repository_dispatch` "hook" (not the proper term probably). FOr testing purposes the GH Action only prints the payload for now (event trigger, form ID and matched response). 
 
+Need to make sure that AppScript API is activated in Google Cloud Console... It was activated already, still getting error "403: Forbidden... "
+
+~~Following the official [Google documentation](https://developers.google.com/workspace/forms/api/guides/apps-script-setup?_gl=1*ghfyt3*_up*MQ..*_ga*MjE2MTgzNzE1LjE3NzIwOTM3Nzg.*_ga_SM8HXJ53K2*czE3NzIwOTM3NzckbzEkZzAkdDE3NzIwOTM3NzckajYwJGwwJGgw)gives you a few more steps to follow: ~~
+~~0. First, need to have a [Google Cloud Console](https://console.cloud.google.com/) project with AppScripts API enabled (same as for Forms API)~~
+~~0. Then, on the [AppScripts page](https://script.google.com/) create a new project~~
+
+There's a setting to enable API on AppScript... On the [AppScripts dashboard](https://script.google.com/), without selecting any project, so under Settings > Google Apps Script API > Enable. 
+
+Now we don't get a 403 error anymore! 
+
 
 
 

@@ -39,10 +39,10 @@ jobs:
           git config user.name "GitHub Action"
           
           # Only commit if state file was modified
-          if git diff --quiet formTrigger_state.json 2>/dev/null; then
+          if git diff --quiet data/formTrigger_state.json 2>/dev/null; then
             echo "[*] No state changes to commit"
           else
-            git add formTrigger_state.json
+            git add data/formTrigger_state.json
             git commit -m "Update form polling state [skip ci]" || echo "[*] State file already up to date"
             git push
           fi

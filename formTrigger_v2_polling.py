@@ -3,7 +3,7 @@
 # instead of creating a bound script with triggers
 
 import json, os, sys, urllib.request, urllib.parse, datetime
-from authFlow_helpers import resolve_oauth_path, make_creds
+# from authFlow_helpers import resolve_oauth_path, make_creds
 
 # ------------------------------------------------------------
 # 1️⃣  CONFIG – edit these values once

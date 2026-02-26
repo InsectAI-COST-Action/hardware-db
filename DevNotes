@@ -329,6 +329,14 @@ The Google REST API does not allow to bind Apps Script to existing forms. **This
 ## Polling the form responses
 New approach: run a workflow at relatively frequent intervals and check for new responses. 
 
+The idea is that we have one workflow running on a schedule, every 5 minutes initially then maybe every hour or so; it can run a python script that checks whether there are questions with certain answers (i.e. "previous device ID"), and if yes commit a state file to the repo (don't love this, might change later). 
+
+If this workflow succeeds / commits new changes, another workflow is dispatched that can process the new form response and do something (i.e. send an email or whatever). 
+
+We have:
+- `form-polling.yml` that runs every 5 mins and saves the state file if new responses
+- `test-form-trigger.yml` that gets activated if the `form-polling.yml` finds new responses
+- `formTrigger_v2.py` that reads the responses and filters for desired values, handles the github access token and reads-save state file. 
 
 
 

@@ -13,10 +13,20 @@ jobs:
 
       - name: Show received payload
         run: |
-          echo "Event type: ${{ github.event.action }}"
-          echo "Form ID   : ${{ github.event.client_payload.formId }}"
-          echo "Answer    : ${{ github.event.client_payload.answer }}"
+          echo "Event type:       ${{ github.event.action }}"
+          echo "Form ID:          ${{ github.event.client_payload.formId }}"
+          echo "Response ID:      ${{ github.event.client_payload.responseId }}"
+          echo "Previous DeviceID: ${{ github.event.client_payload.previousDeviceID }}"
+          echo "Timestamp:        ${{ github.event.client_payload.timestamp }}"
 
-      - name: Fail if payload missing (quick sanity check)
-        if: ${{ !github.event.client_payload.formId || !github.event.client_payload.answer }}
-        run: exit 1
+      - name: Validate payload
+        if: ${{ !github.event.client_payload.formId || !github.event.client_payload.previousDeviceID }}
+        run: |
+          echo "[ERROR] Missing required fields in payload"
+          exit 1
+
+      - name: Success - payload received
+        run: |
+          echo "[SUCCESS] Form response detected!"
+          echo "Device ID from form: ${{ github.event.client_payload.previousDeviceID }}"
+          echo "Response ID: ${{ github.event.client_payload.responseId }}"

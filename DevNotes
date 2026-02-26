@@ -312,7 +312,17 @@ Now we don't get a 403 error anymore!
 Apps Script projects get created with the API call, however I get an error 404: Not found now, triggered by the second `api_call` in `formTrigger.py`.
 
 Ok, so I debugged a bunch the URL requests, there was a lot of stuff wrong... 
+- Wrong API base URL → Changed from script.googleapis.com to scriptmanagement.googleapis.com
+- Wrong HTTP method → Changed from PATCH to PUT for uploading content
+- Missing manifest file → Added required `appsscript.json` to the content files with proper manifest structure
+- Invalid deployment body → Changed from {"deploymentConfig": {...}} to proper structure
+- Missing version number → Added version creation step before deployment
+
 The version of `formTrigger.py` in this commit runs successfully, however there seems to be a problem with setting triggers via API. 
+
+The REST API doesn't support trigger creation directly, according to restrictions in the [documentation](https://developers.google.com/apps-script/guides/triggers/#restrictions). 
+
+Investigating how to bind a Apps Script project to a Google Forms directly, maybe some useful on this page about [Container-bound scripts](https://developers.google.com/apps-script/guides/bound?_gl=1*r43p1u*_up*MQ..*_ga*MTIzMjEwOTQ0OC4xNzcyMTA5NjY0*_ga_SM8HXJ53K2*czE3NzIxMDk2NjMkbzEkZzAkdDE3NzIxMDk2NjMkajYwJGwwJGgw).
 
 
 > [!TIP]

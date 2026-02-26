@@ -107,9 +107,9 @@ def trigger_github_dispatch(form_response_id, answer):
     """Trigger a GitHub Actions workflow_dispatch event"""
     print(f"[*] Triggering GitHub dispatch event...")
     
-    github_token = os.environ.get("GITHUB_TOKEN")
+    github_token = os.environ.get("GH_TOKEN")
     if not github_token:
-        print("[!] GITHUB_TOKEN env var not set - skipping GitHub dispatch")
+        print("[!] GH_TOKEN env var not set - skipping GitHub dispatch")
         return False
     
     url = f"{GITHUB_API}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/dispatches"
@@ -187,7 +187,7 @@ Poll Interval:      {POLL_INTERVAL}s ({POLL_INTERVAL//60}m)
 GitHub Repo:        {GITHUB_OWNER}/{GITHUB_REPO}
 
 💡 To use this script:
-   1. Set GITHUB_TOKEN environment variable with PAT token
+   1. Set GH_TOKEN environment variable with PAT token
    2. GitHub PAT needs 'repo' scope for dispatching workflows
    3. Run this script in background: python formTrigger_v2_polling.py &
    

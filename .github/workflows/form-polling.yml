@@ -27,7 +27,7 @@ jobs:
 
       - name: Run form polling
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           cd /home/runner/work/hardware-db/hardware-db
           python formTrigger_v2_polling.py

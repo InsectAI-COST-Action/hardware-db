@@ -336,7 +336,12 @@ If this workflow succeeds / commits new changes, another workflow is dispatched 
 We have:
 - `form-polling.yml` that runs every 5 mins and saves the state file if new responses
 - `test-form-trigger.yml` that gets activated if the `form-polling.yml` finds new responses
-- `formTrigger_v2.py` that reads the responses and filters for desired values, handles the github access token and reads-save state file. 
+- `formTrigger_v2_polling.py` that reads the responses and filters for desired values, handles the github access token and reads-save state file. 
+
+Need to create a Personal Access Token from your Github account: https://github.com/settings/tokens . 
+I selected "classic" and gave scopes repo and workflows. 
+
+Then, need to add this token as a repository secret, [here](https://github.com/InsectAI-COST-Action/hardware-db/settings/secrets/actions); named it `GH_TOKEN`, because secrets cannot start with "GITHUB". (also aligned scripts with new secret name)
 
 
 

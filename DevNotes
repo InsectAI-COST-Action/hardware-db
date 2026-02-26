@@ -324,6 +324,13 @@ The REST API doesn't support trigger creation directly, according to restriction
 
 Investigating how to bind a Apps Script project to a Google Forms directly, maybe some useful on this page about [Container-bound scripts](https://developers.google.com/apps-script/guides/bound?_gl=1*r43p1u*_up*MQ..*_ga*MTIzMjEwOTQ0OC4xNzcyMTA5NjY0*_ga_SM8HXJ53K2*czE3NzIxMDk2NjMkbzEkZzAkdDE3NzIxMDk2NjMkajYwJGwwJGgw).
 
+The Google REST API does not allow to bind Apps Script to existing forms. **This is a dead end**... 
+
+## Polling the form responses
+New approach: run a workflow at relatively frequent intervals and check for new responses. 
+
+
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

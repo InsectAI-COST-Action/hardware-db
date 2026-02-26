@@ -19,7 +19,7 @@ GITHUB_REPO    = "hardware-db"
 GITHUB_EVENT   = "new_form_response"
 # Note: Scheduling is handled by GitHub Actions workflow (cron: */5 * * * *)
 # This script runs once per workflow execution, not in a loop
-STATE_FILE = "formTrigger_state.json"
+STATE_FILE = "data/formTrigger_state.json"
 
 def get_access_token():
     data = urllib.parse.urlencode({
@@ -96,6 +96,8 @@ def load_state():
 
 def save_state(state):
     """Save the last processed response ID"""
+    # Ensure data directory exists
+    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
     with open(STATE_FILE, 'w') as f:
         json.dump(state, f)
 

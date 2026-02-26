@@ -7,9 +7,9 @@ from authFlow_helpers import resolve_oauth_path, make_creds
 # ------------------------------------------------------------
 CLIENT_ID      = "169338603256-2thchlcnuosj9jetpube07keuc35ln9v.apps.googleusercontent.com"
 CLIENT_SECRET  = "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"
-REFRESH_TOKEN  = "1//03WFeWInyc4UTCgYIARAAGAMSNwF-L9IrvwCERs86Qv5GKecVoY-SX0ePUImNDiImWhVUlQLUAFIvcDgBoAdqIxuMO5XYQsJ0wLM"   # obtain via OAuth flow once
-FORM_ID        = "1EDkQGRnKg5g6gVP56l6zWwSY7YvrbbM3urdlFcmgQTQ"                # e.g. 1FAIpQLSf...
-TARGET_Q_TITLE = "Previous deviceID"         # exact question text
+REFRESH_TOKEN  = "1//03q1oLSr819_0CgYIARAAGAMSNwF-L9Ir_IcW5srMf5SI2I90WNzk_GrtOXgDXPWn-MKSs0WpoYXivYca13ikzgz3Rfdn0OCmxUk"   # obtain via OAuth flow once
+FORM_ID        = "1EDkQGRnKg5g6gVP56l6zWwSY7YvrbbM3urdlFcmgQTQ" # e.g. 1FAIpQLSf...
+TARGET_Q_TITLE = "Previous deviceID"  # exact question text
 MATCH_VALUE    = "newDevice"
 GITHUB_OWNER   = "InsectAI-COST-Action"
 GITHUB_REPO    = "hardware-db"
@@ -18,6 +18,7 @@ GITHUB_EVENT   = "new_form_response"
 
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 SCRIPT_API = "https://script.googleapis.com/v1"
+SCRIPT_MGMT_API = "https://scriptmanagement.googleapis.com/v1"
 
 def get_access_token():
     data = urllib.parse.urlencode({
@@ -28,19 +29,45 @@ def get_access_token():
     }).encode()
     req = urllib.request.Request(TOKEN_URL, data=data, method="POST")
     resp = urllib.request.urlopen(req).read()
-    return json.loads(resp)["access_token"]
+    token = json.loads(resp)["access_token"]
+    # debug: inspect token scopes
+    try:
+        info = urllib.request.urlopen(
+            f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={token}"
+        ).read()
+        print("[debug] token info:", info)
+    except Exception as e:
+        print("[debug] failed to fetch tokeninfo:", e)
+    return token
 
 def api_call(method, url, body=None):
     hdr = {"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"}
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(url, data=data, method=method, headers=hdr)
-    return json.loads(urllib.request.urlopen(req).read())
+    try:
+        return json.loads(urllib.request.urlopen(req).read())
+    except urllib.error.HTTPError as exc:
+        error_body = exc.read().decode(errors="ignore") if hasattr(exc, 'read') else None
+        print(f"\n[error] API call failed: {exc.code} {exc.reason}")
+        print(f"[error] URL: {url}")
+        print(f"[error] Method: {method}")
+        if error_body:
+            print(f"[error] Response body: {error_body}")
+        raise
 
 # ------------------------------------------------------------
 # 2️⃣  CREATE Apps‑Script project
 # ------------------------------------------------------------
 TOKEN = get_access_token()
-proj = api_call("POST", f"{SCRIPT_API}/projects", {"title": "FormWatcher"})
+print("[debug] obtained access token, now attempting API call...")
+try:
+    proj = api_call("POST", f"{SCRIPT_API}/projects", {"title": "FormWatcher"})
+except urllib.error.HTTPError as exc:
+    body = exc.read().decode(errors="ignore") if hasattr(exc, 'read') else None
+    print(f"[error] API request failed {exc.code} {exc.reason}")
+    if body:
+        print("response body:", body)
+    raise
 script_id = proj["scriptId"]
 print(f"[+] Created project – scriptId={script_id}")
 
@@ -75,28 +102,55 @@ function onFormSubmit(e) {{
   UrlFetchApp.fetch(url, opts);
 }}
 """
-api_call("PATCH",
-         f"{SCRIPT_API}/projects/{script_id}/content",
-         {"files": [{"name": "Code", "type": "SERVER_JS", "source": handler_code}]})
+api_call(
+    "PUT",
+    f"{SCRIPT_MGMT_API}/projects/{script_id}/content",
+    {
+        "files": [
+            {"name": "appsscript", "type": "JSON", "source": '{"timeZone":"America/New_York","exceptionLogging":"STACKDRIVER","runtimeVersion":"V8"}'},
+            {"name": "Code", "type": "SERVER_JS", "source": handler_code}
+        ]
+    }
+    )
 print("[+] Uploaded onFormSubmit handler")
 
 # ------------------------------------------------------------
-# 4️⃣  DEPLOY the script (required for triggers)
+# 4️⃣  CREATE a version and DEPLOY the script (required for triggers)
 # ------------------------------------------------------------
+version = api_call("POST",
+                   f"{SCRIPT_MGMT_API}/projects/{script_id}/versions",
+                   {})
+version_number = version["versionNumber"]
+print(f"[+] Created version – versionNumber={version_number}")
+
 deployment = api_call("POST",
-                      f"{SCRIPT_API}/projects/{script_id}/deployments",
-                      {"deploymentConfig": {"description": "auto‑trigger"}})
+                      f"{SCRIPT_MGMT_API}/projects/{script_id}/deployments",
+                      {"versionNumber": version_number, "description": "auto-trigger"})
 deployment_id = deployment["deploymentId"]
 print(f"[+] Deployed – deploymentId={deployment_id}")
 
 # ------------------------------------------------------------
 # 5️⃣  CREATE the ON_FORM_SUBMIT trigger bound to the Form
+# ⚠️ NOTE: Trigger creation via REST API is not directly supported
+#    You must manually create the trigger:
+#    1. Go to the Apps Script editor for this project
+#    2. Click "Triggers" (left sidebar, clock icon)  
+#    3. Click "Create new trigger"
+#    4. Set event type to "On form submit"
+#    5. Select your form from the dropdown
 # ------------------------------------------------------------
-trigger_body = {
-    "eventType": "ON_FORM_SUBMIT",
-    "resourceId": FORM_ID
-}
-trigger = api_call("POST",
-                   f"https://script.googleapis.com/v1/scripts/{script_id}:createTrigger",
-                   trigger_body)
-print("[+] Trigger created –", trigger["trigger"]["triggerId"])
+print("""
+[!] Script deployment complete!
+
+📝 Next steps to activate the trigger:
+   1. Visit: https://script.google.com/home/projects/{}/edit
+   2. Click the "Triggers" icon (⏰) on the left sidebar
+   3. Click "Create new trigger"
+      - Function: onFormSubmit
+      - Event type: On form submit
+      - Form: Select your Google Form
+   4. Save and authorize
+
+Then, when forms are submitted with "{}" = "{}", 
+the GitHub dispatch event will trigger.
+""".format(script_id, TARGET_Q_TITLE, MATCH_VALUE))

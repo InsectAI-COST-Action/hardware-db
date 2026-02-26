@@ -309,7 +309,10 @@ There's a setting to enable API on AppScript... On the [AppScripts dashboard](ht
 
 Now we don't get a 403 error anymore! 
 
+Apps Script projects get created with the API call, however I get an error 404: Not found now, triggered by the second `api_call` in `formTrigger.py`.
 
+Ok, so I debugged a bunch the URL requests, there was a lot of stuff wrong... 
+The version of `formTrigger.py` in this commit runs successfully, however there seems to be a problem with setting triggers via API. 
 
 
 > [!TIP]

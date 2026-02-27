@@ -44,7 +44,7 @@ def get_access_token():
     return token
 
 def api_call(method, url, body=None, headers=None):
-    default_headers = {"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"}
+    default_headers = {"Authorization": f"Bearer {SCRIPT_TOKEN}", "Content-Type": "application/json"}
     if headers:
         default_headers.update(headers)
     data = json.dumps(body).encode() if body else None
@@ -173,7 +173,7 @@ def poll_and_process():
         print("[*] No new matching responses")
 
 def main():
-    TOKEN = get_access_token()
+    SCRIPT_TOKEN = get_access_token()
     print(f"[debug] obtained access token")
     print(f"[*] Polling form: {FORM_ID}")
     print(f"[*] Looking for: {TARGET_Q_TITLE} = {MATCH_VALUE}")

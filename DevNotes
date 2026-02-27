@@ -350,6 +350,15 @@ Compare the info displayed for a public repo, like [Awesome InsectAI](https://ap
 
 Will need to make the repo public before being able to test this trigger. 
 
+Need to change the form to redirect to a different page if they reply "yes" to "Do you have a device ID?", that tells them what will happen (see below). 
+
+Once the trigger works properly, the lifecycle would be something like:
+- User submits form with Device ID
+- Form poll workflow reads the new response, triggers another workflow
+- **Option A**: somehow, this new workflow reconstructs the original response ID, and sends this link to the contact email in the original response. - need to investigate hoe to retrieve response IDs
+- **Option B**: the new workflow reads the `.json` with the device info in `data/` and populates a custom response with that info. - need to investigate how to push responses to a form (without creating a new form / overwriting existing ones).
+
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

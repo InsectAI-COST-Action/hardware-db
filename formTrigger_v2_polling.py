@@ -3,46 +3,37 @@
 # instead of creating a bound script with triggers
 
 import json, os, sys, urllib.request, urllib.parse, datetime
-# from authFlow_helpers import resolve_oauth_path, make_creds
+from google.auth.transport.requests import Request
+from authFlow_helpers import resolve_oauth_path, make_creds
+from configParsing import build_config
 
 # ------------------------------------------------------------
-# 1️⃣  CONFIG – edit these values once
-# ------------------------------------------------------------
-CLIENT_ID      = "169338603256-2thchlcnuosj9jetpube07keuc35ln9v.apps.googleusercontent.com"
-CLIENT_SECRET  = "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"
-REFRESH_TOKEN  = "1//03q1oLSr819_0CgYIARAAGAMSNwF-L9Ir_IcW5srMf5SI2I90WNzk_GrtOXgDXPWn-MKSs0WpoYXivYca13ikzgz3Rfdn0OCmxUk"
-FORM_ID        = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
-TARGET_Q_TITLE = "Previous deviceID"  # exact question text
-MATCH_VALUE    = "newDevice"
-GITHUB_OWNER   = "InsectAI-COST-Action"
-GITHUB_REPO    = "hardware-db"
-GITHUB_EVENT   = "new_form_response"
-# Note: Scheduling is handled by GitHub Actions workflow (cron: */5 * * * *)
-# This script runs once per workflow execution, not in a loop
+# Credential configuration – managed via build_config() / CLI / env / .secrets
+SCOPES = [
+    "https://www.googleapis.com/auth/forms.responses.readonly",
+    "https://www.googleapis.com/auth/forms.body"
+]
+OAUTH_CLIENT_JSON = ""
+TOKEN_FORM_TRIGGER = ""
+
+# ============================================================
+# Polling configuration – hardcoded values (not from build_config)
+# Edit these if you need to monitor a different form/question
+# ============================================================
+FORM_ID = "1hg7KuM9BkXK8quQqQXAh4CXQrpT-JazrjKLzKQNgYw8"
+TARGET_Q_TITLE = "Previous deviceID"
+MATCH_VALUE = "newDevice"
+GITHUB_OWNER = "lpego"
+GITHUB_REPO = "hardware-db"
+GITHUB_EVENT = "new_form_response"
 STATE_FILE = "data/formTrigger_state.json"
-TOKEN_URL = "https://oauth2.googleapis.com/token"
+
+# API endpoints (constants)
 FORMS_API = "https://forms.googleapis.com/v1"
 GITHUB_API = "https://api.github.com"
-TOKEN = None  # Set in main()
+TOKEN = None  # Set in main() after obtaining credentials
 
-def get_access_token():
-    data = urllib.parse.urlencode({
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-        "refresh_token": REFRESH_TOKEN,
-        "grant_type": "refresh_token"
-    }).encode()
-    req = urllib.request.Request(TOKEN_URL, data=data, method="POST")
-    resp = urllib.request.urlopen(req).read()
-    token = json.loads(resp)["access_token"]
-    try:
-        info = urllib.request.urlopen(
-            f"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={token}"
-        ).read()
-        print("[debug] token info:", info)
-    except Exception as e:
-        print("[debug] failed to fetch tokeninfo:", e)
-    return token
+
 
 def api_call(method, url, body=None, headers=None):
     default_headers = {"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"}
@@ -175,7 +166,22 @@ def poll_and_process():
 
 def main():
     global TOKEN
-    TOKEN = get_access_token()
+    
+    cfg = build_config(globals())
+    
+    oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
+    
+    creds = make_creds(
+        OAUTH_CLIENT_JSON=oauth_path,
+        TOKEN_FILE=cfg["TOKEN_FORM_TRIGGER"],
+        SCOPES=cfg["SCOPES"],
+    )
+    
+    # Ensure credentials are valid and extract access token
+    if not creds.valid:
+        creds.refresh(Request())
+    TOKEN = creds.token
+    
     print(f"[debug] obtained access token")
     print(f"[*] Polling form: {FORM_ID}")
     print(f"[*] Looking for: {TARGET_Q_TITLE} = {MATCH_VALUE}")

@@ -354,6 +354,14 @@ Need to change the form to redirect to a different page if they reply "yes" to "
 
 *Update*: on a fork, the collecting of new responses works correctly and also eventually triggers the other workflow! You can see the endpoint [here](https://api.github.com/repos/lpego/hardware-db). Need to change the repo owner appropriately when testing on the fork, obviously... 
 
+**Critical**: I committed hardcoded credentials (i.e. Google OAuth access and refresh token) in branch `form_trigger`... Need to revoke those credentials and make new ones: 
+ - [x] In `.secrets` file locally
+ - [x] Change repo secrets in both original one and fork.
+
+Done, old credentials revoked. Not tested new creds yet. 
+
+The hardcoded secrets are in a bunch of commits, it's a real pain to go through and amend them all. Since I removed the token from my Google Cloud Console, this should be sufficient. 
+
 Once the trigger works properly, the lifecycle would be something like:
 - User submits form with Device ID
 - Form poll workflow reads the new response, triggers another workflow

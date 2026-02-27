@@ -343,6 +343,12 @@ I selected "classic" and gave scopes repo and workflows.
 
 Then, need to add this token as a repository secret, [here](https://github.com/InsectAI-COST-Action/hardware-db/settings/secrets/actions); named it `GH_TOKEN`, because secrets cannot start with "GITHUB". (also aligned scripts with new secret name)
 
+As of #e0f5677, the polling works (need to double check how often it is running actually, the cron does not seem to behave as expected). 
+
+However, the trigger with `repository_dispatch` does not work, because there is no REST endpoint for private repos... 
+Compare the info displayed for a public repo, like [Awesome InsectAI](https://api.github.com/repos/InsectAI-COST-Action/awesome-InsectAI) and a private repo, like [the fork on my GH](https://api.github.com/repos/lpego/hardware-db). 
+
+Will need to make the repo public before being able to test this trigger. 
 
 
 > [!TIP]

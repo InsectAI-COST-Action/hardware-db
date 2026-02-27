@@ -20,6 +20,9 @@ GITHUB_EVENT   = "new_form_response"
 # Note: Scheduling is handled by GitHub Actions workflow (cron: */5 * * * *)
 # This script runs once per workflow execution, not in a loop
 STATE_FILE = "data/formTrigger_state.json"
+TOKEN_URL = "https://oauth2.googleapis.com/token"
+FORMS_API = "https://forms.googleapis.com/v1"
+GITHUB_API = "https://api.github.com"
 
 def get_access_token():
     data = urllib.parse.urlencode({

@@ -11,23 +11,20 @@ from googleapiclient.discovery import build
 import os
 import json
 import copy
+import csv
 
 #### CONFIGURATION ####
 
 # Define constants which can be changed depending on form of interest - may change this later to have a basic formID too
-FORM_ID_BASIC = "1mXaEkw1lydgeE5Ld0X5j2Xp82ABDgnQeQ79CvEJi_UQ"
-FORM_ID_BASIC_FEEDBACK = "11eU2nSwDg7_2bFFInmzp71FMTqjPvFI03hMfZeZMbI0"
-FORM_ID_FULL = "1k7RsEdOJrLW6ZDwOTHNdgDH2VSYWETfCI-1HyznB0m8"
-FORM_ID_FULL_FEEDBACK = "1S4wOnE0gNqLgvtut66M-lH4q2VxG4joJMSssi8CGCOM"
-FORM_ID_DEPLOYMENT = "19htB7BIDoh3ngRtvgURIyCrT1Cir_ScP4lWVnZ-ftHc"
-FORM_ID_DEPLOYMENT_FEEDBACK = "1dYnkrfRVaOM1Trf8BpCP-mDgq1DlnDQ73S8H2-Z-UCA"
-
-FORM_ID = ""
-SHEETS_ID = "1DClwffVrkrwH0G5nuCVCJVVoLLdueuqHdJ_VXWPc_Pg"
+FORM_ID = "1skt2r59S_EZ6Osgp_s4XlVuRmm1DJEuuBmf6VtRQdE4"
+SHEETS_URL = "1nHGSLz4uwX9LUz91rZyvWalkX2ja1LEfwRXlYI-ific"
 SHEETS_RANGE = 'Master!A1:R100'
 SHEETS_METADATA_RANGE = 'FormSettings!A1:D19'
 
-OAUTH_CLIENT_JSON = "C:/Users/gsmit/OneDrive/Documents/01_Career/03_Academia/05_PhD_Pollinator_diversity/16_STSM/insect-hdb_workspace/oauth_client.json"
+OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+
+# add export directory (relative to this script)
+EXPORT_DIR = os.path.join(os.path.dirname(__file__), "export")
 
 # The scope within which the API has been declared to operate i.e. now the forms body can be edited, and so can the whole spreadsheet, but not the forms responses
 SCOPES = [
@@ -81,6 +78,9 @@ if not creds or not creds.valid:
 sheets_service = build("sheets", "v4", credentials=creds)
 forms_service = build("forms", "v1", credentials=creds)
 drive_service = build("drive", "v3", credentials=creds)
+
+# ensure export directory exists
+os.makedirs(EXPORT_DIR, exist_ok=True)
 
 ## --------------------------------------------------------------------------------------------- ##
 ## ---------------------------------------## FUNCTIONS ##--------------------------------------- ##
@@ -223,7 +223,8 @@ def read_body_sheet():
 def read_form():
     form_existing_json = forms_service.forms().get(formId=FORM_ID).execute()
 
-    with open("./json_existing.json", "w") as f:
+    # write to export directory
+    with open(os.path.join(EXPORT_DIR, "json_existing.json"), "w") as f:
         json.dump([], f)
         json.dump(form_existing_json, f, indent=4)    
     
@@ -318,13 +319,15 @@ def create_json_info(form_title, doc_title, form_description):
         "description": form_description
     }
 
-    with open("./json_info.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_info.json"), "w") as f:
         json.dump(form_info_json, f, indent=4)
 
     return form_info_json
 
 def create_json_body(rows):
-    with open("./json_body.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_body.json"), "w") as f:
         json.dump([], f)
         form_body_json = []
         for row in rows:
@@ -517,7 +520,8 @@ def apply_moves_creates(forms_service, form_id, form_info_request, form_requests
 
 def create_form(form_info_json, form_body_json):
 
-    with open("./json_form.json", "w") as f:
+    # write into export dir
+    with open(os.path.join(EXPORT_DIR, "json_form.json"), "w") as f:
         json.dump([], f)
         form_json = {
         "formId": FORM_ID,
@@ -580,6 +584,90 @@ def create_form(form_info_json, form_body_json):
 
     # print(f"Form sync complete: {summary}")
 
+def read_form_responses():
+    """Fetch all responses from the Google Form."""
+    try:
+        result = forms_service.forms().responses().list(formId=FORM_ID).execute()
+        responses = result.get('responses', [])
+        return responses
+    except Exception as e:
+        print(f"Error fetching responses: {e}")
+        return []
+
+def export_responses_json(responses, filename="form_responses.json"):
+    """Export responses to JSON file with question titles instead of item IDs."""
+    # Get form structure for question mapping
+    form = forms_service.forms().get(formId=FORM_ID).execute()
+    items = form.get('items', [])
+    
+    # Map itemId to question title
+    id_to_question = {item.get('itemId'): item.get('title', 'Unknown') for item in items}
+    
+    # Transform responses with question titles
+    transformed_responses = []
+    for response in responses:
+        transformed_response = {
+            'responseId': response.get('responseId'),
+            'timestamp': response.get('createTime', ''),
+            'answers': {}
+        }
+        
+        answers = response.get('answers', {})
+        for item_id, answer_data in answers.items():
+            question_title = id_to_question.get(item_id, item_id)
+            
+            # Extract answer value
+            if 'textAnswers' in answer_data:
+                text_answers = answer_data['textAnswers'].get('answers', [])
+                transformed_response['answers'][question_title] = ', '.join([a.get('value', '') for a in text_answers])
+            else:
+                transformed_response['answers'][question_title] = answer_data
+        
+        transformed_responses.append(transformed_response)
+    
+    # write into export directory
+    fullpath = os.path.join(EXPORT_DIR, filename)
+    with open(fullpath, 'w') as f:
+        json.dump(transformed_responses, f, indent=4)
+    print(f"Exported {len(transformed_responses)} responses to {fullpath}")
+
+def export_responses_csv(responses, header, filename="form_responses.csv"):
+    """Export responses to CSV file."""
+    # Get form structure for question mapping
+    form = forms_service.forms().get(formId=FORM_ID).execute()
+    items = form.get('items', [])
+    
+    # Map itemId to question title
+    id_to_question = {item.get('itemId'): item.get('title', 'Unknown') for item in items}
+    
+    # Flatten responses into rows
+    rows = []
+    for response in responses:
+        row = {'responseId': response.get('responseId'), 'timestamp': response.get('createTime', '')}
+        answers = response.get('answers', {})
+        
+        for item_id, answer_data in answers.items():
+            question_title = id_to_question.get(item_id, item_id)
+            # Extract text or choice answer
+            if 'textAnswers' in answer_data:
+                text_answers = answer_data['textAnswers'].get('answers', [])
+                row[question_title] = ', '.join([a.get('value', '') for a in text_answers])
+            else:
+                row[question_title] = str(answer_data)
+        
+        rows.append(row)
+    
+    # Write CSV into export directory
+    if rows:
+        fullpath = os.path.join(EXPORT_DIR, filename)
+        with open(fullpath, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=list(set().union(*(r.keys() for r in rows))))
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f"Exported {len(rows)} responses to {fullpath}")
+    else:
+        print("No responses to export")
+
 def main():
     
     form_title, doc_title, form_description = read_info_sheet()
@@ -587,7 +675,10 @@ def main():
     form_info_json = create_json_info(form_title, doc_title, form_description)
     form_body_json = create_json_body(rows)
     create_form(form_info_json, form_body_json)
-    read_form()
+    responses = read_form_responses()
+    export_responses_json(responses)
+    export_responses_csv(responses, header)
+
 
    
 if __name__ == "__main__":

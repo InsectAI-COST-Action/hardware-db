@@ -1,0 +1,209 @@
+{
+    "AddInventoryContentForm": [
+        {
+            "Product_name": null,
+            "type": "short answer",
+            "required": true,
+        },
+        {
+            "Overview": null,
+            "type": "short answer",
+            "required": true,
+        },
+        {
+            "Product_type": [
+                "Hardware",
+                "Software"
+            ],
+            "type": "choice",
+            "required": true,
+        },
+        {
+            "Technology_type": [
+                "Animal borne imaging",
+                "Bioacoustics",
+                "Biologger/tracking",
+                "Camera traps",
+                "data management and processing",
+                "eDNA",
+                "Image recognition",
+                "Mobile apps/cit sci",
+                "Navigation/communication/connectivity",
+                "Networked sensors",
+                "PA Management",
+                "Remote sensing GIS",
+                "Thermal imaging",
+                "UAVs/drone"
+            ],
+            "type": "choice",
+            "required": true,
+        }
+    ],
+    "Ecosystem": [
+        {
+            "Ecosystem": [
+                "Aquatic",
+                "Terrestrial"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "SpeciesGroup": [
+        {
+            "SpeciesGroup": [
+                "Amphibians",
+                "Birds",
+                "Fish",
+                "Invertebrates",
+                "Mammals",
+                "Plants",
+                "..."
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "Availability": [
+        {
+            "Availability": [
+                "Available for Group Buy",
+                "Commercial",
+                "Crowdfunding",
+                "Free",
+                "OpenSource"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "Maturity": [
+        {
+            "Maturity": [
+                "Early Stage/Prototype",
+                "In trials/Pilot",
+                "Tested and Implemented"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "Prerequisites": [
+        {
+            "Prerequisites": [
+                "Needs integration with other tech",
+                "Ready to use/Plug and paly",
+                "To be assembled/Customised"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "CostRange": [
+        {
+            "CostRange": [
+                "$1-100",
+                "$100-1000",
+                "$1000-5000",
+                "$5000+",
+                "Free",
+                "Price available on request"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "WhereToBuy": [
+        {
+            "URL": null,
+            "type": "short answer",
+            "required": false,
+        },
+        {
+            "LinkText": null,
+            "type": "short answer",
+            "required": false,
+        }
+    ],
+    "Website": [
+        {
+            "URL": null,
+            "type": "short answer",
+            "required": false,
+        },
+        {
+            "LinkText": null,
+            "type": "short answer",
+            "required": false,
+        }
+    ],
+    "ExternalResources": [
+        {
+            "URL": null,
+            "type": "short answer",
+            "required": false,
+        },
+        {
+            "LinkText": null,
+            "type": "short answer",
+            "required": false,
+        }
+    ],
+    "ConservationChallenges": [
+        {
+            "ConservationChallenges": [
+                "Agriculture",
+                "Best practices",
+                "Biodiversity monitoring",
+                "Captive breeding",
+                "Citizen science",
+                "Climate change",
+                "Deforestation",
+                "Ecosystem services",
+                "Ecotourism",
+                "Endangered species",
+                "Environmental monitoring",
+                "Fishing",
+                "Human-wildlife conflict",
+                "Invasive species",
+                "Pollution",
+                "Scientific research",
+                "Threatened ecosystems",
+                "Wildlife crime"
+            ],
+            "type": "choice",
+            "required": false,
+        }
+    ],
+    "Specifications": [
+        {
+            "Specifications": null,
+            "type": "long answer",
+            "required": false,
+        }
+    ],
+    "Documentation": [
+        {
+            "Documentation": null,
+            "type": "long answer",
+            "required": false,
+        }
+    ],
+    "AddImage": [
+        {
+            "Image": null,
+            "type": "image",
+            "required": true,
+        },
+        {
+            "CopyrightInformationImageCredit": null,
+            "type": "short answer",
+            "required": true,
+        },
+        {
+            "Caption": null,
+            "type": "short answer",
+            "required": false,
+        }
+    ],
+}

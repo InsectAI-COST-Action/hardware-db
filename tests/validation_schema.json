@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "info": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["title", "description"]
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "emailCollectionType": { "type": "string" }
+      },
+      "required": ["emailCollectionType"]
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": {
+            "type": ["string", "null"]
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" },
+                "required": { "type": "boolean" },
+                "type": { "type": "string" },
+                "paragraph": { "type": "boolean" },
+                "choiceType": { "type": "string" },
+                "high": { "type": "number" },
+                "low": { "type": "number" },
+                "options": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "logic": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "go_to": { "type": "string" }
+                    },
+                    "required": ["go_to"]
+                  }
+                }
+              },
+              "required": ["id", "title", "required", "type"]
+            }
+          }
+        },
+        "required": ["id", "title", "questions"]
+      }
+    }
+  },
+  "required": ["info", "settings", "sections"]
+}

@@ -42,6 +42,7 @@
 - [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
   - [x] Add changelog
   - [ ] Add licence
+  - [ ] Add ToS
 
 
 **Outstanding issues:**
@@ -56,4 +57,8 @@
 - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
 - [ ] Reiterating over the schema of the database i.e. changing questions etc
   - [ ] Think about activities for the annual meeting to progress database structure
-  
+- [ ] Wildlab's Inventory ⇄ hardware-db schema
+  -	[ ] Look at the correspondence between the Wildlab’s schema and our own database schema (make a table)
+  -	[ ] Investigate a mapping layer that a program can use to covert between formats
+  -	[ ] Maybe implement a conversion script from hardware-db and Wildlab’s Inventory
+-	[ ] Collect publications DOIs etc to later fill in the hardware database 

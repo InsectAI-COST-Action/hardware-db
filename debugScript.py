@@ -19,7 +19,7 @@ import csv
 FORM_ID = "1skt2r59S_EZ6Osgp_s4XlVuRmm1DJEuuBmf6VtRQdE4"
 SHEETS_URL = "1nHGSLz4uwX9LUz91rZyvWalkX2ja1LEfwRXlYI-ific"
 SHEETS_RANGE = 'Master!A1:R100'
-SHEETS_METADATA_RANGE = 'FormSettings!A1:C10'
+SHEETS_METADATA_RANGE = 'FormSettings!A1:D19'
 
 OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
 
@@ -38,7 +38,24 @@ DEBUG = False  # set True to enable verbose item-level debug output
 
 BATCH_SIZE = 50
 REQUIRED_FIELDS = ["question", "type", "formItemID"]
-FORM_TYPE = "full"
+FORM_TYPE = input("Enter form type you wish to generate (full/basic/deployment): ").strip()
+FORM_TYPE_FEEDBACK = input("Do you want to generate the feedback version of your chosen form (input no for the normal submission form to be generated)? (yes/no): ").strip()
+if FORM_TYPE_FEEDBACK == "yes":
+    if FORM_TYPE == "full":
+        FORM_ID = FORM_ID_FULL_FEEDBACK
+    elif FORM_TYPE == "basic":
+        FORM_ID = FORM_ID_BASIC_FEEDBACK
+    elif FORM_TYPE == "deployment":
+        FORM_ID = FORM_ID_DEPLOYMENT_FEEDBACK
+else:
+    if FORM_TYPE == "full":
+        FORM_ID = FORM_ID_FULL
+    elif FORM_TYPE == "basic":
+        FORM_ID = FORM_ID_BASIC
+    elif FORM_TYPE == "deployment":
+        FORM_ID = FORM_ID_DEPLOYMENT
+    else:
+        raise ValueError("Invalid form type specified.")
 
 # Optional variable to reset the token if the scope above has changed
 user_scope_response = "no" ## TRY BLOCK
@@ -99,7 +116,7 @@ def clear_form_items():
 def read_info_sheet():
     # print("Fetching form metadata...")
     metadata = sheets_service.spreadsheets().values().get(
-        spreadsheetId=SHEETS_URL,
+        spreadsheetId=SHEETS_ID,
         range=SHEETS_METADATA_RANGE
     ).execute()
     
@@ -123,10 +140,13 @@ def read_info_sheet():
 
     # Search for each row
     for row in structured_rows:
-        first_col = row.get(header[0], "")
-        second_col = row.get(header[1], "")
-        if first_col == FORM_TYPE and second_col in keys_to_find:
-            results[second_col] = row.get(header[2], "")
+        first_col = row.get("formType", "")
+        second_col = row.get("feedbackType", "")
+        third_col = row.get("fieldType", "")
+        fourth_col = row.get("contents", "")
+        if first_col == FORM_TYPE and second_col == FORM_TYPE_FEEDBACK:
+            if third_col in keys_to_find:
+                results[third_col] = fourth_col
 
     # print("Form metadata found:", results)
 
@@ -134,27 +154,71 @@ def read_info_sheet():
     doc_title = results["docTitle"]
     form_description = results["formDescription"]
 
+    print("---- DEBUG METADATA ----")
+    print("FORM_TYPE:", repr(FORM_TYPE))
+    print("FORM_ID_FEEDBACK:", repr(FORM_TYPE_FEEDBACK))
+    print("form_title:", repr(form_title))
+    print("doc_title:", repr(doc_title))
+    print("form_description:", repr(form_description))
+    print("-------------------------")
+
+
     return form_title, doc_title, form_description
     # form_title =
     # form_description = 
 
 def read_body_sheet():
-    
-    # print("Fetching hardware data...")
-    result = sheets_service.spreadsheets().values().get(spreadsheetId=SHEETS_URL,range=SHEETS_RANGE).execute()
+
+    result = sheets_service.spreadsheets().values().get(
+        spreadsheetId=SHEETS_ID,
+        range=SHEETS_RANGE
+    ).execute()
 
     rows = result.get('values', [])
-    # print("Rows extracted:", rows)
-
     if not rows:
         raise ValueError("Sheet is empty or range is incorrect")
-    
+
     header = rows[0]
 
-    structured_rows = [{header[i]: row[i] if i < len(row) else "" for i in range(len(header))}
-        for row in rows[1:]]
+    # Convert rows into list of dicts
+    structured_rows = [
+        {header[i]: row[i] if i < len(row) else "" for i in range(len(header))}
+        for row in rows[1:]
+    ]
 
-    return header, structured_rows
+    # ---- Filtering logic begins here ----
+
+    FORM_TYPE_COL = "questionLevel"  # <-- Update to your actual column name
+
+    if FORM_TYPE == "full":
+        # Include rows that have "full" OR "basic"
+        filtered_rows = [
+            r for r in structured_rows
+            if r.get(FORM_TYPE_COL, "").strip().lower() in ["full", "basic"]
+        ]
+
+    elif FORM_TYPE == "basic":
+        # Only rows with "basic"
+        filtered_rows = [
+            r for r in structured_rows
+            if r.get(FORM_TYPE_COL, "").strip().lower() == "basic"
+        ]
+
+    elif FORM_TYPE == "deployment":
+        # Only rows with "deployment"
+        filtered_rows = [
+            r for r in structured_rows
+            if r.get(FORM_TYPE_COL, "").strip().lower() == "deployment"
+        ]
+
+    elif FORM_TYPE == "feedback":
+        print("functionality not enabled yet")
+        filtered_rows = []
+
+    else:
+        raise ValueError(f"Unsupported FORM_TYPE: {FORM_TYPE}")
+
+    return header, filtered_rows
 
 def read_form():
     form_existing_json = forms_service.forms().get(formId=FORM_ID).execute()
@@ -169,41 +233,68 @@ def read_form():
 ## -------------------- ##
 
 def build_json(row):
-    """Convert a row into a Form item JSON compatible with Google Forms API."""
-    q_text = str(row.get("question") or "").strip()
-    q_type = str(row.get("type") or "").strip().upper()
-    required = str(row.get("required", "")).strip().lower() == "true"
-    options = [o.strip() for o in str(row.get("options", "")).split(",") if o.strip()]
-    description = str(row.get("description") or "").strip()
-    item_id = str(row.get("formItemID") or "").strip()
-    image_id = str(row.get("imageID") or "").strip()
-
-    # Section / Page Break
-    if q_type in ["SECTION", "SECTION_HEADER", "PAGE_BREAK"]:
-        return {"itemId": item_id, "title": q_text, "description": description, "pageBreakItem": {}}
-
-    # Skip empty / N/A
-    if q_type in ["", "N/A", "NONE"]:
-        return None
-
-    item = {"itemId": item_id, "title": q_text, "questionItem": {"question": {"required": required}}}
     
-    # Only add image if image_id is not empty
-    if image_id:
-        item["questionItem"]["image"] = image_id
+    if FORM_TYPE_FEEDBACK == "yes":
+        """Convert a row into a Form item JSON compatible with Google Forms API for feedback forms."""
+        q_text = str(row.get("question") or "").strip()
+        q_type = str(row.get("type") or "").strip().upper()
+        required = "false"
+        options = [o.strip() for o in str(row.get("options", "")).split(",") if o.strip()]
+        description = str(row.get("description") or "").strip()
+        item_id = str(row.get("formItemID") or "").strip()
+        image_id = str(row.get("imageID") or "").strip()
 
-    if q_type in ["TEXT", "SHORT", "SHORT_TEXT", "FILE_UPLOAD", "FILE UPLOAD"]:
-        item["questionItem"]["question"]["textQuestion"] = {"paragraph": False}
-    elif q_type in ["PARAGRAPH", "LONG_TEXT", "PARAGRAPH_TEXT"]:
-        item["questionItem"]["question"]["textQuestion"] = {"paragraph": True}
-    elif q_type in ["MULTIPLE_CHOICE", "MCQ"]:
-        item["questionItem"]["question"]["choiceQuestion"] = {"type": "RADIO", "options": [{"value": o} for o in options]}
-    elif q_type in ["CHECKBOX", "CHECKBOXES"]:
-        item["questionItem"]["question"]["choiceQuestion"] = {"type": "CHECKBOX", "options": [{"value": o} for o in options]}
-    elif q_type in ["SCALE", "LINEAR"]:
-        item["questionItem"]["question"]["scaleQuestion"] = {"low": 1, "high": 5}
+        # Skip empty / N/A
+        if q_type in ["", "N/A", "NONE"]:
+            return None
+
+        item = {"itemId": item_id, "title": q_text, "questionItem": {"question": {"required": required}}}
+        
+        # Only add image if image_id is not empty
+        if image_id:
+            item["questionItem"]["image"] = image_id
+
+        if q_type in ["SECTION", "SECTION_HEADER", "PAGE_BREAK"]:
+            return {"itemId": item_id, "title": q_text, "description": description, "pageBreakItem": {}}
+        else:
+            item["questionItem"]["question"]["scaleQuestion"] = {"low": 1, "high": 3, "lowLabel": "Important field", "highLabel": "Unimportant field"}
+            
     else:
-        raise ValueError(f"Unsupported question type: {q_type}")
+        """Convert a row into a Form item JSON compatible with Google Forms API."""
+        q_text = str(row.get("question") or "").strip()
+        q_type = str(row.get("type") or "").strip().upper()
+        required = str(row.get("required", "")).strip().lower() == "true"
+        options = [o.strip() for o in str(row.get("options", "")).split(",") if o.strip()]
+        description = str(row.get("description") or "").strip()
+        item_id = str(row.get("formItemID") or "").strip()
+        image_id = str(row.get("imageID") or "").strip()
+
+        # Section / Page Break
+        if q_type in ["SECTION", "SECTION_HEADER", "PAGE_BREAK"]:
+            return {"itemId": item_id, "title": q_text, "description": description, "pageBreakItem": {}}
+
+        # Skip empty / N/A
+        if q_type in ["", "N/A", "NONE"]:
+            return None
+
+        item = {"itemId": item_id, "title": q_text, "questionItem": {"question": {"required": required}}}
+        
+        # Only add image if image_id is not empty
+        if image_id:
+            item["questionItem"]["image"] = image_id
+
+        if q_type in ["TEXT", "SHORT", "SHORT_TEXT", "FILE_UPLOAD", "FILE UPLOAD"]:
+            item["questionItem"]["question"]["textQuestion"] = {"paragraph": False}
+        elif q_type in ["PARAGRAPH", "LONG_TEXT", "PARAGRAPH_TEXT"]:
+            item["questionItem"]["question"]["textQuestion"] = {"paragraph": True}
+        elif q_type in ["MULTIPLE_CHOICE", "MCQ"]:
+            item["questionItem"]["question"]["choiceQuestion"] = {"type": "RADIO", "options": [{"value": o} for o in options]}
+        elif q_type in ["CHECKBOX", "CHECKBOXES"]:
+            item["questionItem"]["question"]["choiceQuestion"] = {"type": "CHECKBOX", "options": [{"value": o} for o in options]}
+        elif q_type in ["SCALE", "LINEAR"]:
+            item["questionItem"]["question"]["scaleQuestion"] = {"low": 1, "high": 5}
+        else:
+            raise ValueError(f"Unsupported question type: {q_type}")
 
     return item
 
@@ -354,11 +445,11 @@ def apply_item_updates(forms_service, form_id, valid_items, existing_items):
 
     try:
         forms_service.forms().batchUpdate(formId=form_id, body={"requests": update_ops}).execute()
-        print(f"Applied {len(update_ops)} item updates")
+        # print(f"Applied {len(update_ops)} item updates")
         return len(update_ops)
     except Exception as e:
         print("ERROR applying updates:", e)
-        print(json.dumps(update_ops, indent=2))
+        # print(json.dumps(update_ops, indent=2))
         return 0
 
 def simulate_operations(valid_items, existing_items):
@@ -477,6 +568,9 @@ def create_form(form_info_json, form_body_json):
 
     # execute deletes and refresh
     execute_delete_ops(forms_service, FORM_ID, delete_ops)
+    if FORM_TYPE_FEEDBACK == "yes":
+        clear_form_items()
+    print(f"Deleted {len(delete_ops)} items not present in feedback JSON.")
     existing_form = forms_service.forms().get(formId=FORM_ID).execute()
     existing_items = existing_form.get("items", [])
     # Step 2: apply per-item content updates
@@ -576,7 +670,6 @@ def export_responses_csv(responses, header, filename="form_responses.csv"):
 
 def main():
     
-    ## READ IN INFORMATION FROM THE GOOGLE SHEET
     form_title, doc_title, form_description = read_info_sheet()
     header, rows = read_body_sheet()
     form_info_json = create_json_info(form_title, doc_title, form_description)

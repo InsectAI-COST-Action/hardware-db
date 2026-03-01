@@ -3,17 +3,18 @@ import json
 from datetime import datetime
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# Path to the client‑secret JSON you downloaded from GCP
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
-# SCOPES = ["https://www.googleapis.com/auth/drive.file"]
-SCOPES = [
-    "https://www.googleapis.com/auth/script.projects",
-    "https://www.googleapis.com/auth/script.deployments",
-    "https://www.googleapis.com/auth/forms.body",
-    "https://www.googleapis.com/auth/forms.responses.readonly"
-]
+from authFlow_helpers import resolve_oauth_path, make_creds
+from configParsing import build_config
 
-flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
+# Path to the client‑secret JSON you downloaded from GCP
+OAUTH_CLIENT_JSON = ""
+SCOPES = []
+
+cfg = build_config(globals())
+
+oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
+
+flow = InstalledAppFlow.from_client_secrets_file(oauth_path, cfg["SCOPES"])
 creds = flow.run_local_server(port=0)          # opens a browser, you approve
 
 # The Credentials object already contains a refresh token.

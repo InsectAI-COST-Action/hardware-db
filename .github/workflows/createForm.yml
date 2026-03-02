@@ -54,9 +54,11 @@ jobs:
           if grep -q "^${SCHEMA_FILE}$" changed.txt; then
             echo "schema_changed=true" >> $GITHUB_OUTPUT
             echo "Schema file $SCHEMA_FILE has changed; proceeding."
+            echo "::notice::Schema file $SCHEMA_FILE has changed; proceeding."
           else
             echo "schema_changed=false" >> $GITHUB_OUTPUT
             echo "No schema changes in $SCHEMA_FILE; skipping."
+            echo "::notice::No schema changes in $SCHEMA_FILE; skipping."
           fi
 
       - name: Set up Python

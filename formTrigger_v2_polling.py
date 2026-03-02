@@ -167,13 +167,24 @@ def poll_and_process():
 def main():
     global TOKEN
     
+    # Build configuration from all sources (CLI, env, .secrets, hardcoded)
     cfg = build_config(globals())
     
-    oauth_path = resolve_oauth_path(cfg["OAUTH_CLIENT_JSON"])
+    # # Debug: Show what configuration was resolved
+    # print(f"[debug] Configuration resolved:")
+    # print(f"  - OAUTH_CLIENT_JSON: {'***' if cfg.get('OAUTH_CLIENT_JSON') else '<empty>'}")
+    # print(f"  - TOKEN_FORM_TRIGGER: {cfg.get('TOKEN_FORM_TRIGGER', '<not set>')}")
+    # print(f"  - SCOPES: {len(cfg.get('SCOPES', []))} scope(s)")
+    
+    # Resolve OAuth path (handles both file paths and raw JSON strings)
+    oauth_path = resolve_oauth_path(cfg.get("OAUTH_CLIENT_JSON"))
+    
+    # Get token file path (may be None, empty string, or a path)
+    token_file = cfg.get("TOKEN_FORM_TRIGGER")
     
     creds = make_creds(
         OAUTH_CLIENT_JSON=oauth_path,
-        TOKEN_FILE=cfg["TOKEN_FORM_TRIGGER"],
+        TOKEN_FILE=token_file,
         SCOPES=cfg["SCOPES"],
     )
     

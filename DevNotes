@@ -372,6 +372,15 @@ Once the trigger works properly, the lifecycle would be something like:
 
 I can use this construct to, for instance, send an email to the contact person email address. 
 
+Next step is looking into retrieving the response ID to allow editing.
+
+# Retrieving response ID to allow editing. 
+Google Forms API provides for this with [getEditResponseUrl()](https://developers.google.com/apps-script/reference/forms/form-response#geteditresponseurl), testing with `get_edit_response-url.py`. 
+
+Update: oops, the above mentioned function in in Apps Script, cannot use in Python API... 
+
+Regardless, tested the script and it correctly forms a edit response URL. 
+
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

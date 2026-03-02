@@ -10,8 +10,8 @@ from configParsing import build_config
 # ------------------------------------------------------------
 # Credential configuration – managed via build_config() / CLI / env / .secrets
 SCOPES = [
-    "https://www.googleapis.com/auth/forms.responses.readonly",
-    "https://www.googleapis.com/auth/forms.body"
+    "https://www.googleapis.com/auth/forms.body.readonly",
+    "https://www.googleapis.com/auth/forms.responses.readonly"
 ]
 OAUTH_CLIENT_JSON = ""
 TOKEN_FORM_TRIGGER = ""

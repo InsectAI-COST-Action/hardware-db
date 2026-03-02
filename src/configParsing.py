@@ -128,7 +128,13 @@ def pick_cfg_value(
         return cli_val
 
     # 2. Hardcoded value in script – use as-is (already correct type)
-    if hardcoded_val is not None and hardcoded_val != "":
+    # Special handling: treat empty collections and empty strings as "not provided"
+    # But always use boolean values (including False, which is meaningful)
+    if isinstance(hardcoded_val, bool):
+        # Boolean values are always meaningful
+        return hardcoded_val
+    elif hardcoded_val is not None and hardcoded_val:
+        # For other types: only use if truthy (non-empty)
         return hardcoded_val
 
     # Determine the target type for file values

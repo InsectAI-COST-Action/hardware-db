@@ -26,8 +26,8 @@ jobs:
       - name: Check if schema changed
         id: schema_check
         run: |
-          git fetch --no-tags --prune --unshallow || true
-          git diff --name-only ${{ github.event.workflow_run.head_sha }}^ ${{ github.event.workflow_run.head_sha }} > changed.txt || true
+          # Fetch sufficient history to compare commits safely
+          git fetch --depth=20 --no-tags --prune origin 2>/dev/null || true
           
           # Load SCHEMA_FILE from .env (allow GitHub Actions override)
           SCHEMA_FILE="${{ env.SCHEMA_FILE }}"
@@ -37,14 +37,27 @@ jobs:
           
           echo "Schema file: $SCHEMA_FILE"
           
-          if ! grep -q "^${SCHEMA_FILE}$" changed.txt; then
-            echo "schema_changed=false" >> $GITHUB_OUTPUT
-            echo "No schema changes in $SCHEMA_FILE; skipping."
-            exit 0
+          # Get changed files from HEAD~1 to HEAD (safe for shallow clones)
+          if git diff HEAD~1 HEAD --name-only > changed.txt 2>/dev/null; then
+            echo "Compared HEAD~1 to HEAD"
+          elif git log --oneline -n 2 > /dev/null 2>&1; then
+            # Fallback: if we have at least 2 commits, use them
+            PREV_SHA=$(git log --format=%H -n 2 | tail -1)
+            git diff "$PREV_SHA" HEAD --name-only > changed.txt 2>/dev/null || echo "" > changed.txt
+            echo "Compared $PREV_SHA to HEAD"
+          else
+            # Last resort: just check if the file exists in the current commit
+            echo "Only one commit available, checking current HEAD"
+            git ls-tree -r --name-only HEAD | grep "^${SCHEMA_FILE}$" > changed.txt 2>/dev/null || echo "" > changed.txt
           fi
           
-          echo "schema_changed=true" >> $GITHUB_OUTPUT
-          echo "Schema file $SCHEMA_FILE has changed; proceeding."
+          if grep -q "^${SCHEMA_FILE}$" changed.txt; then
+            echo "schema_changed=true" >> $GITHUB_OUTPUT
+            echo "Schema file $SCHEMA_FILE has changed; proceeding."
+          else
+            echo "schema_changed=false" >> $GITHUB_OUTPUT
+            echo "No schema changes in $SCHEMA_FILE; skipping."
+          fi
 
       - name: Set up Python
         if: steps.schema_check.outputs.schema_changed == 'true'

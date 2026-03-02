@@ -381,6 +381,14 @@ Update: oops, the above mentioned function in in Apps Script, cannot use in Pyth
 
 Regardless, tested the script and it correctly forms a edit response URL. 
 
+## Issues with permissions
+I can successfully collect and generate response edit URLs, and I could then send the link to the contact email in the response to allow editing of responses. 
+
+however, the only two permissions settings available are “Restricted (to people who have access)” and “Anyone with the link”, for the whole form, not just a single response. Obviously, letting anyone with the link edit the form is terrible idea... 
+
+But I also don't want to require suers to sign in with the google account either; and I have not looked into whether it would allow them access to editing their response anyway. 
+
+Currently stuck here, unsure how to continue with the implementation...
 
 > [!TIP]
 > Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

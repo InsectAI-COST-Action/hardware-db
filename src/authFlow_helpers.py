@@ -95,7 +95,7 @@ def resolve_oauth_path(value: Optional[Union[str, Path]]) -> Path:
 def make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES):
     # Try to load a persisted token file (useful when you run locally)
     creds = None
-    if TOKEN_FILE and os.path.isfile(TOKEN_FILE):
+    if TOKEN_FILE and isinstance(TOKEN_FILE, (str, Path)) and os.path.isfile(TOKEN_FILE):
         try:
             creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
         except Exception as exc:          # e.g. malformed / stale file
@@ -130,8 +130,15 @@ def make_creds(OAUTH_CLIENT_JSON, TOKEN_FILE, SCOPES):
         flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
         creds = flow.run_local_server(port=0)   # opens a browser – only works locally
 
-        # Persist the fresh token for the next local run
-        with open(TOKEN_FILE, "w", encoding="utf-8") as token:
-            token.write(creds.to_json())
+        # Persist the fresh token for the next local run (if TOKEN_FILE is valid)
+        if TOKEN_FILE and isinstance(TOKEN_FILE, (str, Path)):
+            token_path = Path(TOKEN_FILE)
+            try:
+                token_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(token_path, "w", encoding="utf-8") as token:
+                    token.write(creds.to_json())
+                print(f"[+] Saved token to {token_path}")
+            except Exception as exc:
+                print(f"[!] Could not save token to '{TOKEN_FILE}': {exc}")
             
     return creds

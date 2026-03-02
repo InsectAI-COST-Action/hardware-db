@@ -24,30 +24,48 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Check if schema changed
+        id: schema_check
         run: |
           git fetch --no-tags --prune --unshallow || true
           git diff --name-only ${{ github.event.workflow_run.head_sha }}^ ${{ github.event.workflow_run.head_sha }} > changed.txt || true
-          if ! grep -q '^hardware-db_schema.json$' changed.txt; then
-            echo "No schema changes; skipping."
+          
+          # Load SCHEMA_FILE from .env (allow GitHub Actions override)
+          SCHEMA_FILE="${{ env.SCHEMA_FILE }}"
+          if [ -z "$SCHEMA_FILE" ]; then
+            SCHEMA_FILE=$(grep '^SCHEMA_FILE=' .env | cut -d'=' -f2 | xargs)
+          fi
+          
+          echo "Schema file: $SCHEMA_FILE"
+          
+          if ! grep -q "^${SCHEMA_FILE}$" changed.txt; then
+            echo "schema_changed=false" >> $GITHUB_OUTPUT
+            echo "No schema changes in $SCHEMA_FILE; skipping."
             exit 0
           fi
+          
+          echo "schema_changed=true" >> $GITHUB_OUTPUT
+          echo "Schema file $SCHEMA_FILE has changed; proceeding."
 
       - name: Set up Python
+        if: steps.schema_check.outputs.schema_changed == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
       - name: Install dependencies
+        if: steps.schema_check.outputs.schema_changed == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -e .[ci]
 
       - name: Run createForm
+        if: steps.schema_check.outputs.schema_changed == 'true'
         # env:
         #   OAUTH_CLIENT_JSON: ${{ github.workspace }}/OAuth_client.json
         run: python createForm.py --update-links
 
       - name: Commit and push changes
+        if: steps.schema_check.outputs.schema_changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

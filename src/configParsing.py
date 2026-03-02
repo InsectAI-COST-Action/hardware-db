@@ -59,7 +59,9 @@ def _type_for_key(key: str, caller_globals: Dict[str, Any]) -> Callable[[str], A
     Conventions:
         * Upper‑case constants that are **lists** (e.g. SCOPES) → list
         * Upper‑case constants that are **bools** (e.g. DEBUG) → bool
-        * Everything else → str
+        * Everything else → str (especially for keys from external files)
+    
+    If the key is not declared in the script, defaults to str.
     """
     # If the caller defined a default value, we can infer the type from it.
     default_val = caller_globals.get(key)
@@ -67,11 +69,14 @@ def _type_for_key(key: str, caller_globals: Dict[str, Any]) -> Callable[[str], A
         return bool
     if isinstance(default_val, list):
         return list
-    # No explicit default – fall back to heuristics based on the key name.
+    
+    # No explicit default – fall back to key-name heuristics
     if key == "DEBUG":
         return bool
     if key == "SCOPES":
         return list
+    
+    # Default for everything else (including external .env/.secrets keys)
     return str
 
 
@@ -86,63 +91,95 @@ def _type_for_key(key: str, caller_globals: Dict[str, Any]) -> Callable[[str], A
 def pick_cfg_value(
     key: str,
     cli_val: Any,
-    secret_dict: Dict[str, str],
+    hardcoded_val: Any,
+    file_dict: Dict[str, str],
     caller_globals: Dict[str, Any],
+    is_declared: bool = False,
 ) -> Any:
     """
     Returns the configuration value for *key* after applying precedence and
-    type coercion.  Raises ``ValueError`` if the key cannot be satisfied.
+    type coercion. Only raises ValueError if the key is declared in the script
+    and cannot be satisfied from any source.
     
-    Precedence is:
+    Precedence (highest to lowest):
         1. CLI argument (if not None)
-        2. Environment variable (if present)
-        3. .secrets and .env file entry (if present)
-        4. Defaults for some keys (e.g. debug, secrets-file)
-        5. Otherwise, error.
+        2. Hardcoded value in script (if not None/empty)
+        3. .env or .secrets file entry (if present)
+        4. Otherwise: error if declared, None if not declared
+    
+    Parameters
+    ----------
+    key : str
+        The configuration key name
+    cli_val : Any
+        Value from CLI argument (already typed by argparse)
+    hardcoded_val : Any
+        Value from the caller's globals (hardcoded in script)
+    file_dict : Dict[str, str]
+        Combined dict of .env and .secrets values (all strings)
+    caller_globals : Dict[str, Any]
+        The caller's globals (for type inference)
+    is_declared : bool
+        Whether this key is a declared UPPERCASE variable in the script.
+        If True and value cannot be satisfied, raise error.
     """
     # 1. CLI argument – already the correct Python type because argparse does it.
     if cli_val is not None:
         return cli_val
 
-    # Determine the target type once (used for both .secrets and env).
+    # 2. Hardcoded value in script – use as-is (already correct type)
+    if hardcoded_val is not None and hardcoded_val != "":
+        return hardcoded_val
+
+    # Determine the target type for file values
     target_type = _type_for_key(key, caller_globals)
 
-    # 2. Environment variable – also a raw string.
-    env_raw = os.getenv(key)
-    if env_raw is not None:
-        return _coerce_value(env_raw, target_type)
-
-    # 3. .secrets file – always a raw string, so we coerce.
-    if key in secret_dict:
-        return _coerce_value(secret_dict[key], target_type)
+    # 3. Value from .env/.secrets file – always a raw string, so we coerce
+    if key in file_dict:
+        return _coerce_value(file_dict[key], target_type)
     
-    # 4. Defaults for some keys (handled in argparse)
-
-    # Nothing found → explicit failure.
-    raise ValueError(
-        f"Configuration value for '{key}' not supplied. Provide it via CLI, a .secrets "
-        f"file, or an environment variable."
-    )
+    # Nothing found
+    if is_declared:
+        # Declared variables are required
+        raise ValueError(
+            f"Configuration value for '{key}' not supplied. Provide it via CLI, "
+            f"hardcode it in the script, or add it to .env or .secrets."
+        )
+    else:
+        # Undeclared variables are optional (e.g., from external .env files)
+        return None
 
 
 # ----------------------------------------------------------------------
 # Build the full configuration dict for *any* script.
-# The caller passes its ``globals()`` so we know which keys it expects.
+# The caller passes its ``globals()`` so we know which keys it declares.
+# All keys from .env and .secrets are also included automatically.
 # ----------------------------------------------------------------------
 def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Parses CLI arguments, loads an optional .secrets file, checks environment
-    variables, coerces values to the expected Python types, and returns a dict.
-    Missing required keys raise ``ValueError``.
+    Parses CLI arguments, loads .env and .secrets files, applies precedence
+    to configuration values, and returns a complete config dict.
+    
+    Behavior:
+    * Scripts do NOT need to declare all variables
+    * All values from .env and .secrets are automatically included
+    * Declared variables (UPPERCASE in caller_globals) are required
+    * Undeclared variables from external files are optional (always included if present)
+    
+    Precedence for each key:
+        1. CLI arguments (highest priority)
+        2. Hardcoded values in the calling script
+        3. Values from .env or .secrets files
+        4. Error if declared but not found; None if undeclared and not found
     """
     parser = argparse.ArgumentParser(
         description=(
-            "Collect Google Form responses (or any other script) "
-            "with overridable configuration."
+            "Configuration management supporting CLI, hardcoded defaults, "
+            "and external .env/.secrets files."
         )
     )
     # ------------------------------------------------------------------
-    # Shared CLI options – defaults for some only
+    # Shared CLI options
     # ------------------------------------------------------------------
     parser.add_argument(
         "--scopes",
@@ -151,7 +188,6 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     )
     parser.add_argument(
         "--schema-file",
-        # default="hardware-db_schema.json",
         help="Path to the form schema JSON file.",
     )
     parser.add_argument(
@@ -171,8 +207,12 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
         help="Token cache file for createForm.py.",
     )
     parser.add_argument(
-        "--token-test_auth",
+        "--token-test-auth",
         help="Token cache file for testAuth.py.",
+    )
+    parser.add_argument(
+        "--token-form-trigger",
+        help="Token cache file for formTrigger scripts.",
     )
     parser.add_argument(
         "--discovery-doc",
@@ -204,43 +244,55 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     # ------------------------------------------------------------------
-    # Parse CLI – this will automatically exit with a nice help message
-    # if the user supplies `-h/--help`.
+    # Parse CLI
     # ------------------------------------------------------------------
     args = parser.parse_args()
 
     # ------------------------------------------------------------------
-    # Load .env and .secrets (if they exist)
+    # Load .env and .secrets
     # ------------------------------------------------------------------
     env_vals = load_secrets(Path(args.env_file))
     secret_vals = load_secrets(Path(args.secrets_file))
     
     # Merge with .secrets taking precedence over .env
-    all_config = {**env_vals, **secret_vals}
+    all_file_config = {**env_vals, **secret_vals}
 
     # ------------------------------------------------------------------
-    # Determine which upper‑case names the caller cares about.
-    # By convention we treat every UPPERCASE global as a required config key.
+    # Determine which keys are declared in the script
     # ------------------------------------------------------------------
-    expected_keys = [
+    declared_keys = [
         name for name, val in caller_globals.items() if name.isupper()
     ]
 
     # ------------------------------------------------------------------
-    # Assemble the final configuration dict, applying precedence and
-    # type‑coercion for each key.
+    # Collect all keys: declared keys + all keys from .env/.secrets
+    # ------------------------------------------------------------------
+    all_keys = set(declared_keys) | set(all_file_config.keys())
+
+    # ------------------------------------------------------------------
+    # Process all keys with proper precedence
     # ------------------------------------------------------------------
     cfg: Dict[str, Any] = {}
-    for key in expected_keys:
-        # CLI attributes are the lower‑case version of the constant name.
+    
+    for key in all_keys:
+        # Get the value from each source (or None if not present)
         cli_attr = key.lower()
         cli_val = getattr(args, cli_attr, None)
+        hardcoded_val = caller_globals.get(key)
+        is_declared = key in declared_keys
 
-        cfg[key] = pick_cfg_value(
+        # Apply precedence and type coercion
+        value = pick_cfg_value(
             key,
             cli_val,
-            all_config,
+            hardcoded_val,
+            all_file_config,
             caller_globals,
+            is_declared=is_declared,
         )
+        
+        # Only add to cfg if we got a value (declared keys always get a value or raise)
+        if value is not None:
+            cfg[key] = value
 
     return cfg

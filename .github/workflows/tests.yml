@@ -33,6 +33,54 @@ jobs:
         run: python validateJSON.py
         working-directory: tests
 
+  test_config:
+    name: Testing config precedence
+    runs-on: ubuntu-latest
+    env:
+        SCOPES: "myenvscope1 myenvscope2"
+        SCHEMA_FILE: "this_is_an_env_schema.json"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[ci]
+
+      - name: Test config parsing precedence order
+        run: python test_config_parse.py
+        working-directory: tests
+        
+      - name: Verify GitHub Actions env vars take precedence over .env
+        run: |
+          echo "Testing that GitHub Actions env vars override .env values..."
+          python testConfig.py SCOPES SCHEMA_FILE > env_precedence.txt
+          
+          echo "Expected: SCOPES and SCHEMA_FILE should have GitHub Actions env values"
+          cat env_precedence.txt
+          
+          # Check SCOPES came from env (GitHub Actions), not .env
+          if grep -q "SCOPES.*myenvscope1.*myenvscope2" env_precedence.txt; then
+            echo "✓ SCOPES correctly has GitHub Actions env value"
+          else
+            echo "✗ SCOPES does not have expected GitHub Actions env value"
+            exit 1
+          fi
+          
+          # Check SCHEMA_FILE came from env (GitHub Actions), not .env
+          if grep -q "SCHEMA_FILE.*this_is_an_env_schema.json" env_precedence.txt; then
+            echo "✓ SCHEMA_FILE correctly has GitHub Actions env value"
+          else
+            echo "✗ SCHEMA_FILE does not have expected GitHub Actions env value"
+            exit 1
+          fi
+        working-directory: tests
+  
   test_auth:
     name: Drive auth & file ops (optional)
     # needs: validate_json
@@ -56,97 +104,3 @@ jobs:
 
       - name: Run Drive auth test
         run: python tests/testAuth.py
-
-  test_config:
-    name: Testing config
-    runs-on: ubuntu-latest
-    env:
-        SCOPES: "myenvscope1 myenvscope2"
-        SCHEMA_FILE: "this_is_an_env_schema.json"
-        # OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
-        # REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .[ci]
-
-      - name: Testing config parsing from CLI
-        run: |
-          python testConfig.py --scopes thisismyscope1 thisismyscope2 --schema-file "this_is_a_test_schema.json" --debug > CLI_parsing.txt
-          cat <<'EXPECTED' > CLI_expected.txt
-          SCOPES               -> ['thisismyscope1', 'thisismyscope2']   (list)
-          DEBUG                -> True   (bool)
-          SCHEMA_FILE          -> 'this_is_a_test_schema.json'   (str)
-          EXPECTED
-          diff -u CLI_expected.txt CLI_parsing.txt
-        working-directory: tests
-    
-      - name: Testing config parsing from env
-        run: |
-          python testConfig.py > Env_parsing.txt
-          cat <<'EXPECTED' > Env_expected.txt
-          SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)
-          DEBUG                -> False   (bool)
-          SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
-          EXPECTED
-          diff -u Env_expected.txt Env_parsing.txt
-        working-directory: tests
-
-      - name: Merge workflow and .env vars
-        # The expected behaviour is that env vars declared in the workflow supersede those in .env, 
-        # but vars not declared in workflow should be picked up from .env; 
-        # parsing GOOGLE_FORM_ID and PARENT_DIR as examples, are Google file IDs (alphanumeric, hyphens, underscores). 
-        run: |
-          # Print out cfg dictionary
-          python <<'PY'
-          import re
-          from configParsing import build_config
-          
-          SCOPES=[]
-          DEBUG=True
-          SCHEMA_FILE=""
-          GOOGLE_FORM_ID=""
-          PARENT_DIR=""
-
-          cfg = build_config(globals())
-          
-          print("cfg dictionary items: ")
-          for k, v in cfg.items():
-            print(f"{k}: {v!r}")
-          
-          with open("merged_config.txt", "w") as f:
-            for k, v in cfg.items():
-              f.write(f"{k:20} -> {repr(v)}   ({type(v).__name__})\n")
-          PY
-          
-          # Check that vars only present in .env file are being picked up and are of expected format
-          echo "Checking format of vars from .env file: "
-          for key in GOOGLE_FORM_ID PARENT_DIR; do
-            if grep -q "^$key" merged_config.txt &&
-              grep "^$key" merged_config.txt | grep -q -E "[[:space:]]*->[[:space:]]*'[A-Za-z0-9_-]{5,}'"
-            then
-              echo "$key: OK"
-            else
-              echo "$key: NOT FOUND or INVALID"
-              exit 1
-            fi
-          done
-
-          # Check that vars assigned in workflow take precedence over .env, strip away .env vars first
-          echo "Checking that env vars take precedence over those in .env file: "
-          sed -n '1,/SCHEMA_FILE/p' merged_config.txt > filtered_output.txt
-          cat <<'EXPECTED' > merged_expected.txt
-          SCOPES               -> ['myenvscope1', 'myenvscope2']   (list)
-          DEBUG                -> False   (bool)
-          SCHEMA_FILE          -> 'this_is_an_env_schema.json'   (str)
-          EXPECTED
-          diff -u merged_expected.txt filtered_output.txt
-    

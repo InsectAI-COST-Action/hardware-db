@@ -15,8 +15,6 @@ jobs:
     
     env:
       TZ: Europe/Zurich
-      OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
-      REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
 
     steps:
       - name: Checkout repository
@@ -37,6 +35,8 @@ jobs:
 
       - name: Run form polling
         env:
+          OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
+          REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           cd /home/runner/work/hardware-db/hardware-db

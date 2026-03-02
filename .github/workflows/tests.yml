@@ -33,12 +33,9 @@ jobs:
         run: python validateJSON.py
         working-directory: tests
 
-  test_config:
-    name: Testing config precedence
+  test_config_parsing:
+    name: Testing configuration parsing
     runs-on: ubuntu-latest
-    env:
-        SCOPES: "myenvscope1 myenvscope2"
-        SCHEMA_FILE: "this_is_an_env_schema.json"
     steps:
       - uses: actions/checkout@v4
 
@@ -55,8 +52,27 @@ jobs:
       - name: Test config parsing precedence order
         run: python test_config_parse.py
         working-directory: tests
-        
-      - name: Verify GitHub Actions env vars take precedence over .env
+
+  test_config_precedence:    
+    name: Verify GitHub Actions env vars take precedence over .env
+    runs-on: ubuntu-latest
+    env:
+      SCOPES: "myenvscope1 myenvscope2"
+      SCHEMA_FILE: "this_is_an_env_schema.json"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[ci]
+      
+      - name: Test env variables precedence order
         run: |
           echo "Testing that GitHub Actions env vars override .env values..."
           python testConfig.py SCOPES SCHEMA_FILE > env_precedence.txt

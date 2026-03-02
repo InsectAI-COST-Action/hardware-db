@@ -104,8 +104,9 @@ def pick_cfg_value(
     Precedence (highest to lowest):
         1. CLI argument (if not None)
         2. Hardcoded value in script (if not None/empty)
-        3. .env or .secrets file entry (if present)
-        4. Otherwise: error if declared, None if not declared
+        3. Environment variable (from GitHub Actions, system env, etc.)
+        4. .env or .secrets file entry (if present)
+        5. Otherwise: error if declared, None if not declared
     
     Parameters
     ----------
@@ -127,6 +128,9 @@ def pick_cfg_value(
     if cli_val is not None:
         return cli_val
 
+    # Determine the target type (needed for type coercion from strings)
+    target_type = _type_for_key(key, caller_globals)
+
     # 2. Hardcoded value in script – use as-is (already correct type)
     # Special handling: treat empty collections and empty strings as "not provided"
     # But always use boolean values (including False, which is meaningful)
@@ -137,10 +141,12 @@ def pick_cfg_value(
         # For other types: only use if truthy (non-empty)
         return hardcoded_val
 
-    # Determine the target type for file values
-    target_type = _type_for_key(key, caller_globals)
+    # 3. Environment variables (from GitHub Actions, system env, etc.)
+    env_raw = os.getenv(key)
+    if env_raw is not None:
+        return _coerce_value(env_raw, target_type)
 
-    # 3. Value from .env/.secrets file – always a raw string, so we coerce
+    # 4. Value from .env/.secrets file – always a raw string, so we coerce
     if key in file_dict:
         return _coerce_value(file_dict[key], target_type)
     
@@ -172,11 +178,12 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     * Declared variables (UPPERCASE in caller_globals) are required
     * Undeclared variables from external files are optional (always included if present)
     
-    Precedence for each key:
-        1. CLI arguments (highest priority)
+    Precedence for each key (highest to lowest):
+        1. CLI arguments
         2. Hardcoded values in the calling script
-        3. Values from .env or .secrets files
-        4. Error if declared but not found; None if undeclared and not found
+        3. Environment variables (GitHub Actions env:, system env, etc.)
+        4. Values from .env or .secrets files
+        5. Error if declared but not found; None if undeclared and not found
     """
     parser = argparse.ArgumentParser(
         description=(

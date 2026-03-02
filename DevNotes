@@ -368,7 +368,9 @@ Once the trigger works properly, the lifecycle would be something like:
 - **Option A**: somehow, this new workflow reconstructs the original response ID, and sends this link to the contact email in the original response. - need to investigate hoe to retrieve response IDs
 - **Option B**: the new workflow reads the `.json` with the device info in `data/` and populates a custom response with that info. - need to investigate how to push responses to a form (without creating a new form / overwriting existing ones).
 
+*Update 02.02.2026*: After fiddling around quite a bit and also changing some of the handling of configParse (see commits up to d0390a1), the form polling workflow `form-polling.yml` successfully runs and checks whether there are new responses matching the criteria, and triggers the follow-up workflow `test-form-trigger.yml`. 
 
+I can use this construct to, for instance, send an email to the contact person email address. 
 
 
 > [!TIP]

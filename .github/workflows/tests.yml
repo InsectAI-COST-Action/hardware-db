@@ -49,8 +49,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[ci]
 
-      - name: Test config parsing precedence order
-        run: python test_config_parse.py
+      - name: Test config parsing
+        run: python testConfigParse.py
         working-directory: tests
 
   test_config_precedence:    
@@ -75,7 +75,7 @@ jobs:
       - name: Test env variables precedence order
         run: |
           echo "Testing that GitHub Actions env vars override .env values..."
-          python testConfig.py SCOPES SCHEMA_FILE > env_precedence.txt
+          python testConfigPrecedence.py SCOPES SCHEMA_FILE > env_precedence.txt
           
           echo "Expected: SCOPES and SCHEMA_FILE should have GitHub Actions env values"
           cat env_precedence.txt

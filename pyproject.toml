@@ -18,6 +18,7 @@ dependencies = [
 [project.optional-dependencies]
 ci = [
     "jsonschema>=4.0.0",
+    "google-api-python-client>=2.187.0",
 ]
 notebook = [
     "ipykernel",

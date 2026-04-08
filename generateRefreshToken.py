@@ -3,12 +3,15 @@ import json
 from datetime import datetime
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+### This script only takes arguments specified below
+### It does not use the helpers in configParsing or authFlow_helpers
+
 # Path to the client‑secret JSON you downloaded from GCP
-OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-WSL_laptop.json"
+OAUTH_CLIENT_JSON = "D:\\hardware-db\\OAuth_client-new.json"
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 flow = InstalledAppFlow.from_client_secrets_file(OAUTH_CLIENT_JSON, SCOPES)
-creds = flow.run_local_server(port=0)          # opens a browser, you approve
+creds = flow.run_local_server(port=0) # opens a browser, you approve
 
 # The Credentials object already contains a refresh token.
 # Serialize the *whole* credential (access token, refresh token, expiry, etc.).

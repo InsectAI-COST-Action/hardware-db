@@ -210,10 +210,26 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     args = parser.parse_args()
 
     # ------------------------------------------------------------------
+    # Resolve config file paths relative to the project root
+    # ------------------------------------------------------------------
+    # The project root is the parent of the src/ directory where this file lives
+    project_root = Path(__file__).parent.parent.resolve()
+    
+    # Resolve --secrets-file relative to project root if not absolute
+    secrets_path = Path(args.secrets_file)
+    if not secrets_path.is_absolute():
+        secrets_path = project_root / args.secrets_file
+    
+    # Resolve --env-file relative to project root if not absolute
+    env_path = Path(args.env_file)
+    if not env_path.is_absolute():
+        env_path = project_root / args.env_file
+
+    # ------------------------------------------------------------------
     # Load .env and .secrets (if they exist)
     # ------------------------------------------------------------------
-    env_vals = load_secrets(Path(args.env_file))
-    secret_vals = load_secrets(Path(args.secrets_file))
+    env_vals = load_secrets(env_path)
+    secret_vals = load_secrets(secrets_path)
     
     # Merge with .secrets taking precedence over .env
     all_config = {**env_vals, **secret_vals}

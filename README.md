@@ -20,6 +20,8 @@ https://docs.google.com/forms/d/1M5B_lukDuz7xbIL0l8yK-03JOp5uqoo4Nmt6NcozshU/vie
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
 
 Form w/ responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
+\
+Form w/ responses from [*Pegoraro et al.* 2020](https://portlandpress.com/emergtoplifesci/article-abstract/4/1/87/222100/Automated-video-monitoring-of-insect-pollinators?redirectedFrom=fulltext): https://docs.google.com/forms/d/e/1FAIpQLSeYXqfhX8GNSSikLYQEr8XaImpMpMRJxpsHRKNRa-t-ZCh29g/viewform?usp=header
 
 ## Visualise data
 If you want to see the visualisation fo the data, you can click here: 

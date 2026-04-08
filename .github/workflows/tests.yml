@@ -40,6 +40,7 @@ jobs:
     env:
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
+        TOKEN_TEST_AUTH: "" # this triggers the use of the refresh token
         SCOPES: "https://www.googleapis.com/auth/drive.file"
     steps:
       - uses: actions/checkout@v4

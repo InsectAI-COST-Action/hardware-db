@@ -55,6 +55,7 @@ jobs:
       TZ: Europe/Zurich
       OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
       REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
+      TOKEN_COLLECT_RESPONSES: "" # force use of refresh token
 
     steps:
       - uses: actions/checkout@v4

@@ -17,6 +17,7 @@ jobs:
         TZ: Europe/Zurich
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}
         REFRESH_TOKEN_JSON: ${{ secrets.REFRESH_TOKEN_JSON }}
+        TOKEN_CREATE_FORM: "" # force use of refresh token
     steps:
       - name: Checkout branch that triggered tests
         uses: actions/checkout@v4

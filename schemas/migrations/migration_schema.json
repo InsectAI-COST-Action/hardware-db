@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Migration Registry Schema",
+  "description": "Schema for validating migration definitions in migrations.json",
+  "type": "object",
+  "required": ["_metadata", "migrations"],
+  "properties": {
+    "_metadata": {
+      "type": "object",
+      "required": ["description", "format_version"],
+      "properties": {
+        "description": {"type": "string"},
+        "format_version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+        "last_updated": {"type": "string", "format": "date-time"}
+      }
+    },
+    "migrations": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["created_date", "description", "mappings"],
+        "properties": {
+          "created_date": {"type": "string"},
+          "description": {"type": "string"},
+          "mappings": {
+            "type": "object",
+            "required": ["drops", "adds", "renames", "transforms"],
+            "properties": {
+              "drops": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Question IDs to remove"
+              },
+              "adds": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "title"],
+                  "properties": {
+                    "id": {"type": "string"},
+                    "title": {"type": "string"},
+                    "type": {"type": "string"},
+                    "default_value": {}
+                  }
+                },
+                "description": "New questions to add"
+              },
+              "renames": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["old_id", "new_id"],
+                  "properties": {
+                    "old_id": {"type": "string"},
+                    "new_id": {"type": "string"}
+                  }
+                },
+                "description": "Question IDs to rename"
+              },
+              "transforms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["id", "type"],
+                  "properties": {
+                    "id": {"type": "string"},
+                    "type": {"enum": ["value_map", "split", "merge", "format"]},
+                    "mapping": {"type": "object"},
+                    "format": {"type": "string"},
+                    "split_regex": {"type": "string"}
+                  }
+                },
+                "description": "Value transformations for existing questions"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

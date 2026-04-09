@@ -1,0 +1,19 @@
+{
+  "_metadata": {
+    "description": "Migration registry: defines transformations between schema versions",
+    "format_version": "1.0.0",
+    "last_updated": "2026-04-09T00:00:00Z"
+  },
+  "migrations": {
+    "1.0.0→1.1.0": {
+      "created_date": "TBD - define when needed",
+      "description": "TBD - describe the changes between 1.0.0 and 1.1.0",
+      "mappings": {
+        "drops": [],
+        "adds": [],
+        "renames": [],
+        "transforms": []
+      }
+    }
+  }
+}

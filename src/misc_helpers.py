@@ -93,8 +93,8 @@ def transform_form(input_json):
 
     return out
 
-with open("sanitised_form.json") as f:
-    data = json.load(f)
+# with open("sanitised_form.json") as f:
+#     data = json.load(f)
 
 structured = transform_form(data)
 

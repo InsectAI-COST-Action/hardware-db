@@ -1,8 +1,32 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "InsectAI Hardware Database Schema",
+  "description": "JSON Schema for validating hardware-db_schema.json structure and versioning",
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "_metadata": {
+      "type": "object",
+      "description": "Schema versioning and metadata",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version (MAJOR.MINOR.PATCH)"
+        },
+        "created_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when this schema version was created"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this schema version"
+        }
+      },
+      "required": ["schema_version", "created_date", "description"]
+    },
     "info": {
       "type": "object",
       "additionalProperties": false,
@@ -69,5 +93,5 @@
       }
     }
   },
-  "required": ["info", "settings", "sections"]
+  "required": ["_metadata", "info", "settings", "sections"]
 }

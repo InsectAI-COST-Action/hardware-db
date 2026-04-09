@@ -17,7 +17,7 @@ For progress see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHA
 ## Contribute data 
 If you want to submit a device to the database, you can find the form here: 
 <!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->
-https://docs.google.com/forms/d/1M5B_lukDuz7xbIL0l8yK-03JOp5uqoo4Nmt6NcozshU/viewform
+https://docs.google.com/forms/d/1xOo5mPGpSQIXi-uf3FRFOz6Vt3t3NstxM1X4ylyuVIY/viewform
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
 
 Form w/ responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog

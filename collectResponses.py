@@ -3,6 +3,7 @@ import csv
 import os
 import sys
 from pathlib import Path
+from datetime import datetime
 
 from googleapiclient.discovery import build
 
@@ -21,6 +22,20 @@ OAUTH_CLIENT_JSON = ""
 TOKEN_COLLECT_RESPONSES = ""
 DISCOVERY_DOC = ""
 DEBUG = False
+
+
+# ----------------------------------------------------------------------
+# Helper functions
+# ----------------------------------------------------------------------
+def get_schema_version(schema_path: str) -> str:
+    """Extract schema version from the schema JSON file."""
+    try:
+        with open(schema_path, "r", encoding="utf-8") as f:
+            schema = json.load(f)
+        return schema.get("_metadata", {}).get("schema_version", "1.0.0")
+    except Exception as e:
+        print(f"Warning: Could not retrieve schema version: {e}")
+        return "1.0.0"
 
 
 # ----------------------------------------------------------------------
@@ -148,12 +163,24 @@ def main():
 
     # Build list of responses where keys are shorthand (preserve schema order)
     responses_shorthand = []
+    schema_version = get_schema_version(cfg["SCHEMA_FILE"])
+    collection_date = datetime.utcnow().isoformat() + "Z"
+    
     for row in parsed_rows:
         mapped = {short: "" for short in ordered_shortQ_to_titleQ}
         for qid, ans in row.items():
             short = idQ_to_shortQ.get(qid)
             if short:
                 mapped[short] = ans
+        
+        # Add metadata to track schema version and collection context
+        mapped["_metadata"] = {
+            "schema_version": schema_version,
+            "collected_from_form_id": cfg["GOOGLE_FORM_ID"],
+            "collected_date": collection_date,
+            "migrated_from_version": None
+        }
+        
         responses_shorthand.append(mapped)
 
     if cfg["DEBUG"]:
@@ -167,16 +194,19 @@ def main():
 
 
     ### Write CSV with shorthand keys as headers, and answers as rows
+    # Skip _metadata column; include only actual form fields
     csv_file = output_dir / "form_responses.csv"
 
     with open(csv_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         
-        header = list(responses_shorthand[0].keys())
+        # Use ordered schema IDs as headers, excluding _metadata
+        header = [short for short in ordered_shortQ_to_titleQ]
         writer.writerow(header)
 
         for item in responses_shorthand:
-            writer.writerow(list(item.values()))
+            row_values = [item.get(short, "") for short in ordered_shortQ_to_titleQ]
+            writer.writerow(row_values)
 
     print(f"CSV written to {csv_file}")
 

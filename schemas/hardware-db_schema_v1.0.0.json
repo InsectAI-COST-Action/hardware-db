@@ -238,7 +238,7 @@
         },
         {
           "id": "device_cost",
-          "title": "Device cost (\u20ac) - excluding operational costs",
+          "title": "Device cost (€) - excluding operational costs",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -252,7 +252,7 @@
         },
         {
           "id": "device_size",
-          "title": "Device size (m\u00b2)",
+          "title": "Device size (m²)",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -666,7 +666,7 @@
         },
         {
           "id": "operational_temperature_range_c",
-          "title": "Operational temperature range (\u00b0C)",
+          "title": "Operational temperature range (°C)",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -718,7 +718,7 @@
         },
         {
           "id": "operational_costs",
-          "title": "Operational costs (\u20ac)",
+          "title": "Operational costs (€)",
           "required": false,
           "type": "text",
           "paragraph": false

@@ -33,7 +33,7 @@
 
 *Extras*
 - [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)
-- [ ] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
+- [x] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
   - [ ] What about github releases and tags?
 - [ ] Add response validation, e.g. valid email address, etc. 
 - [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
@@ -46,8 +46,8 @@
 
 
 **Outstanding issues:**
-- [ ] Collating responses across form / database versions:
-  - [ ] how to track responses when form is re-generated at every JSON schema update?
+- [x] Collating responses across form / database versions:
+  - [x] how to track responses when form is re-generated at every JSON schema update?
   - [ ] what about attached pictures? (currently not implemented)
 - [ ] Updating existing record
   - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
@@ -55,10 +55,10 @@
   - [ ] 💡 it should be possible to reconstruct the link to edit the response from some info on the response itself; we could send the link to the email address listed as contact in the response (can import utils from lpego/CYBO)
   - [ ] We might also just ask them to contact us and/or resubmit... 
 - [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
-- [ ] Reiterating over the schema of the database i.e. changing questions etc
-  - [ ] Think about activities for the annual meeting to progress database structure
+- [x] Reiterating over the schema of the database i.e. changing questions etc
+  - [x] Think about activities for the annual meeting to progress database structure
 - [ ] Wildlab's Inventory ⇄ hardware-db schema
-  -	[ ] Look at the correspondence between the Wildlab’s schema and our own database schema (make a table)
+  -	[x] Look at the correspondence between the Wildlab’s schema and our own database schema (make a table)
   -	[ ] Investigate a mapping layer that a program can use to covert between formats
   -	[ ] Maybe implement a conversion script from hardware-db and Wildlab’s Inventory
 -	[ ] Collect publications DOIs etc to later fill in the hardware database 

@@ -3,36 +3,54 @@
 # Insect AI Hardware Database
 
 <p align="center">
-**🚧 Under construction! 🚧**
+<b>🚧 Under construction! 🚧</b>
 </p>
 <p align="center">
-<img src="./assets/Hardware-dtb-image.png" width="540"/>
+<img src="./assets/InsectAI - full.svg" height="250"/>
+<img src="./assets/hardware-db_pictogram.svg" height="250"/>
 </p>
 
-For progress see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHANGELOG).
-
-**This branch is backup as of 09 Apr, with for creation, collection of response functioning and tested, but before cleaning unused files, and with no extra features merged (i.e. `form_trigger` or `response_edit`)**
-
 # Quickstart
+Welcome! This is the InsectAI hardware database, designed to collate information on devices used for automated monitoring of insects. 
+
+Here you can submit details about systems you use, develop or commercialise for the monitoring insects, and you can visualise the data we have collected to choose a system for your needs. 
+
+More info on the scope of the InsectAI hardware database *coming soon*... 
+
+For more info on InsectAI, visit our official website [insectai.eu](https://insectai.eu/), or the [InsectAI page](https://www.cost.eu/actions/CA22129/) on the [COST Association](https://www.cost.eu/) website. 
+
 ## Contribute data 
-If you want to submit a device to the database, you can find the form here: 
+If you want to submit a system to the database, you can fill in the form here: 
 <!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->
 https://docs.google.com/forms/d/1xOo5mPGpSQIXi-uf3FRFOz6Vt3t3NstxM1X4ylyuVIY/viewform
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
 
-Form w/ responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
-\
+<!-- ### Beginning of spoiler section -->
+<details>
+  <summary>Additional links <i>(for development purposes only)</i></summary>
+
+
 Form w/ responses from [*Pegoraro et al.* 2020](https://portlandpress.com/emergtoplifesci/article-abstract/4/1/87/222100/Automated-video-monitoring-of-insect-pollinators?redirectedFrom=fulltext): https://docs.google.com/forms/d/e/1FAIpQLSeYXqfhX8GNSSikLYQEr8XaImpMpMRJxpsHRKNRa-t-ZCh29g/viewform?usp=header
 
+Form w/ first batch of responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
+\
+
+<!-- ### End of spoilers section -->
+</details>
+
 ## Visualise data
-If you want to see the visualisation fo the data, you can click here: 
+If you want to visualise information on insect monitoring systems we collected, you can click here: 
 <!-- FRONTEND-BEGIN comment to anchor auto-update of form link -->
 *...link coming soon...*
 <!-- FRONTEND-END comment to anchor auto-update of form link -->
 
+All the data is also stored in the `/data` directory in this repo, both in a CSV file with one row for each system, and as JSON files (one file per system). 
+
 # Documentation
 Below we explain what does what in the repository and how to use it. 
 If you only want to contribute or read data, you should not need to read this section. 
+
+For progress also see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHANGELOG).
 
 <!-- ### Beginning of spoiler section -->
 <details>
@@ -44,6 +62,10 @@ The workflow is, at its most basic:
 hardware-db_schema.json --- createForms.py ---> Google Form
 Google Form --- collectResponses.py ---> data/ (JSON, CSV)
 ```
+
+<p align="center">
+<img src="./assets/Hardware-dtb-image.png" width="600"/>
+</p>
 
 The repo is set up to run certain workflows automatically, but if you want to run things locally you will need to install it. 
 
@@ -310,3 +332,9 @@ It then runs `collectResponses.py`, and pushes the CSV and JSON files to `data/`
 
 # Contacts
 If you have questions please get in touch: [luca.pegoraro@wsl.ch](mailto:luca.pegoraro@wsl.ch)
+
+# Citation
+If you found this repo useful, please cite it as: 
+>The InsectAI hardware database - https://github.com/InsectAI-COST-Action/hardware-db 
+
+If you use one of the systems listed here, please make sure to credit the authors! Info available in the respective system entry. 

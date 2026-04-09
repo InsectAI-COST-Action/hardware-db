@@ -7,8 +7,7 @@ on:
       - 'tests/**'
       - 'src/**'
       - '.env'
-      - 'collectResponses.py'
-      - 'createForm.py'
+      - '*.py'
       - 'pyproject.toml'
   workflow_dispatch:
 

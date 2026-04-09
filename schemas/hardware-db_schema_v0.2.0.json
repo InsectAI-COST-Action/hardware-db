@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
+    "schema_version": "0.2.0",
     "created_date": "2026-04-09T00:00:00Z",
     "description": "Initial schema versioning system implementation"
   },

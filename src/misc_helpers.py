@@ -1,6 +1,7 @@
 import os
 import re
 import tempfile
+import json
 from collections import defaultdict
 
 def sanitize_filename(name):

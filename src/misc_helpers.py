@@ -92,11 +92,3 @@ def transform_form(input_json):
         out["sections"].append(current_section)
 
     return out
-
-# with open("sanitised_form.json") as f:
-#     data = json.load(f)
-
-structured = transform_form(data)
-
-with open("structured_form.json", "w") as f:
-    json.dump(structured, f, indent=2)

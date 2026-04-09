@@ -1,3 +1,13 @@
+# SCHEMAS
+**0.2.0** Restructured form to include both basic and full form: mandatory questions (i.e. basic form) based off of Wildlabs's The Inventory schema, remaining questions (i.e. full form) restructured in separate sections, all optional so far; circa 6702825
+
+**0.1.0** Untracked, translating Google Forms-based questionnaire into JSON-based schema (after code redesign, version >1.0.0)
+
+**0.0.0** Untracked, based off of Graham's initial set of questions during STSM in Aarhus
+
+# CODE
+**1.4.0-alpha** Implementing schema evolution tracking and data migration tools, from circa 9fad90d
+
 **1.3.1-alpha** Refactoring python scripts, cleaned up code
 
 **1.3.0-alpha** CI/CD workflow via GitHub Actions operational, circa a0b90fd
@@ -10,4 +20,4 @@
 
 **0.1.1** Added essential repo items, added functionality to consolidate responses, circa 717f49f
 
-**0.1.0** First implementation of Google Forms API-base forms creation, up to  circa bbd7992
+**0.1.0** First implementation of Google Forms API-base forms creation, up to circa bbd7992

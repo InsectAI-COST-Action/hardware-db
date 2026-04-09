@@ -287,10 +287,22 @@ If I take away the .secrets file, it does not fall back to hardcoded vars though
 ## Revising logic somewhat
 Actually scratch that, I only need to know if there are configs in the call, .secrets or env vars. Let's simplify the logic, ignoring vars hardcoded in the script (which is bad practice anyway). 
 
+### Status at 9 April, 2026
+The config parsing works by looking in various places for declared variables, they must be UPPERCASE, with order of precedence as below:
 
-> [!TIP]
-> Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!
+``` 
+Returns the configuration value for *key* after applying precedence and
+    type coercion.  Raises ``ValueError`` if the key cannot be satisfied.
+    
+    Precedence is:
+        1. CLI argument (if not None)
+        2. Environment variable (if present)
+        3. .secrets and .env file entry (if present)
+        4. Defaults for some keys (e.g. debug, secrets-file)
+        5. Otherwise, error.
+```
 
+This setup works both locally (asks for authorisation via browser manually, saves a local cache token) and on Github Actions (uses refresh token, no cached token saved). 
 
 > [!CAUTION]
 > If, when running any of the scripts, you get an error like: 
@@ -366,3 +378,6 @@ FULL FORM, SIMPLE FORM --- (NEW) collectResponses.py ---> responses (JSON, CSV)
 
 When modification to the DB structure are needed, these can be made at the point DATABASE STRUCTURE JSON and propagate to the rest of the pipeline from there. 
 The frontend can then be served using the CSV or JSON exports as data sources. 
+
+> [!TIP]
+> Don't forget to look at https://github.com/rhine3/bioacoustics-software for inspiration about the workflow!

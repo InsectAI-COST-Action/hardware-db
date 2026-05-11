@@ -1,4 +1,77 @@
-# Redesigning approach dev notes TODO
+# InsectAI hardware-db workshop feedback TODOs
+**Workshop feedback suggestions**
+- [ ] Need to figure out a way to put descriptions under the questions to clarify
+- [ ] Section descriptions are often skipped; can make them a lot shorter and/or ask if understood (mandatory) to proceed
+- [ ] DeviceID is confusing for users, but is difficult to generate automatically... 
+*Specific for questions or sections*
+=== Basic info ===
+- [ ] Resolve ambiguity between contact person, data owner, creator, maintainer etc. 
+- [ ] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")
+- [ ] Add question on project duration and/or person/hours involved (as an estimate of the team size adn time invested). 
+=== Contributors details ===
+- [ ] Simplify questions about device creator, maintainer etc.
+- [ ] Allow multiple names with separator (e.g. `;`)
+- [ ] Move versioning question to device details
+=== Device links ===
+- [ ] Add language of documentation as a question?? 
+- [ ] DOI field to accept multiple DOIs???
+- [ ] Remove documentation upload
+- [ ] Add "Additional resources" to capture non-standard repos or YouTube videos. 
+=== Device details ===
+- [ ] Device construction wording is confusing; "Custom designed parts (e.g., PCB, 3D print)". Add "Other"???
+- [ ] Cost should be split into:
+  - [ ] Unit Build Cost (Hardware only).
+  - [ ] Deployment/Seasonal Costs (Consumables).
+  - [ ] Ongoing Software/Compute Costs.
+  - [ ] Assembly Time/Cost (Human hours).
+- [ ] Device size, split into:
+  - [ ] packaged dimensions for transport (L x W x H)
+  - [ ] deployed dimensions (L x W x H)
+- [ ] Remove colour
+- [ ] Device material change to "primary material", with dropdown list & other
+- [ ] Device mobility, simplify and enforce choice from dropdown.
+- [ ] New Fields: Skills & Tools Required (for construction) as a filterable tag.
+=== Component details === 
+- [ ] 
+=== Maintenance and repairs ===
+- [ ] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
+- [ ] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").
+- [ ] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
+=== Intended usage scope === 
+[...]
+
+
+**Dev bits & bobs**
+- [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)
+- [x] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
+  - [ ] What about github releases and tags?
+- [ ] Add response validation, e.g. valid email address, etc. 
+- [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
+- [x] Make a better landing page for OAuth authorisation, in Google Cloud console
+- [x] Other tests? - added config_test
+- [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
+  - [x] Add changelog
+  - [ ] Add licence
+  - [ ] Add ToS
+
+**Outstanding issues:**
+- [x] Collating responses across form / database versions:
+  - [x] how to track responses when form is re-generated at every JSON schema update?
+  - [ ] what about attached pictures? (currently not implemented)
+- [ ] Updating existing record
+  - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
+  - [ ] How to retrieve info and pre-populate form with it? 
+  - [ ] 💡 it should be possible to reconstruct the link to edit the response from some info on the response itself; we could send the link to the email address listed as contact in the response (can import utils from lpego/CYBO)
+  - [ ] We might also just ask them to contact us and/or resubmit... 
+- [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
+- [x] Reiterating over the schema of the database i.e. changing questions etc
+  - [x] Think about activities for the annual meeting to progress database structure
+- [ ] Wildlab's Inventory ⇄ hardware-db schema
+  -	[x] Look at the correspondence between the Wildlab’s schema and our own database schema (make a table)
+  -	[ ] Investigate a mapping layer that a program can use to covert between formats
+  -	[ ] Maybe implement a conversion script from hardware-db and Wildlab’s Inventory
+-	[ ] Collect publications DOIs etc to later fill in the hardware database 
+
 **Re-implementation TODO list:**
 - [x] Proof of concept JSON to Google Form
 - [x] Transfer over actual questions into JSON format: 
@@ -29,36 +102,3 @@
   - [x] Explain briefly the logic and workflow in section below landing page
 - [x] Add `pyproject.toml` with installs, in place of conda environments.
   - [x] Maybe can have different installs for CI/CD and local
-
-
-*Extras*
-- [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)
-- [x] Will need to come up with a sensible versioning/tagging system for JSON database ontology 
-  - [ ] What about github releases and tags?
-- [ ] Add response validation, e.g. valid email address, etc. 
-- [ ] Make basic frontend for visualising answers (static website w/ GitHub pages?)
-- [x] Make a better landing page for OAuth authorisation, in Google Cloud console
-- [x] Other tests? - added config_test
-- [ ] Other bells and whistles - handy dandy summary [here](https://github.com/joelparkerhenderson/github-special-files-and-paths?tab=readme-ov-file#profile-readme)
-  - [x] Add changelog
-  - [ ] Add licence
-  - [ ] Add ToS
-
-
-**Outstanding issues:**
-- [x] Collating responses across form / database versions:
-  - [x] how to track responses when form is re-generated at every JSON schema update?
-  - [ ] what about attached pictures? (currently not implemented)
-- [ ] Updating existing record
-  - [ ] How to uniquely identify each entry? Ask user for unique name (but then how to check?)
-  - [ ] How to retrieve info and pre-populate form with it? 
-  - [ ] 💡 it should be possible to reconstruct the link to edit the response from some info on the response itself; we could send the link to the email address listed as contact in the response (can import utils from lpego/CYBO)
-  - [ ] We might also just ask them to contact us and/or resubmit... 
-- [ ] Scope of `hardware-db`: how to align with "Technology type" in Wildlabs? Do we only take camera-based tech???
-- [x] Reiterating over the schema of the database i.e. changing questions etc
-  - [x] Think about activities for the annual meeting to progress database structure
-- [ ] Wildlab's Inventory ⇄ hardware-db schema
-  -	[x] Look at the correspondence between the Wildlab’s schema and our own database schema (make a table)
-  -	[ ] Investigate a mapping layer that a program can use to covert between formats
-  -	[ ] Maybe implement a conversion script from hardware-db and Wildlab’s Inventory
--	[ ] Collect publications DOIs etc to later fill in the hardware database 

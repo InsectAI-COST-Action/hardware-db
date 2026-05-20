@@ -1,22 +1,32 @@
 # InsectAI hardware-db workshop feedback TODOs
 **Workshop feedback suggestions**
+=== General technical ===
 - [ ] Need to figure out a way to put descriptions under the questions to clarify
+- [ ] DeviceID is confusing for users, but is difficult to generate automatically... We can try and direct users to `data/`dir and ask to check existing deviceIDs, or we need a different solution altogether. 
+- [ ] Need to introduce much more data input validation (i.e. valid link, valid email) whenever easy / possible
+=== General non-technical ===
+- [ ] Need to clarify the scope better, and remind users of difference between deployments and hardware
 - [ ] Section descriptions are often skipped; can make them a lot shorter and/or ask if understood (mandatory) to proceed
-- [ ] DeviceID is confusing for users, but is difficult to generate automatically... 
-*Specific for questions or sections*
+- [ ] Not clear that all but the basic info sections are optional
+- [ ] Incentives for filling in the questionnaire (i.e. card at the end, etc.)"
+- [ ] Licencing
+- [ ] Need to ask user's permission to licence data
+*Suggestions for specific questions or sections*
 === Basic info ===
 - [ ] Resolve ambiguity between contact person, data owner, creator, maintainer etc. 
 - [ ] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")
 - [ ] Device description (i.e. device summary) should perhaps be placed later after the technical questions? 
-- [ ] Add question on project duration and/or person/hours involved (as an estimate of the team size adn time invested). 
 === Contributors details ===
-- [ ] Simplify questions about device creator, maintainer etc.
-- [ ] Allow multiple names with separator (e.g. `;`)
+- [ ] Description of section does not match content (it's about device versions); remove or modify
+- [ ] Simplify questions about device creator, maintainer etc; "creator" makes people too self-conscious, change term. 
+- [ ] Allow multiple persons' names with separator (e.g. `;`)
+- [ ] Add question on project duration and/or person/hours involved (as an estimate of the team size and time invested)? 
 - [ ] Move versioning question to device details
 === Device links ===
 - [ ] Add language of documentation as a question?? 
 - [ ] DOI field to accept multiple DOIs???
-- [ ] Remove documentation upload
+- [ ] Remove any mention of uploads of any kind, as we cannot host any files; provide field for links and some instructions on how to host them externally (e.g. GitHub, Zenodo)
+- [ ] Bill of materials remove? Should be in the external documentation probably
 - [ ] Add "Additional resources" to capture non-standard repos or YouTube videos. 
 === Device details ===
 - [ ] Device construction wording is confusing; "Custom designed parts (e.g., PCB, 3D print)". Add "Other"???
@@ -29,15 +39,22 @@
   - [ ] packaged dimensions for transport (L x W x H)
   - [ ] deployed dimensions (L x W x H)
 - [ ] Remove colour
+- [ ] Remove "Device or schematic image"
 - [ ] Device material change to "primary material", with dropdown list & other
 - [ ] Device mobility, simplify and enforce choice from dropdown.
 - [ ] New Fields: Skills & Tools Required (for construction) as a filterable tag.
 === Component details === 
-- [ ] Details abut the sensor should be asked before or at the same time as teh device details.
+- [ ] Details abut the sensor should be asked before or at the same time as the device details.
 - [ ] Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. 
 - [ ] Power: rename "Main" to "Grid electricity"
+- [ ] Power duration caused confusion, change to "Power autonomy"? 
+- [ ] Some sensor details, like bitrate, aperture, lens mounting options etc cause confusion; perhaps remove???
+- [ ] Change FPS and resolution to ranges (min-max)
+- [ ] Add question on sensor/lens field of View (FoV)? 
+- [ ] Change "Capture modes" to "Available image capture modes"
+- [ ] Model processing should not have mutually exclusive options, can have multiple answers
 - [ ] Move "Attractants" to to a dedicated section
-- [ ] Connectivity: add USB to physical connectivity
+- [ ] Connectivity: add USB to physical connectivity, maybe SSH, VNC etc?
 - [ ] Clarify "Processing Unit" (e.g., Raspberry Pi, Jetson, Microcontroller).
 - [ ] Data: change "Supported File Types" to a checklist. 
 - [ ] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
@@ -45,6 +62,7 @@
 - [ ] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
 - [ ] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").
 - [ ] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
+- [ ] Maybe here is a good place to put last firmware update instead of Update frequency"?
 === Intended usage scope === 
 - [ ] Taxonomy: convert to checklist with vernacular / scientific names. 
 - [ ] Maybe add functional guild or other non-taxonomic grouping?
@@ -52,17 +70,15 @@
 - [ ] Constraints: split ranges into Min and Max fields (e.g., Temp Min/Max °C).
 - [ ] Environment: clarify "Operational Environment" (Aquatic/Terrestrial) and add IP Rating for weatherproofing.
 - [ ] Target: add typical subject size range (Min/Max mm) as numeric fields.
-=== Missing questions to add ===
-- [ ] Labor Metrics: time required to build one unit and human hours for operation/maintenance.
+- [ ] "Operational costs": need to clarify, add something about running costs for one season
+=== Missing questions to add (maybe) ===
 - [ ] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
 - [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles.
-- [ ] Software Specifics: distinct versioning for hardware vs. software; repository links for standalone software.
+- [ ] Alternative components? How "flexible" are devices? 
 - [ ] Institution Type: categorization of the organization (NGO, Academic, Government, Commercial).
 - [ ] Pros/Cons: A qualitative field for users to list known limitations or advantages of the device.
 - [ ] Data Analysis Platform: Where the data is processed (local machine, cloud platform name).
-=== Others === 
-- [ ] Remove any mention of uploads of any kind, as we cannot host any files; provide field for links and some instructions on how to host them externally (e.g. GitHub, Zenodo)
-- [ ] 
+
 
 **Dev bits & bobs**
 - [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)

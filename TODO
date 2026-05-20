@@ -7,6 +7,7 @@
 === Basic info ===
 - [ ] Resolve ambiguity between contact person, data owner, creator, maintainer etc. 
 - [ ] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")
+- [ ] Device description (i.e. device summary) should perhaps be placed later after the technical questions? 
 - [ ] Add question on project duration and/or person/hours involved (as an estimate of the team size adn time invested). 
 === Contributors details ===
 - [ ] Simplify questions about device creator, maintainer etc.
@@ -32,14 +33,36 @@
 - [ ] Device mobility, simplify and enforce choice from dropdown.
 - [ ] New Fields: Skills & Tools Required (for construction) as a filterable tag.
 === Component details === 
-- [ ] 
+- [ ] Details abut the sensor should be asked before or at the same time as teh device details.
+- [ ] Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. 
+- [ ] Power: rename "Main" to "Grid electricity"
+- [ ] Move "Attractants" to to a dedicated section
+- [ ] Connectivity: add USB to physical connectivity
+- [ ] Clarify "Processing Unit" (e.g., Raspberry Pi, Jetson, Microcontroller).
+- [ ] Data: change "Supported File Types" to a checklist. 
+- [ ] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
 === Maintenance and repairs ===
 - [ ] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
 - [ ] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").
 - [ ] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
 === Intended usage scope === 
-[...]
-
+- [ ] Taxonomy: convert to checklist with vernacular / scientific names. 
+- [ ] Maybe add functional guild or other non-taxonomic grouping?
+- [ ] Habitats: convert to a Dropdown/Checklist of standardized habitat types.
+- [ ] Constraints: split ranges into Min and Max fields (e.g., Temp Min/Max °C).
+- [ ] Environment: clarify "Operational Environment" (Aquatic/Terrestrial) and add IP Rating for weatherproofing.
+- [ ] Target: add typical subject size range (Min/Max mm) as numeric fields.
+=== Missing questions to add ===
+- [ ] Labor Metrics: time required to build one unit and human hours for operation/maintenance.
+- [ ] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
+- [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles.
+- [ ] Software Specifics: distinct versioning for hardware vs. software; repository links for standalone software.
+- [ ] Institution Type: categorization of the organization (NGO, Academic, Government, Commercial).
+- [ ] Pros/Cons: A qualitative field for users to list known limitations or advantages of the device.
+- [ ] Data Analysis Platform: Where the data is processed (local machine, cloud platform name).
+=== Others === 
+- [ ] Remove any mention of uploads of any kind, as we cannot host any files; provide field for links and some instructions on how to host them externally (e.g. GitHub, Zenodo)
+- [ ] 
 
 **Dev bits & bobs**
 - [ ] Build hook / trigger for collecting responses after each form submission. (also useful for response editing eventually)

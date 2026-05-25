@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   actions: read
 
 jobs:
@@ -80,6 +81,30 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data docs/devices_index.json docs/form_config.json || true
+          git add data/*.json data/form_responses.csv docs/devices_index.json docs/form_config.json || true
           git commit -m "Update data from form responses" || echo "No changes to commit"
           git push
+
+      - name: Detect collisions
+        id: collisions
+        run: |
+          HAS_COLLISIONS=$(python -c "import json, pathlib; p = pathlib.Path('data/_pending/collision_report.json'); print('true' if p.exists() and json.loads(p.read_text(encoding='utf-8')).get('collision_count', 0) > 0 else 'false')")
+          echo "has_collisions=${HAS_COLLISIONS}" >> "$GITHUB_OUTPUT"
+
+      - name: Open PR for collision review
+        if: steps.collisions.outputs.has_collisions == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add pending collision records"
+          title: "Collision review needed for collected responses"
+          body: |
+            This PR was created automatically because one or more form responses
+            would overwrite existing device records.
+
+            Please review the pending payloads in `data/_pending/` and decide
+            how each collision should be resolved.
+          branch: "bot/collision-review-${{ github.ref_name }}"
+          delete-branch: false
+          add-paths: |
+            data/_pending/**

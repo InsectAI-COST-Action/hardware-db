@@ -1,7 +1,6 @@
 import json
 import csv
-import os
-import sys
+import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -211,17 +210,81 @@ def main():
 
 
     ### Write individual JSON files for each response, with shorthand keys
+    # Reset pending collision payloads for this run.
+    pending_dir = output_dir / "_pending"
+    if pending_dir.exists():
+        shutil.rmtree(pending_dir)
+    pending_dir.mkdir(parents=True, exist_ok=True)
+
+    # Keep only the most recent response for each normalized device ID
+    # (same behavior as the old loop where the last write won).
+    latest_by_filename = {}
     for item in responses_shorthand:
-
-        device_name = item.get("device_name")
+        device_name = item.get("device_name", "")
         filename = sanitize_filename(device_name)
+        if not filename:
+            filename = "unnamed_device"
+        latest_by_filename[filename] = item
 
+    writes_ok = 0
+    collisions = []
+    run_stamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+
+    for filename, item in latest_by_filename.items():
         json_path = output_dir / f"{filename}.json"
+
+        existing_item = None
+        if json_path.exists():
+            try:
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    existing_item = json.load(jf)
+            except (json.JSONDecodeError, OSError):
+                # If we cannot read existing JSON, force manual review via collision.
+                existing_item = {"_unreadable_existing_file": str(json_path)}
+
+        # Collision policy: do not overwrite an existing record with different content.
+        if existing_item is not None and existing_item != item:
+            pending_path = pending_dir / f"{filename}__{run_stamp}.json"
+            pending_payload = {
+                "reason": "would_overwrite_existing_record",
+                "target_filename": f"{filename}.json",
+                "submitted_at": run_stamp,
+                "proposed_record": item,
+            }
+            with open(pending_path, "w", encoding="utf-8") as pf:
+                json.dump(pending_payload, pf, indent=2, ensure_ascii=False)
+
+            collisions.append(
+                {
+                    "filename": filename,
+                    "target_file": str(json_path),
+                    "pending_file": str(pending_path),
+                    "device_name": item.get("device_name", ""),
+                    "contact_name": item.get("contact_name", ""),
+                    "contact_email": item.get("contact_email", ""),
+                }
+            )
+            continue
 
         with open(json_path, "w", encoding="utf-8") as jf:
             json.dump(item, jf, indent=2, ensure_ascii=False)
+        writes_ok += 1
 
-    print(f"JSON files written to {output_dir}")
+    if collisions:
+        collision_report = {
+            "generated_at": run_stamp,
+            "collision_count": len(collisions),
+            "collisions": collisions,
+        }
+        report_path = pending_dir / "collision_report.json"
+        with open(report_path, "w", encoding="utf-8") as rf:
+            json.dump(collision_report, rf, indent=2, ensure_ascii=False)
+        print(f"Collision report written to {report_path}")
+
+    print(
+        f"JSON files written to {output_dir}: {writes_ok} accepted, "
+        f"{len(collisions)} collision(s) routed to {pending_dir}"
+    )
 
 
 if __name__ == "__main__":

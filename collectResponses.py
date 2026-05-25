@@ -242,24 +242,21 @@ def main():
                 # If we cannot read existing JSON, force manual review via collision.
                 existing_item = {"_unreadable_existing_file": str(json_path)}
 
-        # Collision policy: do not overwrite an existing record with different content.
-        if existing_item is not None and existing_item != item:
-            pending_path = pending_dir / f"{filename}__{run_stamp}.json"
-            with open(pending_path, "w", encoding="utf-8") as pf:
-                json.dump(item, pf, indent=2, ensure_ascii=False)
-
+        # Collision detection: if existing record differs from new response
+        collision_detected = existing_item is not None and existing_item != item
+        
+        if collision_detected:
             collisions.append(
                 {
                     "filename": filename,
-                    "target_file": str(json_path),
-                    "pending_file": str(pending_path),
                     "device_name": item.get("device_name", ""),
                     "contact_name": item.get("contact_name", ""),
                     "contact_email": item.get("contact_email", ""),
+                    "timestamp": run_stamp,
                 }
             )
-            continue
 
+        # Always write to data/ (collision resolutions go there directly for GitHub review)
         with open(json_path, "w", encoding="utf-8") as jf:
             json.dump(item, jf, indent=2, ensure_ascii=False)
         writes_ok += 1
@@ -270,14 +267,14 @@ def main():
             "collision_count": len(collisions),
             "collisions": collisions,
         }
-        report_path = pending_dir / "collision_report.json"
+        report_path = pending_dir / f"collision_report_{run_stamp}.json"
         with open(report_path, "w", encoding="utf-8") as rf:
             json.dump(collision_report, rf, indent=2, ensure_ascii=False)
         print(f"Collision report written to {report_path}")
 
     print(
-        f"JSON files written to {output_dir}: {writes_ok} accepted, "
-        f"{len(collisions)} collision(s) routed to {pending_dir}"
+        f"JSON files written to {output_dir}: {writes_ok} files, "
+        f"{len(collisions)} collision(s) detected and written to {output_dir}"
     )
 
 

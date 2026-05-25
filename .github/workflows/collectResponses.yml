@@ -88,7 +88,7 @@ jobs:
       - name: Detect collisions
         id: collisions
         run: |
-          HAS_COLLISIONS=$(python -c "import json, pathlib; p = pathlib.Path('data/_pending/collision_report.json'); print('true' if p.exists() and json.loads(p.read_text(encoding='utf-8')).get('collision_count', 0) > 0 else 'false')")
+          HAS_COLLISIONS=$(python -c "import json, pathlib; reports = list(pathlib.Path('data/_pending').glob('collision_report_*.json')); has = any(json.loads(r.read_text(encoding='utf-8')).get('collision_count', 0) > 0 for r in reports); print('true' if has else 'false')")
           echo "has_collisions=${HAS_COLLISIONS}" >> "$GITHUB_OUTPUT"
 
       - name: Open PR for collision review
@@ -106,9 +106,11 @@ jobs:
             **Branch:** `${{ github.ref_name }}`
             **Triggered by:** `${{ github.event_name }}`
 
-            Please review the pending payloads in `data/_pending/` and decide
-            how each collision should be resolved.
+            **Changes:** Modified device files are shown in the diff above.
+            Collision metadata is in `data/_pending/collision_report_*.json`.
+
+            Review the diffs for each device file, edit as needed, and merge when satisfied.
           branch: "bot/collision-review-${{ github.ref_name }}"
           delete-branch: false
           add-paths: |
-            data/_pending/**
+            data/**

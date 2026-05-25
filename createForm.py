@@ -159,6 +159,43 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
     readme_path.write_text(new_content)
 
 
+def write_form_config_to_docs(form_id: str, forms_service, schema: dict, docs_dir: str = "docs"):
+    """Write form config JSON for the GitHub Pages landing page."""
+    docs_path = Path(docs_dir)
+    docs_path.mkdir(exist_ok=True)
+
+    config = {
+        "form_id": form_id,
+        "form_url": f"https://docs.google.com/forms/d/{form_id}/viewform",
+        "entry_ids": {}
+    }
+
+    # Find the title of the previous_deviceID question in the schema
+    target_title = None
+    for section in schema.get("sections", []):
+        for q in section.get("questions", []):
+            if q.get("id") == "previous_deviceID":
+                target_title = q.get("title")
+                break
+
+    # Fetch the live form to get question IDs for pre-fill URL construction
+    if target_title:
+        try:
+            form_data = forms_service.forms().get(formId=form_id).execute()
+            for item in form_data.get("items", []):
+                if "questionItem" in item and item.get("title") == target_title:
+                    qid = item["questionItem"]["question"]["questionId"]
+                    config["entry_ids"]["previous_deviceID"] = qid
+                    break
+        except Exception as e:
+            print(f"Warning: could not fetch question IDs for pre-fill URLs: {e}")
+
+    config_path = docs_path / "form_config.json"
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2)
+    print(f"Form config written to {config_path}")
+
+
 # ----------------------------------------------------------------------
 # Main fun: call APIs, parse body, etc.
 # ----------------------------------------------------------------------
@@ -333,6 +370,7 @@ def main():
     if cfg["UPDATE_LINKS"]:
         write_form_id_to_env(form_id)   # Write form ID to .env
         update_readme_form_link(form_id)   # Update link in README
+        write_form_config_to_docs(form_id, forms_service, schema)   # Write landing page config
 
     print("Form created successfully:")
     print(f"https://docs.google.com/forms/d/{form_id}/edit")

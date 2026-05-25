@@ -223,6 +223,34 @@ def main():
             json.dump(item, jf, indent=2, ensure_ascii=False)
 
     print(f"JSON files written to {output_dir}")
-    
+
+    ### Write device index for the GitHub Pages landing page
+    docs_dir = Path("docs")
+    docs_dir.mkdir(exist_ok=True)
+
+    index_entries = []
+    for item in responses_shorthand:
+        device_name = item.get("device_name", "")
+        filename = sanitize_filename(device_name)
+        meta = item.get("_metadata", {})
+        index_entries.append({
+            "filename": filename,
+            "device_name": device_name,
+            "institution_name": item.get("institution_name", ""),
+            "contact_name": item.get("contact_name", ""),
+            "contact_email": item.get("contact_email", ""),
+            "device_description": item.get("device_description", ""),
+            "github_link": item.get("github_link", ""),
+            "documentation_link": item.get("documentation_link", ""),
+            "collected_date": meta.get("collected_date", ""),
+            "schema_version": meta.get("schema_version", ""),
+        })
+
+    index_path = docs_dir / "devices_index.json"
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump(index_entries, f, indent=2, ensure_ascii=False)
+    print(f"Device index written to {index_path}")
+
+
 if __name__ == "__main__":
     main()

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsectAI Hardware Database</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f5f7f5; color: #1a2a1a; line-height: 1.5; }
+
+    header { background: #2c6e49; color: white; padding: 2rem 1.5rem; }
+    header h1 { font-size: 1.75rem; margin-bottom: 0.4rem; }
+    header p { opacity: 0.85; font-size: 0.975rem; max-width: 640px; }
+
+    main { max-width: 820px; margin: 2rem auto; padding: 0 1.25rem 3rem; }
+
+    /* ---- Tabs ---- */
+    .tabs { display: flex; border-bottom: 2px solid #c8d5c8; margin-bottom: 1.75rem; }
+    .tab-btn {
+      background: none; border: none; padding: 0.7rem 1.5rem;
+      font-size: 0.975rem; cursor: pointer; color: #5a6e5a;
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+    }
+    .tab-btn.active  { color: #2c6e49; border-bottom-color: #2c6e49; font-weight: 600; }
+    .tab-btn:hover   { color: #2c6e49; }
+
+    /* ---- Panels ---- */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ---- Notice box ---- */
+    .notice {
+      background: #eaf4ef; border: 1px solid #9fcfb5; border-radius: 6px;
+      padding: 0.85rem 1.1rem; margin-bottom: 1.25rem; font-size: 0.9rem;
+    }
+    .notice strong { color: #1d5236; }
+
+    /* ---- Buttons / links ---- */
+    .btn {
+      display: inline-block; background: #2c6e49; color: white;
+      text-decoration: none; padding: 0.65rem 1.75rem;
+      border-radius: 6px; font-size: 0.975rem; margin-top: 1rem;
+    }
+    .btn:hover { background: #235b3c; }
+    .btn-secondary {
+      background: white; color: #2c6e49; border: 1.5px solid #2c6e49; margin-left: 0.75rem;
+    }
+    .btn-secondary:hover { background: #eaf4ef; }
+
+    /* ---- Device list ---- */
+    .search-row { margin-bottom: 0.5rem; }
+    .search-row input {
+      width: 100%; padding: 0.55rem 0.85rem;
+      border: 1px solid #bdc9bd; border-radius: 6px; font-size: 0.95rem;
+    }
+    select#device-select {
+      width: 100%; height: 190px; border: 1px solid #bdc9bd;
+      border-radius: 6px; padding: 0.25rem; font-size: 0.95rem;
+    }
+
+    /* ---- Device info card ---- */
+    .card {
+      background: white; border: 1px solid #c8d5c8; border-radius: 8px;
+      padding: 1.5rem; margin-top: 1.5rem;
+    }
+    .card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; color: #1a2a1a; }
+    .meta-grid {
+      display: grid; grid-template-columns: max-content 1fr;
+      gap: 0.35rem 1rem; font-size: 0.9rem;
+    }
+    .meta-grid dt { font-weight: 600; color: #3d5c3d; white-space: nowrap; }
+    .meta-grid dd { color: #2a3a2a; word-break: break-word; }
+    .description-block {
+      margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid #e0e8e0;
+      font-size: 0.9rem; color: #3a4a3a; white-space: pre-line;
+    }
+    .card-links { margin-top: 0.85rem; font-size: 0.875rem; display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .card-links a { color: #2c6e49; }
+
+    .form-row { margin-top: 1.25rem; }
+
+    .hidden  { display: none !important; }
+    .loading { color: #5a6e5a; font-style: italic; }
+    .error   { color: #c0392b; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>InsectAI Hardware Database</h1>
+  <p>A community catalog of insect monitoring hardware. Browse existing devices or submit yours below.</p>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('update', this)">Browse existing devices</button>
+    <button class="tab-btn" onclick="showTab('new', this)">Submit a new device</button>
+  </div>
+
+  <!-- =========================================================
+       Tab: Browse / update existing devices
+  ========================================================== -->
+  <div id="panel-update" class="panel active">
+    <div class="notice">
+      <strong>Looking to update an existing entry?</strong>
+      Select your device below to see its current record, then open the pre-filled form.
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="device-search"
+             placeholder="Search by name or institution…"
+             oninput="filterDevices()" autocomplete="off">
+    </div>
+
+    <select id="device-select" size="8" onchange="showDeviceCard(this.value)">
+      <option value="" disabled selected class="loading">Loading devices…</option>
+    </select>
+
+    <div id="device-card" class="card hidden"></div>
+
+    <div id="update-form-row" class="form-row hidden">
+      <a id="update-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
+        Open form to update this device ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       Tab: Submit a new device
+  ========================================================== -->
+  <div id="panel-new" class="panel">
+    <div class="notice">
+      <strong>Submitting a new device?</strong>
+      Use this form if your hardware is not yet in the database.
+      If you are adding a new version of an existing entry, switch to the
+      <em>Browse existing devices</em> tab instead.
+    </div>
+    <p style="font-size:0.925rem; color:#3a4a3a;">
+      The form begins with basic information (device name, contact details, a short summary).
+      Detailed technical sections are optional and can be filled later.
+    </p>
+    <a id="new-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
+      Open submission form ↗
+    </a>
+  </div>
+</main>
+
+<script>
+  "use strict";
+
+  let allDevices = [];
+  let formConfig = {};
+
+  // ------------------------------------------------------------------
+  // Security helpers
+  // ------------------------------------------------------------------
+  function esc(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function safeUrl(url) {
+    if (!url) return null;
+    try {
+      const u = new URL(String(url));
+      return (u.protocol === "https:" || u.protocol === "http:") ? url : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Init: fetch form config and device index in parallel
+  // ------------------------------------------------------------------
+  async function init() {
+    const [cfgResult, idxResult] = await Promise.allSettled([
+      fetch("./form_config.json").then(r => r.ok ? r.json() : Promise.reject()),
+      fetch("./devices_index.json").then(r => r.ok ? r.json() : Promise.reject()),
+    ]);
+
+    // Form config
+    if (cfgResult.status === "fulfilled") {
+      formConfig = cfgResult.value;
+      const url = safeUrl(formConfig.form_url);
+      if (url) {
+        document.getElementById("new-form-link").href = url;
+      } else {
+        document.getElementById("new-form-link").textContent = "Form URL unavailable";
+        document.getElementById("new-form-link").removeAttribute("href");
+      }
+    } else {
+      const el = document.getElementById("new-form-link");
+      el.textContent = "Form URL unavailable";
+      el.removeAttribute("href");
+    }
+
+    // Device index
+    const sel = document.getElementById("device-select");
+    if (idxResult.status === "fulfilled") {
+      allDevices = idxResult.value;
+      populateSelect(allDevices);
+    } else {
+      sel.innerHTML = "<option value=\"\" disabled>Could not load device list.</option>";
+      sel.classList.add("error");
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Populate the <select> with a (filtered) list of devices
+  // ------------------------------------------------------------------
+  function populateSelect(list) {
+    const sel = document.getElementById("device-select");
+    sel.innerHTML = "";
+
+    if (list.length === 0) {
+      sel.innerHTML = "<option value=\"\" disabled>No devices match your search.</option>";
+      return;
+    }
+
+    list.forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.filename;
+      const label = [d.device_name, d.institution_name].filter(Boolean).join(" — ");
+      opt.textContent = label || d.filename;
+      sel.appendChild(opt);
+    });
+  }
+
+  // ------------------------------------------------------------------
+  // Filter devices as user types
+  // ------------------------------------------------------------------
+  function filterDevices() {
+    const q = document.getElementById("device-search").value.toLowerCase();
+    const filtered = allDevices.filter(d =>
+      (d.device_name || "").toLowerCase().includes(q) ||
+      (d.institution_name || "").toLowerCase().includes(q)
+    );
+    populateSelect(filtered);
+    document.getElementById("device-card").classList.add("hidden");
+    document.getElementById("update-form-row").classList.add("hidden");
+  }
+
+  // ------------------------------------------------------------------
+  // Show info card for the selected device
+  // ------------------------------------------------------------------
+  function showDeviceCard(filename) {
+    const d = allDevices.find(x => x.filename === filename);
+    const card = document.getElementById("device-card");
+    const formRow = document.getElementById("update-form-row");
+
+    if (!d) {
+      card.classList.add("hidden");
+      formRow.classList.add("hidden");
+      return;
+    }
+
+    const date = d.collected_date
+      ? new Date(d.collected_date).toLocaleDateString("en-GB", {
+          year: "numeric", month: "long", day: "numeric"
+        })
+      : "Unknown";
+
+    const emailHtml = d.contact_email
+      ? `<a href="mailto:${esc(d.contact_email)}">${esc(d.contact_email)}</a>`
+      : "—";
+
+    const metaRows = [
+      ["Device ID",    esc(d.filename)],
+      ["Institution",  esc(d.institution_name) || "—"],
+      ["Contact",      esc(d.contact_name) || "—"],
+      ["Email",        emailHtml],
+      ["Submitted",    esc(date)],
+      ["Schema",       esc(d.schema_version) || "—"],
+    ].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("");
+
+    const ghUrl  = safeUrl(d.github_link);
+    const docUrl = safeUrl(d.documentation_link);
+    const links  = [
+      ghUrl  ? `<a href="${esc(ghUrl)}"  target="_blank" rel="noopener noreferrer">GitHub ↗</a>` : "",
+      docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener noreferrer">Documentation ↗</a>` : "",
+    ].filter(Boolean).join("");
+
+    card.innerHTML = `
+      <div class="card-title">${esc(d.device_name || d.filename)}</div>
+      <dl class="meta-grid">${metaRows}</dl>
+      ${d.device_description
+        ? `<div class="description-block">${esc(d.device_description)}</div>`
+        : ""}
+      ${links ? `<div class="card-links">${links}</div>` : ""}
+    `;
+    card.classList.remove("hidden");
+
+    // Build pre-fill URL if the entry ID is stored in form_config.json
+    const link = document.getElementById("update-form-link");
+    const formUrl = safeUrl(formConfig.form_url);
+    if (formUrl) {
+      const entryId = formConfig.entry_ids && formConfig.entry_ids.previous_deviceID;
+      link.href = entryId
+        ? `${formUrl}?entry.${entryId}=${encodeURIComponent(d.filename)}`
+        : formUrl;
+    } else {
+      link.removeAttribute("href");
+    }
+    formRow.classList.remove("hidden");
+  }
+
+  // ------------------------------------------------------------------
+  // Tab switching
+  // ------------------------------------------------------------------
+  function showTab(name, btn) {
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("panel-" + name).classList.add("active");
+    btn.classList.add("active");
+    // Clear card when switching away from update tab
+    if (name !== "update") {
+      document.getElementById("device-card").classList.add("hidden");
+      document.getElementById("update-form-row").classList.add("hidden");
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>

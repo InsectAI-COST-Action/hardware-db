@@ -52,6 +52,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .env README.md
+          git add .env README.md docs/form_config.json
           git commit -m "Update form ID and link" || true
           git push || true

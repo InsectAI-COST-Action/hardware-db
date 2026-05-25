@@ -96,11 +96,15 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Add pending collision records"
-          title: "Collision review needed for collected responses"
+          commit-message: "Add pending collision records (run ${{ github.run_id }})"
+          title: "Collision review needed — run ${{ github.run_id }} on ${{ github.ref_name }}"
           body: |
             This PR was created automatically because one or more form responses
             would overwrite existing device records.
+
+            **Run:** `${{ github.run_id }}`
+            **Branch:** `${{ github.ref_name }}`
+            **Triggered by:** `${{ github.event_name }}`
 
             Please review the pending payloads in `data/_pending/` and decide
             how each collision should be resolved.

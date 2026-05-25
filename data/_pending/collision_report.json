@@ -1,0 +1,22 @@
+{
+  "generated_at": "20260525T162739Z",
+  "collision_count": 2,
+  "collisions": [
+    {
+      "filename": "InsectDetect_but_different",
+      "target_file": "data/InsectDetect_but_different.json",
+      "pending_file": "data/_pending/InsectDetect_but_different__20260525T162739Z.json",
+      "device_name": "InsectDetect but different",
+      "contact_name": "Again, not Luca",
+      "contact_email": "I.am.not.here@email.com"
+    },
+    {
+      "filename": "GoPro",
+      "target_file": "data/GoPro.json",
+      "pending_file": "data/_pending/GoPro__20260525T162739Z.json",
+      "device_name": "GoPro",
+      "contact_name": "dsaf",
+      "contact_email": "hgfh"
+    }
+  ]
+}

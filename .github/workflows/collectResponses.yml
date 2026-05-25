@@ -82,11 +82,19 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Load collision filenames if they exist
-          COLLISION_FILES="[]"
-          if [ -f "data/_pending/collision_filenames.json" ]; then
-            COLLISION_FILES=$(python -c "import json; print(json.dumps(json.load(open('data/_pending/collision_filenames.json'))))")
-          fi
+          # Load collision filenames from the collision report if it exists
+          COLLISION_FILES=$(python -c "
+import json, pathlib, glob
+reports = list(pathlib.Path('data/_pending').glob('collision_report_*.json'))
+filenames = []
+for r in reports:
+    try:
+        data = json.loads(r.read_text(encoding='utf-8'))
+        filenames += [c['filename'] for c in data.get('collisions', [])]
+    except (json.JSONDecodeError, OSError):
+        pass
+print(json.dumps(filenames))
+")
           
           # Add non-collision files and always-include files
           git add data/form_responses.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true

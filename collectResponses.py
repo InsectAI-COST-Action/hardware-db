@@ -228,10 +228,17 @@ def main():
     docs_dir = Path("docs")
     docs_dir.mkdir(exist_ok=True)
 
+    # Read all JSON files from data/ so the index always reflects the full
+    # contents of the folder, not just the responses from the current form.
     index_entries = []
-    for item in responses_shorthand:
+    for json_path in sorted(output_dir.glob("*.json")):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                item = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
         device_name = item.get("device_name", "")
-        filename = sanitize_filename(device_name)
+        filename = json_path.stem  # already sanitized at write time
         meta = item.get("_metadata", {})
         index_entries.append({
             "filename": filename,
@@ -250,6 +257,25 @@ def main():
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(index_entries, f, indent=2, ensure_ascii=False)
     print(f"Device index written to {index_path}")
+
+    ### Write/update form_config.json with the current form URL.
+    ### Preserves entry_ids written by createForm.py if they already exist.
+    form_config_path = docs_dir / "form_config.json"
+    form_url = f"https://docs.google.com/forms/d/{cfg['GOOGLE_FORM_ID']}/viewform"
+    existing_config = {}
+    if form_config_path.exists():
+        try:
+            with open(form_config_path, "r", encoding="utf-8") as f:
+                existing_config = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    existing_config["form_id"] = cfg["GOOGLE_FORM_ID"]
+    existing_config["form_url"] = form_url
+    if "entry_ids" not in existing_config:
+        existing_config["entry_ids"] = {}
+    with open(form_config_path, "w", encoding="utf-8") as f:
+        json.dump(existing_config, f, indent=2)
+    print(f"Form config updated at {form_config_path}")
 
 
 if __name__ == "__main__":

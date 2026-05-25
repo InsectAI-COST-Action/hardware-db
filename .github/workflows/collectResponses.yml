@@ -81,7 +81,31 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.json data/form_responses.csv docs/devices_index.json docs/form_config.json || true
+          
+          # Load collision filenames if they exist
+          COLLISION_FILES="[]"
+          if [ -f "data/_pending/collision_filenames.json" ]; then
+            COLLISION_FILES=$(python -c "import json; print(json.dumps(json.load(open('data/_pending/collision_filenames.json'))))")
+          fi
+          
+          # Add non-collision files and always-include files
+          git add data/form_responses.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true
+          
+          # Add device JSON files, excluding those with collisions
+          python -c "
+          import json
+          import pathlib
+          import subprocess
+          
+          collision_files = $COLLISION_FILES
+          collision_set = set(f + '.json' for f in collision_files)
+          
+          data_dir = pathlib.Path('data')
+          for json_file in data_dir.glob('*.json'):
+              if json_file.name not in collision_set and json_file.name != 'form_responses.json':
+                  subprocess.run(['git', 'add', str(json_file)], check=False)
+          "
+          
           git commit -m "Update data from form responses" || echo "No changes to commit"
           git push
 

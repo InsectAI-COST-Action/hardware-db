@@ -271,6 +271,13 @@ def main():
         with open(report_path, "w", encoding="utf-8") as rf:
             json.dump(collision_report, rf, indent=2, ensure_ascii=False)
         print(f"Collision report written to {report_path}")
+        
+        # Write list of collision filenames so workflow can exclude them from main commit
+        collision_filenames = [c["filename"] for c in collisions]
+        filenames_path = pending_dir / "collision_filenames.json"
+        with open(filenames_path, "w", encoding="utf-8") as ff:
+            json.dump(collision_filenames, ff, indent=2, ensure_ascii=False)
+        print(f"Collision filenames written to {filenames_path}")
 
     print(
         f"JSON files written to {output_dir}: {writes_ok} files, "

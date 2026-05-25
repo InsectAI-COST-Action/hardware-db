@@ -245,14 +245,8 @@ def main():
         # Collision policy: do not overwrite an existing record with different content.
         if existing_item is not None and existing_item != item:
             pending_path = pending_dir / f"{filename}__{run_stamp}.json"
-            pending_payload = {
-                "reason": "would_overwrite_existing_record",
-                "target_filename": f"{filename}.json",
-                "submitted_at": run_stamp,
-                "proposed_record": item,
-            }
             with open(pending_path, "w", encoding="utf-8") as pf:
-                json.dump(pending_payload, pf, indent=2, ensure_ascii=False)
+                json.dump(item, pf, indent=2, ensure_ascii=False)
 
             collisions.append(
                 {

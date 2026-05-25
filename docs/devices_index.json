@@ -90,6 +90,24 @@
     "schema_version": ""
   },
   {
+    "filename": "InsectDetect_but_different",
+    "device_name": "InsectDetect but different",
+    "institution_name": "",
+    "contact_name": "Again, not Luca",
+    "contact_email": "I.am.not.here@email.com",
+    "contributor_name": "",
+    "contributor_email": "",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "you betcha",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-05-25T16:15:42.813454Z",
+    "schema_version": "1.0.0-beta"
+  },
+  {
     "filename": "MiniMon",
     "device_name": "MiniMon",
     "institution_name": "Federal Research Institute WSL",

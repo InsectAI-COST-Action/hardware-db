@@ -53,6 +53,26 @@
       width: 100%; padding: 0.55rem 0.85rem;
       border: 1px solid #bdc9bd; border-radius: 6px; font-size: 0.95rem;
     }
+    .checker-row { margin-top: 0.9rem; }
+    .checker-row label {
+      display: block; margin-bottom: 0.4rem; font-size: 0.9rem;
+      color: #315231; font-weight: 600;
+    }
+    .checker-row input {
+      width: 100%; padding: 0.55rem 0.85rem;
+      border: 1px solid #bdc9bd; border-radius: 6px; font-size: 0.95rem;
+    }
+    .checker-status {
+      margin-top: 0.65rem; border-radius: 6px; padding: 0.6rem 0.8rem;
+      font-size: 0.88rem; border: 1px solid #bdc9bd; background: #f7fbf8;
+      color: #2f4b2f;
+    }
+    .checker-status.ok {
+      background: #eaf4ef; border-color: #9fcfb5; color: #1d5236;
+    }
+    .checker-status.taken {
+      background: #fff3e9; border-color: #f3be8a; color: #8a4e1e;
+    }
     select#device-select {
       width: 100%; height: 190px; border: 1px solid #bdc9bd;
       border-radius: 6px; padding: 0.25rem; font-size: 0.95rem;
@@ -139,6 +159,19 @@
       The form begins with basic information (device name, contact details, a short summary).
       Detailed technical sections are optional and can be filled later.
     </p>
+
+    <div class="checker-row">
+      <label for="proposed-deviceid">Check proposed deviceID (or device name)</label>
+      <input type="text" id="proposed-deviceid"
+             placeholder="e.g. AMI system"
+             oninput="checkProposedDeviceId()" autocomplete="off">
+      <div id="checker-status" class="checker-status">
+        Type a proposed ID to check availability.
+      </div>
+    </div>
+
+    <div id="checker-card" class="card hidden"></div>
+
     <a id="new-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
       Open submission form ↗
     </a>
@@ -178,6 +211,54 @@
     return clean
       ? `<a href="mailto:${esc(clean)}">${esc(clean)}</a>`
       : "—";
+  }
+
+  // Keep deviceID normalization aligned with Python sanitize_filename().
+  function normalizeDeviceId(value) {
+    return String(value || "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^\w\-]/g, "");
+  }
+
+  function renderDeviceCard(d, card) {
+    const date = d.collected_date
+      ? new Date(d.collected_date).toLocaleDateString("en-GB", {
+          year: "numeric", month: "long", day: "numeric"
+        })
+      : "Unknown";
+
+    const metaRows = [
+      ["Device ID",    esc(d.filename)],
+      ["Institution",  esc(d.institution_name) || "—"],
+      ["Contact",      esc(d.contact_name) || "—"],
+      ["Contact email", mailtoLink(d.contact_email)],
+      ["Contributor",  esc(d.contributor_name) || "—"],
+      ["Contributor email", mailtoLink(d.contributor_email)],
+      ["Maintainer",   esc(d.maintainer_name) || "—"],
+      ["Maintainer email", mailtoLink(d.maintainer_email)],
+      ["Creator",      esc(d.device_creator) || "—"],
+      ["Creator email", mailtoLink(d.device_creator_email)],
+      ["Submitted",    esc(date)],
+      ["Schema",       esc(d.schema_version) || "—"],
+    ].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("");
+
+    const ghUrl  = safeUrl(d.github_link);
+    const docUrl = safeUrl(d.documentation_link);
+    const links  = [
+      ghUrl  ? `<a href="${esc(ghUrl)}"  target="_blank" rel="noopener noreferrer">GitHub ↗</a>` : "",
+      docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener noreferrer">Documentation ↗</a>` : "",
+    ].filter(Boolean).join("");
+
+    card.innerHTML = `
+      <div class="card-title">${esc(d.device_name || d.filename)}</div>
+      <dl class="meta-grid">${metaRows}</dl>
+      ${d.device_description
+        ? `<div class="description-block">${esc(d.device_description)}</div>`
+        : ""}
+      ${links ? `<div class="card-links">${links}</div>` : ""}
+    `;
+    card.classList.remove("hidden");
   }
 
   // ------------------------------------------------------------------
@@ -277,43 +358,7 @@
       return;
     }
 
-    const date = d.collected_date
-      ? new Date(d.collected_date).toLocaleDateString("en-GB", {
-          year: "numeric", month: "long", day: "numeric"
-        })
-      : "Unknown";
-
-    const metaRows = [
-      ["Device ID",    esc(d.filename)],
-      ["Institution",  esc(d.institution_name) || "—"],
-      ["Contact",      esc(d.contact_name) || "—"],
-      ["Contact email", mailtoLink(d.contact_email)],
-      ["Contributor",  esc(d.contributor_name) || "—"],
-      ["Contributor email", mailtoLink(d.contributor_email)],
-      ["Maintainer",   esc(d.maintainer_name) || "—"],
-      ["Maintainer email", mailtoLink(d.maintainer_email)],
-      ["Creator",      esc(d.device_creator) || "—"],
-      ["Creator email", mailtoLink(d.device_creator_email)],
-      ["Submitted",    esc(date)],
-      ["Schema",       esc(d.schema_version) || "—"],
-    ].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("");
-
-    const ghUrl  = safeUrl(d.github_link);
-    const docUrl = safeUrl(d.documentation_link);
-    const links  = [
-      ghUrl  ? `<a href="${esc(ghUrl)}"  target="_blank" rel="noopener noreferrer">GitHub ↗</a>` : "",
-      docUrl ? `<a href="${esc(docUrl)}" target="_blank" rel="noopener noreferrer">Documentation ↗</a>` : "",
-    ].filter(Boolean).join("");
-
-    card.innerHTML = `
-      <div class="card-title">${esc(d.device_name || d.filename)}</div>
-      <dl class="meta-grid">${metaRows}</dl>
-      ${d.device_description
-        ? `<div class="description-block">${esc(d.device_description)}</div>`
-        : ""}
-      ${links ? `<div class="card-links">${links}</div>` : ""}
-    `;
-    card.classList.remove("hidden");
+    renderDeviceCard(d, card);
 
     // Build pre-fill URL if the entry ID is stored in form_config.json
     const link = document.getElementById("update-form-link");
@@ -329,6 +374,41 @@
     formRow.classList.remove("hidden");
   }
 
+  function checkProposedDeviceId() {
+    const input = document.getElementById("proposed-deviceid");
+    const status = document.getElementById("checker-status");
+    const card = document.getElementById("checker-card");
+    const raw = input.value;
+    const normalized = normalizeDeviceId(raw);
+
+    card.classList.add("hidden");
+    status.className = "checker-status";
+
+    if (!raw.trim()) {
+      status.textContent = "Type a proposed ID to check availability.";
+      return;
+    }
+
+    if (!normalized) {
+      status.textContent = "The proposed ID is empty after normalization. Use letters or numbers.";
+      return;
+    }
+
+    const match = allDevices.find(d =>
+      String(d.filename || "").toLowerCase() === normalized.toLowerCase()
+    );
+
+    if (match) {
+      status.classList.add("taken");
+      status.innerHTML = `Taken: <strong>${esc(normalized)}</strong> already exists.`;
+      renderDeviceCard(match, card);
+      return;
+    }
+
+    status.classList.add("ok");
+    status.innerHTML = `Available: <strong>${esc(normalized)}</strong> is not currently used.`;
+  }
+
   // ------------------------------------------------------------------
   // Tab switching
   // ------------------------------------------------------------------
@@ -341,6 +421,9 @@
     if (name !== "update") {
       document.getElementById("device-card").classList.add("hidden");
       document.getElementById("update-form-row").classList.add("hidden");
+    }
+    if (name !== "new") {
+      document.getElementById("checker-card").classList.add("hidden");
     }
   }
 

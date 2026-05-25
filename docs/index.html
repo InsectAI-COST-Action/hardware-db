@@ -108,7 +108,7 @@
 
     <div class="search-row">
       <input type="text" id="device-search"
-             placeholder="Search by name or institution…"
+             placeholder="Search by system, people, email, institution, or abstract…"
              oninput="filterDevices()" autocomplete="off">
     </div>
 
@@ -173,6 +173,13 @@
     }
   }
 
+  function mailtoLink(email) {
+    const clean = String(email || "").trim();
+    return clean
+      ? `<a href="mailto:${esc(clean)}">${esc(clean)}</a>`
+      : "—";
+  }
+
   // ------------------------------------------------------------------
   // Init: fetch form config and device index in parallel
   // ------------------------------------------------------------------
@@ -235,10 +242,22 @@
   // ------------------------------------------------------------------
   function filterDevices() {
     const q = document.getElementById("device-search").value.toLowerCase();
-    const filtered = allDevices.filter(d =>
-      (d.device_name || "").toLowerCase().includes(q) ||
-      (d.institution_name || "").toLowerCase().includes(q)
-    );
+    const filtered = allDevices.filter(d => {
+      const haystack = [
+        d.device_name,
+        d.device_description,
+        d.institution_name,
+        d.contact_name,
+        d.contact_email,
+        d.contributor_name,
+        d.contributor_email,
+        d.maintainer_name,
+        d.maintainer_email,
+        d.device_creator,
+        d.device_creator_email,
+      ].map(v => String(v || "").toLowerCase()).join("\n");
+      return haystack.includes(q);
+    });
     populateSelect(filtered);
     document.getElementById("device-card").classList.add("hidden");
     document.getElementById("update-form-row").classList.add("hidden");
@@ -264,15 +283,17 @@
         })
       : "Unknown";
 
-    const emailHtml = d.contact_email
-      ? `<a href="mailto:${esc(d.contact_email)}">${esc(d.contact_email)}</a>`
-      : "—";
-
     const metaRows = [
       ["Device ID",    esc(d.filename)],
       ["Institution",  esc(d.institution_name) || "—"],
       ["Contact",      esc(d.contact_name) || "—"],
-      ["Email",        emailHtml],
+      ["Contact email", mailtoLink(d.contact_email)],
+      ["Contributor",  esc(d.contributor_name) || "—"],
+      ["Contributor email", mailtoLink(d.contributor_email)],
+      ["Maintainer",   esc(d.maintainer_name) || "—"],
+      ["Maintainer email", mailtoLink(d.maintainer_email)],
+      ["Creator",      esc(d.device_creator) || "—"],
+      ["Creator email", mailtoLink(d.device_creator_email)],
       ["Submitted",    esc(date)],
       ["Schema",       esc(d.schema_version) || "—"],
     ].map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join("");

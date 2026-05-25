@@ -114,10 +114,9 @@ def main():
     count = len(responses)
     print(f"Found {count} responses")
 
-    # Fail if no responses so workflows can detect the issue
     if count == 0:
-        print("Error: no form responses found, cannot proceed.")
-        sys.exit(1)
+        print("Warning: no form responses found, nothing to export.")
+        return
 
 
     ### Parse responses into questionId to answer

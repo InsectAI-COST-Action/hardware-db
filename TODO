@@ -1,7 +1,7 @@
 # InsectAI hardware-db workshop feedback TODOs
 **Workshop feedback suggestions**
 === General technical ===
-- [ ] Need to figure out a way to put descriptions under the questions to clarify
+- [x] Need to figure out a way to put descriptions under the questions to clarify - was already implemented and I forgot 😅
 - [ ] DeviceID is confusing for users, but is difficult to generate automatically... We can try and direct users to `data/` dir and ask to check existing deviceIDs, or we need a different solution altogether. 
 - [ ] Need to introduce much more data input validation (i.e. valid link, valid email) whenever easy / possible
 === General non-technical ===

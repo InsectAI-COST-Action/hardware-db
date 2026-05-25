@@ -1,12 +1,7 @@
 name: Generate Device Index
 
 on:
-  # Run automatically after Collect Responses finishes
-  workflow_run:
-    workflows: ["Collect Responses"]
-    types:
-      - completed
-  # Also allow manual triggering (e.g. to backfill after merging data files)
+  # Allow manual triggering to backfill the index (e.g. after merging data files)
   workflow_dispatch:
 
 permissions:

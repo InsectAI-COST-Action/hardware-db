@@ -83,7 +83,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Extract collision filenames (if any) from timestamped collision reports
-          COLLISION_FILES=$(python -c "import json,pathlib;reports=list(pathlib.Path('data/_pending').glob('collision_report_*.json'));filenames=[c['filename'] for r in reports for c in json.loads(r.read_text(encoding='utf-8')).get('collisions',[])];print(json.dumps(filenames))")
+          COLLISION_FILES=$(python -c "import json,pathlib;reports=list(pathlib.Path('data/collisions').glob('collision_report_*.json'));filenames=[c['filename'] for r in reports for c in json.loads(r.read_text(encoding='utf-8')).get('collisions',[])];print(json.dumps(filenames))")
 
           # Stage always-included files
           git add data/form_responses.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true
@@ -97,7 +97,7 @@ jobs:
       - name: Detect collisions
         id: collisions
         run: |
-          HAS_COLLISIONS=$(python -c "import json, pathlib; reports = list(pathlib.Path('data/_pending').glob('collision_report_*.json')); has = any(json.loads(r.read_text(encoding='utf-8')).get('collision_count', 0) > 0 for r in reports); print('true' if has else 'false')")
+          HAS_COLLISIONS=$(python -c "import json, pathlib; reports = list(pathlib.Path('data/collisions').glob('collision_report_*.json')); has = any(json.loads(r.read_text(encoding='utf-8')).get('collision_count', 0) > 0 for r in reports); print('true' if has else 'false')")
           echo "has_collisions=${HAS_COLLISIONS}" >> "$GITHUB_OUTPUT"
 
       - name: Open PR for collision review
@@ -116,7 +116,7 @@ jobs:
             **Triggered by:** `${{ github.event_name }}`
 
             **Changes:** Modified device files are shown in the diff above.
-            Collision metadata is in `data/_pending/collision_report_*.json`.
+            Collision metadata is in `data/collisions/collision_report_*.json`.
 
             Review the diffs for each device file, edit as needed, and merge when satisfied.
           branch: "bot/collision-review-${{ github.ref_name }}"

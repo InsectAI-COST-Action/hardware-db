@@ -209,7 +209,7 @@ def main():
 
 
     ### Write individual JSON files for each response, with shorthand keys
-    pending_dir = output_dir / "_pending"
+    pending_dir = output_dir / "collisions"
     pending_dir.mkdir(parents=True, exist_ok=True)
 
     # Keep only the most recent response for each normalized device ID

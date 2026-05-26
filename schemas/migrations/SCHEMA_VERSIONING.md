@@ -65,12 +65,14 @@ python reprocessData.py --verbose
 
 ### Semantic Versioning
 
-Schema versions follow **MAJOR.MINOR.PATCH** format:
+Schema versions follow **MAJOR.MINOR.PATCH** format, with an optional pre-release tag:
 - **MAJOR**: Breaking changes (backward-incompatible)
 - **MINOR**: New features (backward-compatible)
 - **PATCH**: Bug fixes (backward-compatible)
+- **Pre-release tag** (optional): e.g. `-beta`, `-alpha`, `-rc.1` — denotes a work-in-progress version not yet considered stable
 
-Example: `1.2.3` = Major version 1, 2 minor features, 3 patches
+Example: `1.2.3` = Major version 1, 2 minor features, 3 patches  
+Example: `1.0.0-beta` = Pre-release of version 1.0.0
 
 ### Question IDs (Immutable Keys)
 

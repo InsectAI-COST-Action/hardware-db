@@ -12,8 +12,8 @@
       "properties": {
         "schema_version": {
           "type": "string",
-          "pattern": "^\\d+\\.\\d+\\.\\d+$",
-          "description": "Semantic version (MAJOR.MINOR.PATCH)"
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+          "description": "Semantic version (MAJOR.MINOR.PATCH or MAJOR.MINOR.PATCH-prerelease)"
         },
         "created_date": {
           "type": "string",

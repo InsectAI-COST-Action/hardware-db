@@ -1,12 +1,12 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0-beta",
-    "created_date": "2026-05-26T00:00:00Z",
-    "description": "v1.0.0-beta: Questionnaire improvements — fixed malformed choice options, aligned required fields with DevNotes recommendation, added Wildlabs Inventory-aligned fields (device_type, device_availability, device_maturity), replaced placeholder descriptions."
+    "schema_version": "1.0.0",
+    "created_date": "2026-04-09T00:00:00Z",
+    "description": "Initial schema versioning system implementation"
   },
   "info": {
     "title": "InsectAI hardware form - full version",
-    "description": "Welcome! This form is to submit or update your insect monitoring hardware to the InsectAI hardware database. \n \n Already submitted hardware or have a new version? You may also use this form to submit new versions of existing hardware or add/update existing hardware details. If so, please provide your latest deviceID where prompted. \n\n Unsure if you have already submitted? If you are unsure what has already been submitted to the database please either 1. check your email for a deviceID 2. access the public database here: [PLACEHOLDER: public database URL] or 3. contact the current handler whose details will be available here: [PLACEHOLDER: contact page URL] providing them with some basic hardware details. \n\n "
+    "description": "Welcome! This form is to provide or update for your insect monitoring hardware to the InsectAI hardware database. \n \n Already submitted hardware or have a new version? You may also use this form to submit new versions of existing hardware or add/update existing hardware details. If so, please provide your latest deviceID where prompted. \n\n Unsure if you have already submitted? If you are unsure what has already been submitted to the database please either 1. check your email for a deviceID 2. access the public database here: ___ or 3. contact the current handler whose details will be available here: ___ providing them with some basic hardware details. \n\n "
   },
   "settings": {
     "emailCollectionType": "DO_NOT_COLLECT"
@@ -41,7 +41,7 @@
     {
       "id": "new_device_version",
       "title": "New device version",
-      "description": "Use this section if you are submitting a new version of hardware that already has a deviceID. \n \n To help decide if your device has entered a new version, the following adaptation of semantic versioning for hardware may be useful: https://www.maskset.net/blog/2023/02/26/semantic-versioning-for-hardware/ \n \n If you want to update an existing entry rather than add a new version, please contact us via: [PLACEHOLDER: contact page URL]",
+      "description": "Information about who the device was created by, who is contributing to this entry and who will be responsible in future for queries about and updates to this entry. \n \n These may all be the same individual in some cases and there may be co-creators. In the case of multiple individuals separate the names and emails of the creators with ';' (e.g. Alan Turner; Dave Johnson)",
       "questions": [
         {
           "id": "previous_deviceID",
@@ -55,7 +55,6 @@
     {
       "id": "basic_info",
       "title": "Basic information",
-      "description": "These four fields form the minimum required submission. They correspond directly to the mandatory fields in Wildlabs's The Inventory.",
       "questions": [
         {
           "id": "contact_name",
@@ -84,37 +83,13 @@
           "required": true,
           "type": "text",
           "paragraph": true
-        },
-        {
-          "id": "device_type",
-          "title": "Technology type (select all that apply)",
-          "required": false,
-          "type": "choice",
-          "choiceType": "CHECKBOX",
-          "options": [
-            "Animal borne imaging",
-            "Bioacoustics",
-            "Biologger / tracking",
-            "Camera traps",
-            "Data management and processing",
-            "eDNA",
-            "Image recognition",
-            "Mobile apps / citizen science",
-            "Navigation / communication / connectivity",
-            "Networked sensors",
-            "Protected area management",
-            "Remote sensing / GIS",
-            "Thermal imaging",
-            "UAVs / drones",
-            "Other"
-          ]
         }
       ]
     },
     {
       "id": "fill_in_full_form",
       "title": "Proceed with filling in full form?",
-      "description": "Would you like to proceed with filling in the full form? \n\n There are 6 sections in total with a total of approximately 67 questions: \n - Contributor details (7 questions); \n - Device links (4 questions); \n - Device details (13 questions); \n - Component details (27 questions); \n - Maintenance and repairs (3 questions); \n - Usage scope (12 questions). \n\n  If you would like to stop here, please click 'No' and then Submit on the next page. ",
+      "description": "Would you like to proceed with filling in the full form? \n\n There are 6 sections in total with a total of 64 questions: \n - Contributor details (7 questions); \n - Device links (4 questions); \n - Device details (11 questions); \n - Component details (27 questions); \n - Maintenance and repairs (3 questions); \n - Usage scope (12 questions). \n\n  If you would like to stop here, please click 'No' and then Submit on the next page. ",
       "questions": [
         {
           "id": "to_full_form",
@@ -140,7 +115,7 @@
     {
       "id": "contributor_details",
       "title": "Contributor details",
-      "description": "Information about who the device was created by, who is contributing to this entry and who will be responsible in future for queries about and updates to this entry. \n \n These may all be the same individual in some cases and there may be co-creators. In the case of multiple individuals, separate names and emails with ';' (e.g. Alan Turner; Dave Johnson).",
+      "description": "New version: This section is for providing a distinct new device version. \n\n Help: To help decide if your device has entered a new version, the following is an adaption of semantic reasoning (used for software versioning) for electronics/hardware is useful: https://www.maskset.net/blog/2023/02/26/semantic-versioning-for-hardware/ \n \n Existing devices: If you want to update an existing device, please use the linked form at the top of this form instead",
       "questions": [
         {
           "id": "contributor_name",
@@ -196,7 +171,7 @@
     {
       "id": "device_links",
       "title": "Device links",
-      "description": "Links to publications, code repositories, and documentation relating to this device. Leave blank if not applicable.",
+      "description": "n/a",
       "questions": [
         {
           "id": "publication_DOI",
@@ -221,7 +196,7 @@
         },
         {
           "id": "documentation_upload",
-          "title": "Documentation upload (link to file or cloud storage)",
+          "title": "Documentation upload",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -231,7 +206,7 @@
     {
       "id": "device_details",
       "title": "Device details",
-      "description": "Physical and design characteristics of the device.",
+      "description": "n/a",
       "questions": [
         {
           "id": "device_version_name",
@@ -248,33 +223,6 @@
           "paragraph": false
         },
         {
-          "id": "device_availability",
-          "title": "Availability",
-          "required": false,
-          "type": "choice",
-          "choiceType": "RADIO",
-          "options": [
-            "Available for group buy",
-            "Commercial",
-            "Crowdfunding",
-            "Free",
-            "Open source",
-            "Other"
-          ]
-        },
-        {
-          "id": "device_maturity",
-          "title": "Maturity / development stage",
-          "required": false,
-          "type": "choice",
-          "choiceType": "RADIO",
-          "options": [
-            "Early stage / prototype",
-            "In trials / pilot",
-            "Tested and implemented"
-          ]
-        },
-        {
           "id": "device_construction",
           "title": "Device construction",
           "required": false,
@@ -283,7 +231,8 @@
           "options": [
             "Off-the-shelf: Purchased and used as-is",
             "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
-            "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
+            "Partly custom: Assembled from off-the-shelf and/or open-source components",
+            "with some user design or modification",
             "Fully custom: Designed and fabricated by the user (hardware and potentially software)"
           ]
         },
@@ -296,7 +245,7 @@
         },
         {
           "id": "device_billofmaterials",
-          "title": "Device bill-of-materials (if available, link or upload)",
+          "title": "Device bill-of-materials (if available)",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -317,7 +266,7 @@
         },
         {
           "id": "device__image",
-          "title": "Device or schematic image (link or upload)",
+          "title": "Device or schematic image",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -334,17 +283,9 @@
           "title": "Device material(s)",
           "required": false,
           "type": "choice",
-          "choiceType": "CHECKBOX",
+          "choiceType": "RADIO",
           "options": [
-            "Metal (aluminium, steel, etc.)",
-            "Plastic (ABS, PLA, PETG, etc.)",
-            "Wood",
-            "Fabric / textile",
-            "Glass",
-            "Rubber / silicone",
-            "Carbon fibre",
-            "PCB / circuit board substrate",
-            "Other"
+            "Option 1"
           ]
         },
         {
@@ -356,8 +297,10 @@
           "options": [
             "Static / fixed: Permanently installed; cannot be moved without disassembly",
             "Manually movable (limited): Can be repositioned by hand but not designed for frequent movement (e.g. repositioned tripod)",
-            "Manually movable (portable): Designed to be carried or repositioned easily",
-            "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting, rolling, or robotic motion)"
+            "Manually movable (portable): Designed to be carried or repositioned easily.",
+            "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting",
+            "rolling",
+            "or robotic motion)."
           ]
         }
       ]
@@ -365,7 +308,7 @@
     {
       "id": "component_details",
       "title": "Component details",
-      "description": "Sensor, connectivity, and processing details for the device components.",
+      "description": "n/a",
       "questions": [
         {
           "id": "power_sources",
@@ -517,11 +460,13 @@
           "options": [
             "Wi-Fi",
             "Bluetooth",
-            "Cellular (e.g. 3G/4G/5G, LTE-M, NB-IoT)",
+            "Cellular (e.g. 3G/4G/5G",
+            "LTE-M",
+            "NB-IoT)",
             "GPS / GNSS",
             "NFC",
             "Serial (UART/RS232/RS485)",
-            "Satellite links"
+            "Satellite Links"
           ]
         },
         {
@@ -653,11 +598,11 @@
     {
       "id": "maintenance_and_repairs",
       "title": "Maintenance and repairs",
-      "description": "Information about the repairability, maintenance schedule and firmware update process for this device.",
+      "description": "n/a",
       "questions": [
         {
           "id": "repairability_score",
-          "title": "Repairability score (1 = very difficult to repair; 5 = very easy to repair)",
+          "title": "Repairability score",
           "required": false,
           "type": "scale",
           "low": 1,
@@ -682,7 +627,7 @@
     {
       "id": "intended_usage_scope_and_operational_constraints",
       "title": "Intended usage scope and operational constraints",
-      "description": "The ecological and operational context in which this device has been designed or tested.",
+      "description": "n/a",
       "questions": [
         {
           "id": "taxonomic_groups",
@@ -766,7 +711,7 @@
         },
         {
           "id": "weatherproofing",
-          "title": "Weatherproofing (e.g. IP rating)",
+          "title": "Weatherproofing",
           "required": false,
           "type": "text",
           "paragraph": false

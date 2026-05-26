@@ -104,6 +104,7 @@ def check_unique_question_ids(schema_file: Path) -> Tuple[bool, List[str]]:
 def check_version_format(schema_file: Path) -> Tuple[bool, List[str]]:
     """
     Check that schema version is valid semantic versioning.
+    Accepts MAJOR.MINOR.PATCH and MAJOR.MINOR.PATCH-prerelease formats.
     
     Returns:
         (is_valid, list_of_errors)
@@ -123,11 +124,14 @@ def check_version_format(schema_file: Path) -> Tuple[bool, List[str]]:
         errors.append("Missing '_metadata.schema_version'")
         return False, errors
     
-    parts = version.split(".")
+    # Strip optional pre-release tag (e.g. "-beta", "-alpha.1") from PATCH component
+    core_version = version.split("-")[0] if "-" in version else version
+    
+    parts = core_version.split(".")
     if len(parts) != 3:
         errors.append(
             f"Invalid schema_version '{version}': "
-            f"must be MAJOR.MINOR.PATCH format"
+            f"must be MAJOR.MINOR.PATCH or MAJOR.MINOR.PATCH-prerelease format"
         )
         return False, errors
     

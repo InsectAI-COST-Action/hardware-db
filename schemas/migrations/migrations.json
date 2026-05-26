@@ -2,17 +2,131 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-04-09T00:00:00Z"
+    "last_updated": "2026-05-26T00:00:00Z"
   },
   "migrations": {
-    "1.0.0→1.1.0": {
-      "created_date": "TBD - define when needed",
-      "description": "TBD - describe the changes between 1.0.0 and 1.1.0",
+    "0.2.0→1.0.0": {
+      "created_date": "2026-04-09",
+      "description": "Added _metadata block to responses; no question field changes between 0.2.0 and 1.0.0.",
       "mappings": {
         "drops": [],
         "adds": [],
         "renames": [],
         "transforms": []
+      }
+    },
+    "0.2.0→1.0.0-beta": {
+      "created_date": "2026-05-26",
+      "description": "Migration from 0.2.0 to 1.0.0-beta: adds device_type, device_availability, device_maturity; normalises previously malformed choice values in device_construction, device_mobility and wireless_connectivity_options.",
+      "mappings": {
+        "drops": [],
+        "adds": [
+          {
+            "id": "device_type",
+            "title": "Technology type",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "id": "device_availability",
+            "title": "Availability",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "id": "device_maturity",
+            "title": "Maturity / development stage",
+            "type": "choice",
+            "default_value": null
+          }
+        ],
+        "renames": [],
+        "transforms": [
+          {
+            "id": "device_construction",
+            "type": "value_map",
+            "mapping": {
+              "Partly custom: Assembled from off-the-shelf and/or open-source components": "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
+              "with some user design or modification": null
+            }
+          },
+          {
+            "id": "device_mobility",
+            "type": "value_map",
+            "mapping": {
+              "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting": "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting, rolling, or robotic motion)",
+              "rolling": null,
+              "or robotic motion).": null
+            }
+          },
+          {
+            "id": "wireless_connectivity_options",
+            "type": "value_map",
+            "mapping": {
+              "Cellular (e.g. 3G/4G/5G": "Cellular (e.g. 3G/4G/5G, LTE-M, NB-IoT)",
+              "LTE-M": null,
+              "NB-IoT)": null,
+              "Satellite Links": "Satellite links"
+            }
+          }
+        ]
+      }
+    },
+    "1.0.0→1.0.0-beta": {
+      "created_date": "2026-05-26",
+      "description": "Migration from 1.0.0 to 1.0.0-beta: adds device_type, device_availability, device_maturity; normalises previously malformed choice values in device_construction, device_mobility and wireless_connectivity_options.",
+      "mappings": {
+        "drops": [],
+        "adds": [
+          {
+            "id": "device_type",
+            "title": "Technology type",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "id": "device_availability",
+            "title": "Availability",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "id": "device_maturity",
+            "title": "Maturity / development stage",
+            "type": "choice",
+            "default_value": null
+          }
+        ],
+        "renames": [],
+        "transforms": [
+          {
+            "id": "device_construction",
+            "type": "value_map",
+            "mapping": {
+              "Partly custom: Assembled from off-the-shelf and/or open-source components": "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
+              "with some user design or modification": null
+            }
+          },
+          {
+            "id": "device_mobility",
+            "type": "value_map",
+            "mapping": {
+              "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting": "Self-moving (passive or autonomous): Moves under external forces or its own power (e.g. drifting, rolling, or robotic motion)",
+              "rolling": null,
+              "or robotic motion).": null
+            }
+          },
+          {
+            "id": "wireless_connectivity_options",
+            "type": "value_map",
+            "mapping": {
+              "Cellular (e.g. 3G/4G/5G": "Cellular (e.g. 3G/4G/5G, LTE-M, NB-IoT)",
+              "LTE-M": null,
+              "NB-IoT)": null,
+              "Satellite Links": "Satellite links"
+            }
+          }
+        ]
       }
     }
   }

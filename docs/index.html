@@ -73,6 +73,12 @@
     .checker-status.taken {
       background: #fff3e9; border-color: #f3be8a; color: #8a4e1e;
     }
+    .deviceid-preview {
+      margin-top: 0.5rem; font-size: 0.9rem; color: #3d5c3d;
+      padding: 0.45rem 0.8rem; background: #f0f6f2;
+      border: 1px solid #b8cfb8; border-radius: 6px;
+    }
+    .deviceid-preview strong { font-family: monospace; font-size: 0.95rem; }
     select#device-select {
       width: 100%; height: 190px; border: 1px solid #bdc9bd;
       border-radius: 6px; padding: 0.25rem; font-size: 0.95rem;
@@ -159,14 +165,26 @@
       The form begins with basic information (device name, contact details, a short summary).
       Detailed technical sections are optional and can be filled later.
     </p>
+    <p style="font-size:0.925rem; color:#3a4a3a; margin-top:0.75rem;">
+      The <strong>deviceID</strong> is generated automatically from the
+      <strong>device name</strong> field in the form: spaces become underscores and
+      special characters are stripped. Use the checker below to see what ID your
+      chosen name will produce and whether it is already taken.
+    </p>
 
     <div class="checker-row">
-      <label for="proposed-deviceid">Check proposed deviceID (or device name)</label>
+      <label for="proposed-deviceid">
+        Device name
+        <span style="font-weight:400; color:#5a6e5a">(as you plan to enter it in the form)</span>
+      </label>
       <input type="text" id="proposed-deviceid"
              placeholder="e.g. AMI system"
              oninput="checkProposedDeviceId()" autocomplete="off">
+      <div id="deviceid-preview" class="deviceid-preview hidden">
+        DeviceID will be: <strong id="deviceid-preview-value"></strong>
+      </div>
       <div id="checker-status" class="checker-status">
-        Type a proposed ID to check availability.
+        Type your device name to preview the generated deviceID and check availability.
       </div>
     </div>
 
@@ -312,8 +330,7 @@
     list.forEach(d => {
       const opt = document.createElement("option");
       opt.value = d.filename;
-      const label = [d.device_name, d.institution_name].filter(Boolean).join(" — ");
-      opt.textContent = label || d.filename;
+      opt.textContent = d.filename;
       sel.appendChild(opt);
     });
   }
@@ -377,6 +394,8 @@
   function checkProposedDeviceId() {
     const input = document.getElementById("proposed-deviceid");
     const status = document.getElementById("checker-status");
+    const preview = document.getElementById("deviceid-preview");
+    const previewValue = document.getElementById("deviceid-preview-value");
     const card = document.getElementById("checker-card");
     const raw = input.value;
     const normalized = normalizeDeviceId(raw);
@@ -385,14 +404,19 @@
     status.className = "checker-status";
 
     if (!raw.trim()) {
-      status.textContent = "Type a proposed ID to check availability.";
+      preview.classList.add("hidden");
+      status.textContent = "Type your device name to preview the generated deviceID and check availability.";
       return;
     }
 
     if (!normalized) {
-      status.textContent = "The proposed ID is empty after normalization. Use letters or numbers.";
+      preview.classList.add("hidden");
+      status.textContent = "The deviceID would be empty after normalization. Use letters or numbers.";
       return;
     }
+
+    previewValue.textContent = normalized;
+    preview.classList.remove("hidden");
 
     const match = allDevices.find(d =>
       String(d.filename || "").toLowerCase() === normalized.toLowerCase()
@@ -400,13 +424,13 @@
 
     if (match) {
       status.classList.add("taken");
-      status.innerHTML = `Taken: <strong>${esc(normalized)}</strong> already exists.`;
+      status.innerHTML = `&#x26A0;&#xFE0F; Taken — <strong>${esc(normalized)}</strong> already exists in the database.`;
       renderDeviceCard(match, card);
       return;
     }
 
     status.classList.add("ok");
-    status.innerHTML = `Available: <strong>${esc(normalized)}</strong> is not currently used.`;
+    status.innerHTML = `&#x2705; Available — <strong>${esc(normalized)}</strong> is not currently used.`;
   }
 
   // ------------------------------------------------------------------

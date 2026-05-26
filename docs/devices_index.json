@@ -110,20 +110,20 @@
   {
     "filename": "MiniMon",
     "device_name": "MiniMon",
-    "institution_name": "Federal Research Institute WSL",
-    "contact_name": "Luca",
+    "institution_name": "Federsal Research Institute WSL",
+    "contact_name": "Luca Pegoraro",
     "contact_email": "luca.pegoraro@wsl.ch",
     "contributor_name": "Luca Pegoraro",
     "contributor_email": "luca.pegoraro@wsl.ch",
     "maintainer_name": "Quentin Geissmann",
     "maintainer_email": "qgeissmann@qgg.au.dk",
     "device_creator": "Helena Russello",
-    "device_creator_email": "Raspberry Pi Zero 2 WH",
+    "device_creator_email": "helena@qgg.au.dk",
     "device_description": "ESP32-based passive recording device with custom-built power management, 3D-printed case and more. ",
     "github_link": "",
     "documentation_link": "",
-    "collected_date": "",
-    "schema_version": ""
+    "collected_date": "2026-05-26T14:46:31.943551Z",
+    "schema_version": "1.0.0-beta"
   },
   {
     "filename": "MyAwesomeInsectCamTrap_v123567",

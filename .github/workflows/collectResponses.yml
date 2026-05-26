@@ -82,31 +82,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Extract collision filenames (if any) from the most recent collision report
-          COLLISION_FILES=$(python -c "
-import json, pathlib
-reports = list(pathlib.Path('data/_pending').glob('collision_report_*.json'))
-filenames = []
-for r in reports:
-    try:
-        data = json.loads(r.read_text(encoding='utf-8'))
-        filenames += [c['filename'] for c in data.get('collisions', [])]
-    except (json.JSONDecodeError, OSError):
-        pass
-print(json.dumps(filenames))
-")
+          # Extract collision filenames (if any) from timestamped collision reports
+          COLLISION_FILES=$(python -c "import json,pathlib;reports=list(pathlib.Path('data/_pending').glob('collision_report_*.json'));filenames=[c['filename'] for r in reports for c in json.loads(r.read_text(encoding='utf-8')).get('collisions',[])];print(json.dumps(filenames))")
 
           # Stage always-included files
           git add data/form_responses.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true
 
           # Stage device JSON files, skipping those involved in collisions
-          COLLISION_FILES_JSON="$COLLISION_FILES" python -c "
-import json, pathlib, subprocess, os
-collision_set = set(f + '.json' for f in json.loads(os.environ['COLLISION_FILES_JSON']))
-for f in pathlib.Path('data').glob('*.json'):
-    if f.name not in collision_set:
-        subprocess.run(['git', 'add', str(f)], check=False)
-"
+          COLLISION_FILES_JSON="$COLLISION_FILES" python -c "import json,pathlib,subprocess,os;collision_set=set(f+'.json' for f in json.loads(os.environ['COLLISION_FILES_JSON']));[subprocess.run(['git','add',str(f)],check=False) for f in pathlib.Path('data').glob('*.json') if f.name not in collision_set]"
 
           git commit -m "Update data from form responses" || echo "No changes to commit"
           git push

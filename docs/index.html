@@ -284,6 +284,17 @@
     // Form config
     if (cfgResult.status === "fulfilled") {
       formConfig = cfgResult.value;
+      const url = safeUrl(formConfig.form_url);
+      if (url) {
+        document.getElementById("new-form-link").href = url;
+      } else {
+        document.getElementById("new-form-link").textContent = "Form URL unavailable";
+        document.getElementById("new-form-link").removeAttribute("href");
+      }
+    } else {
+      const el = document.getElementById("new-form-link");
+      el.textContent = "Form URL unavailable";
+      el.removeAttribute("href");
     }
 
     // Device index
@@ -359,14 +370,11 @@
 
     renderDeviceCard(d, card);
 
-    // Build pre-fill URL if the entry ID is stored in form_config.json
+    // Set link to form URL
     const link = document.getElementById("update-form-link");
     const formUrl = safeUrl(formConfig.form_url);
     if (formUrl) {
-      const entryId = formConfig.entry_ids && formConfig.entry_ids.previous_deviceID;
-      link.href = entryId
-        ? `${formUrl}?entry.${entryId}=${encodeURIComponent(d.filename)}`
-        : formUrl;
+      link.href = formUrl;
     } else {
       link.removeAttribute("href");
     }

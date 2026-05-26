@@ -1,6 +1,5 @@
 import json
 import csv
-import shutil
 from pathlib import Path
 from datetime import datetime
 
@@ -210,10 +209,7 @@ def main():
 
 
     ### Write individual JSON files for each response, with shorthand keys
-    # Reset pending collision payloads for this run.
     pending_dir = output_dir / "_pending"
-    if pending_dir.exists():
-        shutil.rmtree(pending_dir)
     pending_dir.mkdir(parents=True, exist_ok=True)
 
     # Keep only the most recent response for each normalized device ID

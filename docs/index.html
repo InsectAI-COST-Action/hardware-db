@@ -113,63 +113,28 @@
 <body>
 
 <header>
-  <h1>InsectAI Hardware Database</h1>
-  <p>A community catalog of insect monitoring hardware. Browse existing devices or submit yours below.</p>
+  <h1>InsectAI Hardware Database - deviceID checker</h1>
+  <p>A tool page to help you check if the device you want to submit is already in the database</p>
 </header>
 
 <main>
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('update', this)">Browse existing devices</button>
-    <button class="tab-btn" onclick="showTab('new', this)">Submit a new device</button>
+    <button class="tab-btn active" onclick="showTab('new', this)">Check your device ID</button>
+    <button class="tab-btn" onclick="showTab('update', this)">Browse existing devices</button>
   </div>
 
   <!-- =========================================================
-       Tab: Browse / update existing devices
+       Tab: Check your device ID
   ========================================================== -->
-  <div id="panel-update" class="panel active">
+  <div id="panel-new" class="panel active">
     <div class="notice">
-      <strong>Looking to update an existing entry?</strong>
-      Select your device below to see its current record, then open the pre-filled form.
+      <strong>Checking your device ID?</strong>
+      Device IDs are generated automatically from the device name you enter in the submission form.
+      Type your intended device name below to preview the ID it will produce and check whether it is already taken.
     </div>
-
-    <div class="search-row">
-      <input type="text" id="device-search"
-             placeholder="Search by system, people, email, institution, or abstract…"
-             oninput="filterDevices()" autocomplete="off">
-    </div>
-
-    <select id="device-select" size="8" onchange="showDeviceCard(this.value)">
-      <option value="" disabled selected class="loading">Loading devices…</option>
-    </select>
-
-    <div id="device-card" class="card hidden"></div>
-
-    <div id="update-form-row" class="form-row hidden">
-      <a id="update-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
-        Open form to update this device ↗
-      </a>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       Tab: Submit a new device
-  ========================================================== -->
-  <div id="panel-new" class="panel">
-    <div class="notice">
-      <strong>Submitting a new device?</strong>
-      Use this form if your hardware is not yet in the database.
-      If you are adding a new version of an existing entry, switch to the
-      <em>Browse existing devices</em> tab instead.
-    </div>
-    <p style="font-size:0.925rem; color:#3a4a3a;">
-      The form begins with basic information (device name, contact details, a short summary).
-      Detailed technical sections are optional and can be filled later.
-    </p>
     <p style="font-size:0.925rem; color:#3a4a3a; margin-top:0.75rem;">
-      The <strong>deviceID</strong> is generated automatically from the
-      <strong>device name</strong> field in the form: spaces become underscores and
-      special characters are stripped. Use the checker below to see what ID your
-      chosen name will produce and whether it is already taken.
+      Spaces become underscores and special characters are stripped.
+      If your chosen name is already taken, browse the <em>existing devices</em> tab to view the existing entry.
     </p>
 
     <div class="checker-row">
@@ -193,6 +158,34 @@
     <a id="new-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
       Open submission form ↗
     </a>
+  </div>
+
+  <!-- =========================================================
+       Tab: Browse existing devices
+  ========================================================== -->
+  <div id="panel-update" class="panel">
+    <div class="notice">
+      <strong>Looking to update an existing entry?</strong>
+      Select a device below to view its current record, then open the pre-filled submission form.
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="device-search"
+             placeholder="Search by system, people, email, institution, or abstract…"
+             oninput="filterDevices()" autocomplete="off">
+    </div>
+
+    <select id="device-select" size="8" onchange="showDeviceCard(this.value)">
+      <option value="" disabled selected class="loading">Loading devices…</option>
+    </select>
+
+    <div id="device-card" class="card hidden"></div>
+
+    <div id="update-form-row" class="form-row hidden">
+      <a id="update-form-link" href="#" class="btn" target="_blank" rel="noopener noreferrer">
+        Open submission form ↗
+      </a>
+    </div>
   </div>
 </main>
 
@@ -291,17 +284,6 @@
     // Form config
     if (cfgResult.status === "fulfilled") {
       formConfig = cfgResult.value;
-      const url = safeUrl(formConfig.form_url);
-      if (url) {
-        document.getElementById("new-form-link").href = url;
-      } else {
-        document.getElementById("new-form-link").textContent = "Form URL unavailable";
-        document.getElementById("new-form-link").removeAttribute("href");
-      }
-    } else {
-      const el = document.getElementById("new-form-link");
-      el.textContent = "Form URL unavailable";
-      el.removeAttribute("href");
     }
 
     // Device index

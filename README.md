@@ -46,6 +46,9 @@ If you want to visualise information on insect monitoring systems we collected, 
 
 All the data is also stored in the `/data` directory in this repo, both in a CSV file with one row for each system, and as JSON files (one file per system). 
 
+> [!NOTE]
+> A **deviceID checker** tool is available via GitHub Pages (`docs/index.html`). Use it to type your intended device name, preview the device ID it will produce, and check whether it is already taken. A full data-browsing and filtering frontend is planned separately.
+
 # Documentation
 Below we explain what does what in the repository and how to use it. 
 If you only want to contribute or read data, you should not need to read this section. 
@@ -59,8 +62,9 @@ For progress also see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG
 ## Intro
 The workflow is, at its most basic: 
 ```
-hardware-db_schema.json --- createForms.py ---> Google Form
+hardware-db_schema.json --- createForm.py ---> Google Form
 Google Form --- collectResponses.py ---> data/ (JSON, CSV)
+data/ (JSON) --- generateIndex.py ---> docs/devices_index.json
 ```
 
 <p align="center">
@@ -271,8 +275,6 @@ DEBUG = False
 It then basically parses the schema and build the body of the request in a format that is compatible with Google Form API. 
 It first creates the sections and adds questions to the form; then it applies the required section navigation logic to the created sections; it then renames the file and moves it the specified folder in Google Drive. 
 
-**TODO:** it does not currently update the README with the link to the newly created form.
-
 ## Collecting the data
 `collectResponses.py` again depends on `src/configParsing.py` and `src/authFlow_helpers.py`, and needs the variables specified at the top of the script (again without their values, the config parser takes care of filling them):
 ```python
@@ -288,12 +290,33 @@ DISCOVERY_DOC = ""
 DEBUG = False
 ```
 
-It first reads the responses from the form identified by `FORM_ID`; then, it loads the schema and uses the *question title* to match the questions to the `id` in the schema; it then grab the responses, and can now associate the responses to the schema's `id`, building a dictionary with `id` shorthands as keys and the response as value; finally, it writes out in `data/` a CSV with all the responses (one per row) as well as one JSON file for each response, named after the (sanitises) `deviceID` the user supplied while filling in the form. 
+It first reads the responses from the form identified by `FORM_ID`; then, it loads the schema and uses the *question title* to match the questions to the `id` in the schema; it then grab the responses, and can now associate the responses to the schema's `id`, building a dictionary with `id` shorthands as keys and the response as value; finally, it writes out in `data/` a CSV with all the responses (one per row) as well as one JSON file for each response. The filename — and therefore the effective device ID — is derived from the `device_name` answer: whitespace is replaced with underscores and non-word characters are stripped (see `sanitize_filename()` in `src/misc_helpers.py`). The deviceID checker page applies the same normalization client-side.
 
 > [!CAUTION]
 > The `id` field in the schema is lost when building the API request. 
 > In order to associate questions pulled from the form (and their responses) to the schema, we need to match the *question title*. 
 > This means that if the question title changes with different versions of the schema, this mapping would break!
+
+**Collision handling**: if the normalized device name matches an existing file in `data/` and the incoming response differs from the stored record, a collision is flagged. The new record is still written to `data/` (making the diff visible in the review PR), and a timestamped report is saved to `data/collisions/collision_report_<timestamp>.json` listing each affected device with submitter contact details. Non-colliding records are committed directly to the branch; collisions trigger an automatic pull request for maintainer review (see [Collecting and parsing responses](#collecting-and-parsing-responses) below).
+
+
+## Generating the device index
+`generateIndex.py` reads every JSON file in `data/` and writes two files to `docs/`:
+ - `docs/devices_index.json` — a compact index of all records, consumed by the GitHub Pages landing page.
+ - `docs/form_config.json` — the current form URL; existing `entry_ids` written by `createForm.py` are preserved.
+
+The script has no third-party dependencies and runs automatically after `collectResponses.py` in CI.
+
+
+## The deviceID checker landing page
+`docs/index.html` is published via GitHub Pages and provides two tabs:
+1. **Check device ID**: type your intended device name to preview the normalised device ID it will produce and confirm it is not already taken (checked against `docs/devices_index.json`).
+2. **Browse existing devices**: search by system name, institution, or contributor; select a device to view its metadata card.
+
+The JS normalization (`normalizeDeviceId()`) mirrors `sanitize_filename()` in `src/misc_helpers.py` exactly: trim, collapse whitespace to `_`, strip non-`\w`/`-` characters.
+
+> [!NOTE]
+> This page is a submission helper only. A separate full-featured data-browsing and filtering frontend is planned.
 
 
 # Lifecycle of the automated workflows
@@ -312,16 +335,14 @@ If any fail, the other workflows will not get triggered. This is desirable, beca
 ## Creating the Google Form from the schema
 The workflow `.github/workflows/createForm.yml` triggers after a successful run of the Tests workflow. This means that it only triggers when Tests is triggered, and only if Tests succeeds. 
 
-It reads access tokens from Github repo secrets, and then calls `createForm.py`. 
-
-**TODO:** it does not currently update the README with the link to the newly created form.
+It reads access tokens from Github repo secrets, and then calls `createForm.py --update-links`, which updates `.env`, the form link in `README.md`, and `docs/form_config.json`.
 
 ## Collecting and parsing responses
-The workflow `.github/workflows/collectResponses.py` starts on a schedule at 4am every day, and checks that the latest run of Tests was successful before running. 
+The workflow `.github/workflows/collectResponses.yml` starts on a schedule at 4am every day, and checks that the latest run of Tests was successful before running. 
 
 It reads access tokens from Github repo secrets, and other variables, notably `FORM_ID`, from `.env`; if `FORM_ID` is assigned within the workflow itself, this takes precedence over the value in `.env` (i.e. for testing purposes). 
 
-It then runs `collectResponses.py`, and pushes the CSV and JSON files to `data/` on the repo. 
+It runs `collectResponses.py` (writing CSV, per-device JSON, and any collision reports), then `generateIndex.py` (rebuilding `docs/devices_index.json`). Non-colliding device files, the CSV, and the docs files are committed and pushed directly. If any collision report has `collision_count > 0`, the workflow opens an automatic pull request on branch `bot/collision-review-<branch>` containing all affected device files. A maintainer should review the diff, consult the collision report in `data/collisions/` for submitter contact details, edit the JSON in the PR branch if needed, and merge when satisfied. 
 
 > [!WARNING]
 > Due to Github's design, `workflow_run` conditions only get triggered on the main branch, se thread [here](https://github.com/orgs/community/discussions/66512).

@@ -200,19 +200,19 @@
   {
     "filename": "iPod",
     "device_name": "iPod",
-    "institution_name": "The Great Empire of China",
-    "contact_name": "MaoMao",
-    "contact_email": "mao.mao@palace.imperial",
-    "contributor_name": "MaoMao",
-    "contributor_email": "mao.mao@palace.imperial",
+    "institution_name": "Federal Institute WSL",
+    "contact_name": "Luca Pegoraro",
+    "contact_email": "luca.pegoraro@wsl.ch",
+    "contributor_name": "Luca Pegoraro",
+    "contributor_email": "luca.pegoraro@wsl.ch",
     "maintainer_name": "",
     "maintainer_email": "",
-    "device_creator": "",
-    "device_creator_email": "",
-    "device_description": "I can't even come up with random text so I am getting influenced by what's happening in my surroundings",
+    "device_creator": "Christopher J. Lortie",
+    "device_creator_email": "lortie@yorku.ca",
+    "device_description": "Lortie et al. 2012 used Apple ’s iPod Nano (2.1 Mpx cameras, 8 GB capacity) equipped with small auxiliary battery packs to observe pollinators on focal plants of Silene acaulis, monitoring an area of ∼50 cm2 for over five weeks and collecting a total of 450 h of footage.",
     "github_link": "",
     "documentation_link": "",
-    "collected_date": "2026-05-26T14:27:36.793042Z",
-    "schema_version": "1.0.0-beta"
+    "collected_date": "",
+    "schema_version": ""
   }
 ]

@@ -12,6 +12,10 @@
 - [ ] Licencing
 - [ ] Need to ask user's permission to licence data
 *Suggestions for specific questions or sections*
+=== Device ID === 
+- [ ] Remove question about deviceID and contained navigation logic. 
+- [ ] Substitute with question to flag wether the submissions is intended for a new device or to update an existing entry (we can use this as flag for user intentionality)
+- [ ] Explain how deviceID are generated and how to check for existing devices in the database, i.e. the landing page: https://insectai-cost-action.github.io/hardware-db/
 === Basic info ===
 - [ ] Resolve ambiguity between contact person, data owner, creator, maintainer etc. 
 - [ ] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")

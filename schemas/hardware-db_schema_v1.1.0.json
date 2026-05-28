@@ -9,7 +9,7 @@
     "description": "A questionnaire to collect information about insect monitoring hardware devices for the InsectAI COST Action hardware database. For more details see: https://insectai-cost-action.github.io/hardware-db/"
   },
   "settings": {
-    "emailCollectionType": "VERIFIED"
+    "emailCollectionType": "DO_NOT_COLLECT"
   },
   "sections": [
     {

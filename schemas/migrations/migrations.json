@@ -2,17 +2,84 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-04-09T00:00:00Z"
+    "last_updated": "2026-05-28T00:00:00Z"
   },
   "migrations": {
-    "1.0.0→1.1.0": {
-      "created_date": "TBD - define when needed",
-      "description": "TBD - describe the changes between 1.0.0 and 1.1.0",
+    "1.0.0-beta\u21921.1.0": {
+      "created_date": "2026-05-28T00:00:00Z",
+      "description": "Workshop feedback restructure: renamed sections, split fields, added new questions",
       "mappings": {
-        "drops": [],
-        "adds": [],
-        "renames": [],
-        "transforms": []
+        "drops": [
+          "have_deviceID",
+          "power_duration_continuous",
+          "power_duration_standard",
+          "firmware_update_frequency",
+          "operational_temperature_range_c",
+          "weatherproofing",
+          "operational_costs"
+        ],
+        "adds": [
+          "submission_type",
+          "project_duration_team_size",
+          "documentation_url",
+          "documentation_language",
+          "doi_references",
+          "additional_resources",
+          "device_material",
+          "device_mobility",
+          "cost_unit_build",
+          "cost_deployment_seasonal",
+          "cost_software_compute",
+          "cost_assembly_time",
+          "size_transport",
+          "size_deployed",
+          "skills_tools_required",
+          "power_autonomy_continuous",
+          "power_autonomy_standard",
+          "capture_modes",
+          "field_of_view",
+          "connectivity",
+          "file_types",
+          "software_version_repo",
+          "attractants",
+          "maintenance_interval",
+          "last_firmware_update",
+          "taxonomic_groups",
+          "habitat_type",
+          "operational_environment",
+          "temperature_min_c",
+          "temperature_max_c",
+          "ip_rating",
+          "subject_size_min_mm",
+          "subject_size_max_mm",
+          "operational_costs_per_season"
+        ],
+        "renames": [
+          {
+            "from": "device_creator",
+            "to": "device_designer"
+          },
+          {
+            "from": "device_creator_email",
+            "to": "device_designer_email"
+          },
+          {
+            "from": "device_cost",
+            "to": "cost_unit_build"
+          }
+        ],
+        "transforms": [
+          {
+            "field": "power_sources",
+            "value_map": {
+              "Mains": "Grid electricity"
+            }
+          },
+          {
+            "field": "model_processing",
+            "note": "Changed from RADIO to CHECKBOX; existing single values remain valid"
+          }
+        ]
       }
     }
   }

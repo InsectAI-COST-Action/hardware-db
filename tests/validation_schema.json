@@ -12,8 +12,8 @@
       "properties": {
         "schema_version": {
           "type": "string",
-          "pattern": "^\\d+\\.\\d+\\.\\d+$",
-          "description": "Semantic version (MAJOR.MINOR.PATCH)"
+          "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+          "description": "Semantic version (MAJOR.MINOR.PATCH with optional pre-release tag)"
         },
         "created_date": {
           "type": "string",
@@ -25,24 +25,39 @@
           "description": "Human-readable description of this schema version"
         }
       },
-      "required": ["schema_version", "created_date", "description"]
+      "required": [
+        "schema_version",
+        "created_date",
+        "description"
+      ]
     },
     "info": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" }
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
       },
-      "required": ["title", "description"]
+      "required": [
+        "title",
+        "description"
+      ]
     },
     "settings": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "emailCollectionType": { "type": "string" }
+        "emailCollectionType": {
+          "type": "string"
+        }
       },
-      "required": ["emailCollectionType"]
+      "required": [
+        "emailCollectionType"
+      ]
     },
     "sections": {
       "type": "array",
@@ -50,10 +65,17 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
-          "title": { "type": "string" },
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
           "description": {
-            "type": ["string", "null"]
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "questions": {
             "type": "array",
@@ -61,17 +83,41 @@
               "type": "object",
               "additionalProperties": false,
               "properties": {
-                "id": { "type": "string" },
-                "title": { "type": "string" },
-                "required": { "type": "boolean" },
-                "type": { "type": "string" },
-                "paragraph": { "type": "boolean" },
-                "choiceType": { "type": "string" },
-                "high": { "type": "number" },
-                "low": { "type": "number" },
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "paragraph": {
+                  "type": "boolean"
+                },
+                "choiceType": {
+                  "type": "string"
+                },
+                "high": {
+                  "type": "number"
+                },
+                "low": {
+                  "type": "number"
+                },
                 "options": {
                   "type": "array",
-                  "items": { "type": "string" }
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "logic": {
                   "type": "object",
@@ -79,19 +125,36 @@
                     "type": "object",
                     "additionalProperties": false,
                     "properties": {
-                      "go_to": { "type": "string" }
+                      "go_to": {
+                        "type": "string"
+                      }
                     },
-                    "required": ["go_to"]
+                    "required": [
+                      "go_to"
+                    ]
                   }
                 }
               },
-              "required": ["id", "title", "required", "type"]
+              "required": [
+                "id",
+                "title",
+                "required",
+                "type"
+              ]
             }
           }
         },
-        "required": ["id", "title", "questions"]
+        "required": [
+          "id",
+          "title",
+          "questions"
+        ]
       }
     }
   },
-  "required": ["_metadata", "info", "settings", "sections"]
+  "required": [
+    "_metadata",
+    "info",
+    "sections"
+  ]
 }

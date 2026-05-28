@@ -63,6 +63,10 @@
               "properties": {
                 "id": { "type": "string" },
                 "title": { "type": "string" },
+                "description": {
+                  "type": ["string", "null"],
+                  "description": "Clarifying text shown below the question"
+                },
                 "required": { "type": "boolean" },
                 "type": { "type": "string" },
                 "paragraph": { "type": "boolean" },

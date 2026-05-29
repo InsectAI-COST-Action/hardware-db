@@ -383,8 +383,99 @@
     {
       "id": "device_details",
       "title": "Device details",
-      "description": null,
+      "description": "Physical characteristics, construction, and cost information for the device.",
       "questions": [
+        {
+          "id": "device_construction",
+          "title": "Device construction",
+          "description": "Select all that apply.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Off-the-shelf: Purchased and used as-is",
+            "Modified off-the-shelf: Pre-built device with user-made adjustments",
+            "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+            "Fully custom: Designed and fabricated entirely by the user (e.g custom PCB)"
+          ]
+        },
+        {
+          "id": "cost_unit_build",
+          "title": "Unit build cost (€) — hardware only",
+          "description": "Approximate cost of components, electronics, enclosure, etc. for one unit.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_deployment_seasonal",
+          "title": "Deployment/seasonal costs (€/season)",
+          "description": "Consumables per deployment or season (batteries, lures, SIM data, etc.).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_software_compute",
+          "title": "Ongoing software/compute costs (€/year)",
+          "description": "Cloud services, subscriptions, or compute costs per year (if applicable).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_assembly_time",
+          "title": "Assembly time/cost",
+          "description": "Estimated human-hours to assemble one unit (e.g. '4 hours', '2 days').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "size_transport",
+          "title": "Packaged dimensions for transport (L × W × H)",
+          "description": "Approximate dimensions in mm when the device is packed for transport (e.g. '300 × 200 × 150').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "size_deployed",
+          "title": "Deployed dimensions (L × W × H)",
+          "description": "Approximate dimensions in mm when the device is set up and operational (e.g. '500 × 400 × 800').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "weight",
+          "title": "Weight (kg)",
+          "description": "Approximate weight of one complete unit, including batteries, supports, fasteners, solar panel, etc. ",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "skills_tools_required",
+          "title": "Skills and tools required for construction",
+          "description": "Select all skills/tools needed to build or assemble the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Soldering",
+            "3D printing",
+            "Laser cutting",
+            "CNC machining",
+            "PCB design/fabrication",
+            "Basic hand tools (screwdriver, pliers)",
+            "Woodworking",
+            "Programming/software setup",
+            "Wiring/crimping",
+            "No tools required (snap-fit assembly)",
+            "Other"
+          ]
+        },
         {
           "id": "device_version_name",
           "title": "Device version name",
@@ -396,29 +487,7 @@
         {
           "id": "device_licence",
           "title": "Device licence (e.g. CC-BY-4.0)",
-          "description": "The licence under which the device design and associated materials are released. Use a standard SPDX identifier where possible (e.g. 'CC-BY-4.0', 'MIT', 'CERN-OHL-S-2.0'). Leave blank if unknown.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "device_construction",
-          "title": "Device construction",
-          "description": "Select all that apply. 'Off-the-shelf' means the device is used as purchased with no modification. 'Partly custom' includes devices assembled from standard components with some user-designed parts (e.g. a 3D-printed enclosure or custom PCB). 'Fully custom' means the device was designed and fabricated entirely by the user.",
-          "required": false,
-          "type": "choice",
-          "choiceType": "CHECKBOX",
-          "options": [
-            "Off-the-shelf: Purchased and used as-is",
-            "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
-            "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
-            "Fully custom: Designed and fabricated by the user (hardware and potentially software)"
-          ]
-        },
-        {
-          "id": "device_cost",
-          "title": "Device cost (€) - excluding operational costs",
-          "description": "Approximate unit build cost for the hardware only (components, PCBs, enclosure, etc.). Do not include deployment consumables, cloud subscriptions, or labour costs.",
+          "description": "The licence under which the device design is released. Use a standard SPDX identifier where possible (e.g. 'CC-BY-4.0', 'CERN-OHL-S-2.0'). Leave blank if unknown.",
           "required": false,
           "type": "text",
           "paragraph": false

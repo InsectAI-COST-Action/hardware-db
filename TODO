@@ -33,20 +33,21 @@
 - [x] Bill of materials remove? Should be in the external documentation probably
 - [x] Add "Additional resources" to capture non-standard repos or YouTube videos. 
 === Device details ===
-- [ ] Device construction wording is confusing; "Custom designed parts (e.g., PCB, 3D print)". Add "Other"???
-- [ ] Cost should be split into:
-  - [ ] Unit Build Cost (Hardware only).
-  - [ ] Deployment/Seasonal Costs (Consumables).
-  - [ ] Ongoing Software/Compute Costs.
-  - [ ] Assembly Time/Cost (Human hours).
-- [ ] Device size, split into:
-  - [ ] packaged dimensions for transport (L x W x H)
-  - [ ] deployed dimensions (L x W x H)
-- [ ] Remove colour
-- [ ] Remove "Device or schematic image"
-- [ ] Device material change to "primary material", with dropdown list & other
-- [ ] Device mobility, simplify and enforce choice from dropdown.
-- [ ] New Fields: Skills & Tools Required (for construction) as a filterable tag.
+- [x] Device construction wording is confusing; "Custom designed parts (e.g., PCB, 3D print)". Add "Other"???
+- [x] Cost should be split into:
+  - [x] Unit Build Cost (Hardware only).
+  - [x] Deployment/Seasonal Costs (Consumables).
+  - [x] Ongoing Software/Compute Costs.
+  - [x] Assembly Time/Cost (Human hours).
+- [x] Device size, split into:
+  - [x] packaged dimensions for transport (L x W x H)
+  - [x] deployed dimensions (L x W x H)
+- [x] Remove colour
+- [x] Remove "Device or schematic image"
+- [ ] ~~~~Device material change to "primary material", with dropdown list & other~~ REMOVED
+- [ ] ~~Device mobility, simplify and enforce choice from dropdown.~~ REMOVED
+- [x] New Fields: Skills & Tools Required (for construction) as a filterable tag.
+- [ ] Not sure hardware device licence goes here...
 === Component details === 
 - [ ] Details abut the sensor should be asked before or at the same time as the device details.
 - [ ] Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. 

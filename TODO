@@ -70,13 +70,13 @@
 - [x] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
 - [x] Maybe here is a good place to put last firmware update instead of Update frequency"?
 === Intended usage scope === 
-- [ ] Taxonomy: convert to checklist with vernacular / scientific names. 
-- [ ] Maybe add functional guild or other non-taxonomic grouping?
-- [ ] Habitats: convert to a Dropdown/Checklist of standardized habitat types.
-- [ ] Constraints: split ranges into Min and Max fields (e.g., Temp Min/Max °C).
-- [ ] Environment: clarify "Operational Environment" (Aquatic/Terrestrial) and add IP Rating for weatherproofing.
-- [ ] Target: add typical subject size range (Min/Max mm) as numeric fields.
-- [ ] "Operational costs": need to clarify, add something about running costs for one season
+- [x] Taxonomy: convert to checklist with vernacular / scientific names. 
+- [x] Maybe add functional guild or other non-taxonomic grouping?
+- [x] Habitats: convert to a Dropdown/Checklist of standardized habitat types.
+- [x] Constraints: split ranges into Min and Max fields (e.g., Temp Min/Max °C).
+- [x] Environment: clarify "Operational Environment" (Aquatic/Terrestrial) and add IP Rating for weatherproofing.
+- [x] Target: add typical subject size range (Min/Max mm) as numeric fields.
+- [ ] ~~"Operational costs": need to clarify, add something about running costs for one season~~ REMOVED, all costs are in device details now
 === Missing questions to add (maybe) ===
 - [ ] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
 - [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles.

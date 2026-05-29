@@ -810,38 +810,176 @@
       ]
     },
     {
-      "id": "intended_usage_scope_and_operational_constraints",
+      "id": "intended_usage_scope",
       "title": "Intended usage scope and operational constraints",
-      "description": "n/a",
+      "description": "Information about where, how, and for what organisms the device is designed to be used.",
       "questions": [
         {
+          "id": "classification_target_type",
+          "title": "Does this device target organisms primarily by taxonomic identity or functional group?",
+          "description": "Taxonomic: the device is designed to detect and/or classify organisms by species or higher taxonomic rank (e.g. genus, family, order). \nFunctional: the device is designed to detect or classify organisms by ecological role or trait (e.g. pollinators, nocturnal insects). \nBoth: the device supports or has been used for both approaches.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Taxonomic groups (species, genus, family, order, etc.)",
+            "Functional groups (ecological role or trait)",
+            "Both taxonomic and functional"
+          ]
+        },
+        {
           "id": "taxonomic_groups",
-          "title": "Taxonomic group(s)",
-          "description": "The insect or arthropod groups this device is designed or validated for (e.g. 'Lepidoptera', 'Coleoptera', 'Hymenoptera'). Use scientific names where possible; separate multiple groups with ';'.",
+          "title": "Target taxonomic group(s)",
+          "description": "Select all taxonomic groups this device is designed or validated for.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Lepidoptera (butterflies & moths)",
+            "Coleoptera (beetles)",
+            "Hymenoptera (bees, wasps, ants)",
+            "Diptera (flies, mosquitoes)",
+            "Hemiptera (true bugs)",
+            "Odonata (dragonflies & damselflies)",
+            "Orthoptera (grasshoppers & crickets)",
+            "Trichoptera (caddisflies)",
+            "Ephemeroptera (mayflies)",
+            "Plecoptera (stoneflies)",
+            "Arachnida (spiders, mites)",
+            "Other arthropods",
+            "Non-specific / all insects"
+          ]
+        },
+        {
+          "id": "functional_groups",
+          "title": "Target functional group(s)",
+          "description": "Select all functional groups that device is designed or has been used to record.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Pollinators (flower-visiting insects)",
+            "Day-flying insects (diurnal)",
+            "Night-flying insects (nocturnal)",
+            "Crepuscular insects (dusk/dawn active)",
+            "Herbivores (plant feeders)",
+            "Predatory insects (e.g. ground beetles, dragonflies)",
+            "Parasitoids (e.g. parasitic wasps)",
+            "Decomposers / detritivores (e.g. dung beetles, carrion feeders)",
+            "Aquatic insects (larval or adult stage)",
+            "Soil-dwelling insects",
+            "Wood-boring insects",
+            "Crop pests",
+            "Disease vectors (e.g. mosquitoes, sandflies)",
+            "Invasive species",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "habitat_type",
+          "title": "Habitat type(s)",
+          "description": "Select all habitat types where this device is designed to operate.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Temperate forest",
+            "Tropical forest",
+            "Grassland/meadow",
+            "Wetland/marsh",
+            "Agricultural land",
+            "Urban/suburban",
+            "Desert/arid",
+            "Alpine/montane",
+            "Freshwater (rivers, lakes)",
+            "Coastal/marine",
+            "Cave/subterranean",
+            "Indoor/laboratory",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "operational_environment",
+          "title": "Operational environment",
+          "description": "The broad environment category for device deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Terrestrial",
+            "Aquatic (freshwater)",
+            "Aquatic (marine)",
+            "Aerial"
+          ]
+        },
+        {
+          "id": "temperature_min_c",
+          "title": "Minimum operational temperature (°C)",
+          "description": "The lowest ambient temperature at which the device functions reliably.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "operational_temperature_range_c",
-          "title": "Operational temperature range (°C)",
-          "description": "The minimum and maximum ambient temperatures within which the device functions reliably (e.g. '-5 to 40'). Refer to manufacturer specifications or field experience.",
+          "id": "temperature_max_c",
+          "title": "Maximum operational temperature (°C)",
+          "description": "The highest ambient temperature at which the device functions reliably.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "weatherproofing",
-          "title": "Weatherproofing",
-          "description": "The IP (Ingress Protection) rating or equivalent, if known (e.g. 'IP65', 'IP54'). If no formal rating exists, describe the protection level (e.g. 'splash-proof enclosure', 'not weatherproof').",
+          "id": "ip_rating",
+          "title": "IP rating (weatherproofing)",
+          "description": "The Ingress Protection rating, if known (e.g. 'IP65', 'IP67'); see here for more details: https://www.iec.ch/ip-ratings. If no formal rating, describe the protection and estimate the closest IP rating (e.g. 'splash-proof enclosure, IP64', 'fully sealed, IP68').",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "operational_costs",
-          "title": "Operational costs (€)",
-          "description": "Estimated running costs for a typical deployment season (e.g. one summer field season). Include consumables (batteries, lures), cloud storage, SIM data plans, etc. Exclude the initial hardware build cost.",
+          "id": "subject_size_min_mm",
+          "title": "Minimum detectable subject size (mm)",
+          "description": "The smallest organism or object size the device can reliably detect or image (in mm).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "subject_size_max_mm",
+          "title": "Maximum detectable subject size (mm)",
+          "description": "The largest organism or object size the device is designed to capture (in mm). Leave blank if not applicable.",
           "required": false,
           "type": "text",
           "paragraph": false

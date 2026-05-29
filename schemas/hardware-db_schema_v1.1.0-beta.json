@@ -342,9 +342,48 @@
       ]
     },
     {
+      "id": "device_links",
+      "title": "Device links and documentation",
+      "description": "Links to external documentation, publications, and resources. We cannot host files directly — please provide URLs to externally hosted content (e.g. GitHub, Zenodo, institutional repositories).",
+      "questions": [
+        {
+          "id": "documentation_url",
+          "title": "Documentation URL",
+          "description": "Link to the main documentation or repository for this device (e.g. GitHub repo, wiki, or project page).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "documentation_language",
+          "title": "Documentation language",
+          "description": "Primary language(s) of the documentation; if multilingual please separate wih ';' (e.g. 'English'; 'French'; 'Spanish')",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "doi_references",
+          "title": "DOI(s)",
+          "description": "Digital Object Identifier(s) for publications related to this device. Separate multiple DOIs with ';' (e.g. '10.1234/example1; 10.5678/example2').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "additional_resources",
+          "title": "Additional resources",
+          "description": "Links to other relevant resources such as video tutorials, YouTube channels, blog posts, or community forums. Separate multiple URLs with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": true
+        }
+      ]
+    },
+    {
       "id": "device_details",
       "title": "Device details",
-      "description": "n/a",
+      "description": null,
       "questions": [
         {
           "id": "device_version_name",

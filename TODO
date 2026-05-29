@@ -27,11 +27,11 @@
 - [x] Add question on project duration and/or person/hours involved (as an estimate of the team size and time invested)? 
 - [ ] Move versioning question to device details
 === Device links ===
-- [ ] Add language of documentation as a question?? 
-- [ ] DOI field to accept multiple DOIs???
-- [ ] Remove any mention of uploads of any kind, as we cannot host any files; provide field for links and some instructions on how to host them externally (e.g. GitHub, Zenodo)
-- [ ] Bill of materials remove? Should be in the external documentation probably
-- [ ] Add "Additional resources" to capture non-standard repos or YouTube videos. 
+- [x] Add language of documentation as a question?? 
+- [x] DOI field to accept multiple DOIs???
+- [x] Remove any mention of uploads of any kind, as we cannot host any files; provide field for links and some instructions on how to host them externally (e.g. GitHub, Zenodo)
+- [x] Bill of materials remove? Should be in the external documentation probably
+- [x] Add "Additional resources" to capture non-standard repos or YouTube videos. 
 === Device details ===
 - [ ] Device construction wording is confusing; "Custom designed parts (e.g., PCB, 3D print)". Add "Other"???
 - [ ] Cost should be split into:

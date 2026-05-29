@@ -49,20 +49,21 @@
 - [x] New Fields: Skills & Tools Required (for construction) as a filterable tag.
 - [ ] Not sure hardware device licence goes here...
 === Component details === 
-- [ ] Details abut the sensor should be asked before or at the same time as the device details.
-- [ ] Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. 
-- [ ] Power: rename "Main" to "Grid electricity"
-- [ ] Power duration caused confusion, change to "Power autonomy"? 
-- [ ] Some sensor details, like bitrate, aperture, lens mounting options etc cause confusion; perhaps remove???
-- [ ] Change FPS and resolution to ranges (min-max)
-- [ ] Add question on sensor/lens field of View (FoV)? 
-- [ ] Change "Capture modes" to "Available image capture modes"
-- [ ] Model processing should not have mutually exclusive options, can have multiple answers
+- [ ] ~~Details abut the sensor should be asked before or at the same time as the device details.~~ DISAGREE
+- [ ] ~~Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. ~~ ONLY OPTICAL SENSORS SUPPORTED
+- [x] Power: rename "Main" to "Grid electricity"
+- [x] Power duration caused confusion, change to "Power autonomy"? 
+- [x] Some sensor details, like bitrate, aperture, lens mounting options etc cause confusion; perhaps remove??? KEPT resolution, FPS, focus mode, focal range
+- [x] Change FPS and resolution to ranges (min-max)
+- [x] Add question on sensor/lens field of View (FoV)? 
+- [x] Change "Capture modes" to "Available image capture modes"
+- [x] Model processing should not have mutually exclusive options, can have multiple answers
+- [x] Connectivity: add USB to physical connectivity, maybe SSH, VNC etc?
+- [x] Clarify "Processing Unit" (e.g., Raspberry Pi, Jetson, Microcontroller).
+- [x] Data: change "Supported File Types" to a checklist. 
+- [x] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
+- [ ] software_version_repo maybe belongs somewhere else...
 - [ ] Move "Attractants" to to a dedicated section
-- [ ] Connectivity: add USB to physical connectivity, maybe SSH, VNC etc?
-- [ ] Clarify "Processing Unit" (e.g., Raspberry Pi, Jetson, Microcontroller).
-- [ ] Data: change "Supported File Types" to a checklist. 
-- [ ] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
 === Maintenance and repairs ===
 - [ ] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
 - [ ] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").

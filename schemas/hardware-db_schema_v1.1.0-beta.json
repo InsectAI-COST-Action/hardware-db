@@ -6,7 +6,7 @@
   },
   "info": {
     "title": "InsectAI hardware database",
-    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
+    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n At the moment, only optical systems (i.e that use cameras) are supported. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
   },
   "settings": {
     "emailCollectionType": "DO_NOT_COLLECT"
@@ -497,7 +497,7 @@
     {
       "id": "component_details",
       "title": "Component details",
-      "description": "n/a",
+      "description": "Technical specifications of the device's sensors, power system, processing, and connectivity.",
       "questions": [
         {
           "id": "power_sources",
@@ -507,24 +507,24 @@
           "type": "choice",
           "choiceType": "CHECKBOX",
           "options": [
-            "Mains",
+            "Grid electricity",
             "Solar",
             "Rechargeable battery",
-            "Non-rechargeable battery"
+            "Non-rechargeable battery",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            true
           ]
         },
         {
-          "id": "power_duration_continuous",
-          "title": "Power duration under continuous use",
-          "description": "How long the device can run on a single charge or battery set during continuous operation (e.g. '8 hours', '3 days'). Enter 'N/A' if mains-powered only.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "power_duration_standard",
-          "title": "Power duration under standard use",
-          "description": "How long the device operates between charges or battery changes under typical deployment conditions (e.g. motion-triggered, scheduled intervals). Enter 'N/A' if mains-powered only.",
+          "id": "power_autonomy_continuous",
+          "title": "Power autonomy under continuous use",
+          "description": "How long the device can run on a single charge/battery set during continuous operation (e.g. '8 hours', '3 days'). \n If fully autonomous (e.g. solar panels), report the longest period a unit has been left unattended and was functioning. Leave blank if grid-powered only.",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -532,25 +532,226 @@
         {
           "id": "processing_unit",
           "title": "Processing unit",
-          "description": "The main compute component of the device (e.g. 'Raspberry Pi 4', 'NVIDIA Jetson Nano', 'Arduino Uno', 'ESP32'). Include model name and version where known.",
+          "description": "The main compute component (e.g. 'Raspberry Pi 4', 'NVIDIA Jetson Nano', 'Arduino Uno', 'ESP32'). Include model and version where known.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "model_processing",
-          "title": "Model processing",
-          "description": "Where detection or classification models are run. 'On-device' means inference happens on the device itself. 'Offboard' means data is transferred to another computer or the cloud before processing.",
+          "title": "AI model processing",
+          "description": "Where detection or classification AI models are run. Select all that apply.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "On-device (edge processing)",
+            "Offboard processing (data transfer to separate computer)",
+            "Cloud processing",
+            "No model / manual identification only"
+          ]
+        },
+        {
+          "id": "capture_modes",
+          "title": "Available image capture modes",
+          "description": "Select all image/video capture modes supported by the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Continuous video",
+            "Time-lapse",
+            "Motion-triggered photo",
+            "Motion-triggered video",
+            "Scheduled photo",
+            "Event-triggered (e.g. AI model detection)",
+            "Manual capture",
+            "Other"
+          ],
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            true
+          ]
+        },
+        {
+          "id": "main_optical_sensor_model_name",
+          "title": "Main optical sensor model name, if known",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_resolution",
+          "title": "Main sensor resolution.",
+          "description": "If multiple resolutions are supported, please choose the closest typical output resolution.",
           "required": false,
           "type": "choice",
           "choiceType": "RADIO",
           "options": [
-            "On-device (edge processing)",
-            "Local computing (near edge processing using locally connected computers on the network)",
-            "Offboard processing (data transfer to and processing on separate computer)",
-            "Cloud processing",
-            "Hybrid"
+            "<= 1 MP (e.g. 1280 x 720, 0.9 MP or lower)",
+            "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)",
+            "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
+            "~6-8 MP (e.g. 3264 x 2448 or 3840 x 2160)",
+            "> 8 MP (e.g. 4056 x 3040 or higher)",
+            "Other (please specify)"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
           ]
+        },
+        {
+          "id": "main_sensor_framerate",
+          "title": "Main sensor frame-rate (frames per second, fps)",
+          "description": "If multiple frame-rates are supported, choose the most commonly used during deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "<1 fps",
+            "1-5 fps",
+            "5-10 fps",
+            "10-30 fps",
+            ">60 fps"
+          ]
+        },
+        {
+          "id": "lens_focusing",
+          "title": "Lens focusing",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Fixed distance",
+            "Manual",
+            "Automatic"
+          ]
+        },
+        {
+          "id": "min_focal_distance",
+          "title": "Minimum focal distance (closest focus distance)",
+          "description": "Closest distance at which the camera can focus sharply on the target.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "< 2 cm (macro)",
+            "2-5 cm",
+            "5-10 cm",
+            "10-20 cm",
+            "20-50 cm",
+            "> 50 cm",
+            "Other (please specify)"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "field_of_view",
+          "title": "Sensor/lens field of view (FoV)",
+          "description": "The angular field of view of the main imaging sensor, if known (e.g. '120°', '62° horizontal').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "connectivity",
+          "title": "Connectivity options",
+          "description": "Select all connectivity options available on the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "WiFi",
+            "Bluetooth",
+            "Cellular (4G/LTE-M/NB-IoT)",
+            "LoRa/LoRaWAN",
+            "Satellite",
+            "USB (wired)",
+            "Ethernet",
+            "SSH/VNC (remote access)",
+            "SD card",
+            "None",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false,
+            false,
+            false, 
+            true
+          ]
+        },
+        {
+          "id": "file_types",
+          "title": "Supported file types",
+          "description": "Select all data file types produced by the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "JPEG",
+            "PNG",
+            "RAW (DNG/CR2/ARW)",
+            "TIFF",
+            "MP4",
+            "AVI/MKV",
+            "CSV/TSV",
+            "JSON",
+            "HDF5",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false,
+            false, 
+            true
+          ]
+        },
+        {
+          "id": "software_version_repo",
+          "title": "On-device software or firmware version and repository link",
+          "description": "Version of the software or firmware running on the device and a link to its source repository, if available, use '|' as separator (e.g. 'v1.3.2 | https://github.com/org/repo').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "attractants",
+          "title": "Attractants used",
+          "description": "Describe any attractants employed by the device (e.g. UV light, pheromone lure, sugar bait). Enter 'None' if no attractants are used.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
         }
       ]
     },

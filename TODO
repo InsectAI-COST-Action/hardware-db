@@ -62,13 +62,13 @@
 - [x] Clarify "Processing Unit" (e.g., Raspberry Pi, Jetson, Microcontroller).
 - [x] Data: change "Supported File Types" to a checklist. 
 - [x] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
-- [ ] software_version_repo maybe belongs somewhere else...
+- [x] firmware_version_repo maybe belongs somewhere else... Maybe in maintenance and repairs? 
 - [ ] Move "Attractants" to to a dedicated section
 === Maintenance and repairs ===
-- [ ] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
-- [ ] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").
-- [ ] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
-- [ ] Maybe here is a good place to put last firmware update instead of Update frequency"?
+- [x] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
+- [x] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").
+- [x] Firmware: Specify "Update Method" (Over The Air, Cable, SD Card).
+- [x] Maybe here is a good place to put last firmware update instead of Update frequency"?
 === Intended usage scope === 
 - [ ] Taxonomy: convert to checklist with vernacular / scientific names. 
 - [ ] Maybe add functional guild or other non-taxonomic grouping?

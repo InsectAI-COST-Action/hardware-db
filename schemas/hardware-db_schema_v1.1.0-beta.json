@@ -738,14 +738,6 @@
           ]
         },
         {
-          "id": "software_version_repo",
-          "title": "On-device software or firmware version and repository link",
-          "description": "Version of the software or firmware running on the device and a link to its source repository, if available, use '|' as separator (e.g. 'v1.3.2 | https://github.com/org/repo').",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
           "id": "attractants",
           "title": "Attractants used",
           "description": "Describe any attractants employed by the device (e.g. UV light, pheromone lure, sugar bait). Enter 'None' if no attractants are used.",
@@ -758,21 +750,29 @@
     {
       "id": "maintenance_and_repairs",
       "title": "Maintenance and repairs",
-      "description": "n/a",
+      "description": "Information about device upkeep, repairability, and firmware updates.",
       "questions": [
         {
+          "id": "maintenance_interval",
+          "title": "Maintenance interval",
+          "description": "How often routine maintenance is needed (e.g. 'Clean lens every 2 weeks', 'Replace desiccant monthly', 'Battery swap every 3 days').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
           "id": "repairability_score",
-          "title": "Repairability score",
-          "description": "Rate from 1 (hardest) to 5 (easiest). 1 = requires soldering or specialist tools; 2 = requires tools but no specialist skills; 3 = screwdriver assembly, standard parts; 4 = snap-fit or modular replacement; 5 = fully tool-free, hot-swap components.",
+          "title": "Repairability score (1 = very difficult, 5 = very easy)",
+          "description": "1 = requires soldering or specialist tools; 2 = requires tools but no specialist skills; 3 = screwdriver assembly, standard parts; 4 = snap-fit or modular replacement; 5 = fully tool-free, hot-swap components.",
           "required": false,
           "type": "scale",
           "low": 1,
           "high": 5
         },
         {
-          "id": "firmware_update_frequency",
-          "title": "Firmware update frequency",
-          "description": "How often firmware updates are typically released or applied (e.g. 'monthly', 'as needed', 'once per season', 'never').",
+          "id": "last_firmware_update",
+          "title": "Date of last firmware/software update",
+          "description": "Approximate date of the most recent firmware or software update (e.g. 'January 2026').",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -780,7 +780,29 @@
         {
           "id": "firmware_update_method",
           "title": "Firmware update method",
-          "description": "How firmware is delivered to the device (e.g. 'Over-the-Air (OTA)', 'USB cable', 'SD card', 'SSH').",
+          "description": "Select all methods by which firmware can be updated on this device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Over-the-Air (OTA)",
+            "USB cable",
+            "SD card",
+            "SSH/remote access",
+            "Other"
+          ], 
+          "isOther": [
+            false,
+            false, 
+            false, 
+            false,
+            true
+          ]
+        },
+        {
+          "id": "firmware_version_repo",
+          "title": "On-device software or firmware version and repository link",
+          "description": "Version of the software or firmware running on the device and a link to its source repository, if available, use '|' as separator (e.g. 'v1.3.2 | https://github.com/org/repo').",
           "required": false,
           "type": "text",
           "paragraph": false

@@ -88,6 +88,52 @@
       "description": "Information about the people involved in using, designing, building, and/or maintaining the device.",
       "questions": [
         {
+          "id": "team_size",
+          "title": "Team size",
+          "description": "How many people are part of the team responsible for the device?",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "1",
+            "2",
+            "3-5",
+            "6–10",
+            "10+"
+          ]
+        },
+        {
+          "id": "person_hours",
+          "title": "Person hours",
+          "description": "Approximately, how many Full-Time Equivalents (FTEs) were committed to working with or on the device? Select the appropriate range (e.g. 1 person full-time, 1 person 60% = 1.6 FTE, select '1-2 FTEs')",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "<1 FTE",
+            ">1 and <2 FTEs",
+            ">2 and <5 FTEs",
+            ">5 FTEs",
+            "20+ FTEs"
+          ]
+        },
+        {
+          "id": "project duration",
+          "title": "Project duration",
+          "description": "What is / was the overall duration of the project that this device was developed or used in?",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "<1 year",
+            "1 year",
+            "2 years",
+            "3 years",
+            "4 years", 
+            ">4 years"
+          ]
+        },
+        {
           "id": "contributor_name",
           "title": "Contributor name",
           "description": "May differ from the contact person or device creator if someone else is submitting on their behalf.",
@@ -104,36 +150,194 @@
           "paragraph": false
         },
         {
-          "id": "device_creator",
-          "title": "Device creator(s)",
-          "description": "The person(s) who originally designed or built this device. Separate multiple names with ';' (e.g. 'Alan Turner; Dave Johnson'). This may differ from the contributor submitting this form.",
+          "id": "contributor_role",
+          "title": "Contributor role",
+          "description": "Role of the person submitting this form \n\n Select between: \nProject lead: directs the project (e.g. PI, lab lead)\nHardware developer: designed or built the device hardware\nSoftware developer: wrote device firmware or software\nField researcher or practitioner: deploys or operates the device in the field\nTechnician: handles assembly, maintenance, or repair\nData manager: processes or curates data from the device",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_1_name",
+          "title": "Team member 1 - Name",
+          "description": "Full name of a person involved in the project.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "device_creator_email",
-          "title": "Device creator email(s)",
-          "description": "Email address(es) for the creator(s) above, in the same order, separated by ';'.",
+          "id": "team_member_1_affiliation",
+          "title": "Team member 1 - Affiliation(s)",
+          "description": "Institution(s) this person is affiliated with. Separate multiple with ';'.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "maintainer_name",
-          "title": "Maintainer name",
-          "description": "The person currently responsible for maintaining or updating the device design. Leave blank if the same as the creator.",
+          "id": "team_member_1_role",
+          "title": "Team member 1 - Role",
+          "description": "Select the role that best describes this person's involvement with the device.",
           "required": false,
-          "type": "text",
-          "paragraph": false
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
         },
         {
-          "id": "maintainer_email",
-          "title": "Maintainer email",
+          "id": "team_member_2_name",
+          "title": "Team member 2 - Name",
           "description": null,
           "required": false,
           "type": "text",
           "paragraph": false
+        },
+        {
+          "id": "team_member_2_affiliation",
+          "title": "Team member 2 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_2_role",
+          "title": "Team member 2 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_3_name",
+          "title": "Team member 3 - Name",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_3_affiliation",
+          "title": "Team member 3 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_3_role",
+          "title": "Team member 3 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_4_name",
+          "title": "Team member 4 - Name",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_4_affiliation",
+          "title": "Team member 4 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_4_role",
+          "title": "Team member 4 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_5_name",
+          "title": "Team member 5 - Name",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_5_affiliation",
+          "title": "Team member 5 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_5_role",
+          "title": "Team member 5 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "additional_team_members",
+          "title": "Additional team members",
+          "description": "Here you can list any additional team members, their affiliation and their role. \n Please separate name, affiliation and role using ';', and separate team member entries with '|'. \n For example: 'Name Surname; Affiliation 1, Affiliation 2; Role | Name Surname; Affiliation 1; Role' and so on",
+          "required": false,
+          "type": "text",
+          "paragraph": true
         }
       ]
     },

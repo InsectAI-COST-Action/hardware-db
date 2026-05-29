@@ -21,10 +21,10 @@
 - [x] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")
 - [ ] Device description (i.e. device summary) should perhaps be placed later after the technical questions? 
 === Contributors details ===
-- [ ] Description of section does not match content (it's about device versions); remove or modify
-- [ ] Simplify questions about device creator, maintainer etc; "creator" makes people too self-conscious, change term. 
-- [ ] Allow multiple persons' names with separator (e.g. `;`)
-- [ ] Add question on project duration and/or person/hours involved (as an estimate of the team size and time invested)? 
+- [x] Description of section does not match content (it's about device versions); remove or modify
+- [x] Simplify questions about device creator, maintainer etc; "creator" makes people too self-conscious, change term. 
+- [x] Allow multiple persons' names with separator (e.g. `;`)
+- [x] Add question on project duration and/or person/hours involved (as an estimate of the team size and time invested)? 
 - [ ] Move versioning question to device details
 === Device links ===
 - [ ] Add language of documentation as a question?? 

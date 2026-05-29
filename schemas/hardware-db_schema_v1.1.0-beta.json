@@ -6,7 +6,7 @@
   },
   "info": {
     "title": "InsectAI hardware database",
-    "description": "A questionnaire to collect information about insect monitoring hardware devices for the InsectAI COST Action hardware database. For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
+    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
   },
   "settings": {
     "emailCollectionType": "DO_NOT_COLLECT"
@@ -19,7 +19,7 @@
         {
           "id": "have_deviceID",
           "title": "Do you want to submit a new device, or update an existing entry?",
-          "description": "Unsure if you have already submitted? You can check what has already been submitted to the database here: https://insectai-cost-action.github.io/hardware-db/",
+          "description": "Unsure if you have already submitted? \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n\n You can check what has already been submitted to the database here: https://insectai-cost-action.github.io/hardware-db/",
           "required": true,
           "type": "choice",
           "choiceType": "RADIO",
@@ -52,9 +52,17 @@
           "paragraph": false
         },
         {
+          "id": "contact_institution",
+          "title": "Institutional affiliation(s) of the contact person",
+          "description": "The institution name(s) that the contact person is affiliated with, no address needed. \n\n Please separate multiple affiliations with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
           "id": "device_name",
           "title": "Device name",
-          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
+          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n\n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
           "required": true,
           "type": "text",
           "paragraph": false
@@ -70,30 +78,27 @@
       ]
     },
     {
-      "id": "contributor_details",
-      "title": "Contributor details",
-      "description": "...",
+      "id": "navigation_optional_details",
+      "title": "Technical questions",
+      "description": "In the following sections there are several technical questions. \n They are all skippable, and we DO NOT expect that you will be able to fill in every single one! \n They are intended as a guide to help you report important information about your hardware. \n\n When you are ready to submit, navigate to the end of the questionnaire and click 'Submit'."
+    },
+    {
+      "id": "people_and_project",
+      "title": "People and project details",
+      "description": "Information about the people involved in using, designing, building, and/or maintaining the device.",
       "questions": [
         {
           "id": "contributor_name",
-          "title": "Contributor name (can be the same as contact name)",
-          "description": "The person filling in this form. May differ from the device creator if someone else is submitting on their behalf.",
+          "title": "Contributor name",
+          "description": "May differ from the contact person or device creator if someone else is submitting on their behalf.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "contributor_email",
-          "title": "Contributor email (can be the same as contact email)",
-          "description": null,
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "institution_name",
-          "title": "Institution name(s)",
-          "description": "The institution(s) affiliated with this device or project. Separate multiple institutions with ';' (e.g. 'University of Edinburgh; NERC').",
+          "title": "Contributor email",
+          "description": "Email of the person filling in this form. \n If it would be the same as the contact person's, simply leave blank.",
           "required": false,
           "type": "text",
           "paragraph": false

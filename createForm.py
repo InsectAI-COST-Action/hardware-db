@@ -29,9 +29,14 @@ UPDATE_LINKS = False
 # ----------------------------------------------------------------------
 def build_choice_options(q, section_id_map=None):
     options = []
+    is_other_flags = q.get("isOther", [])
 
-    for opt in q["options"]:
+    for idx, opt in enumerate(q["options"]):
         option = {"value": opt}
+
+        # Mark options that should expose an "Other" free-text input.
+        if idx < len(is_other_flags) and is_other_flags[idx]:
+            option["isOther"] = True
 
         # Only resolve logic if section_id_map is provided
         if section_id_map and "logic" in q:
@@ -281,7 +286,7 @@ def main():
         items.append(build_section_header(section))
 
         # Questions in this section
-        for q in section["questions"]:
+        for q in section.get("questions", []):
             items.append(build_question_item(q))
 
     resp = forms_service.forms().batchUpdate(
@@ -306,7 +311,7 @@ def main():
         section_start_indices[section["id"]] = reply_index
         reply_index += 1      # pageBreak itself
 
-        for q in section["questions"]:
+        for q in section.get("questions", []):
             if q["type"] == "choice" and "logic" in q:
                 # The item that holds the question is the next index after the pageBreak
                 item_id = replies[reply_index]["createItem"]["itemId"]

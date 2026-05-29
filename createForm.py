@@ -32,11 +32,13 @@ def build_choice_options(q, section_id_map=None):
     is_other_flags = q.get("isOther", [])
 
     for idx, opt in enumerate(q["options"]):
-        option = {"value": opt}
+        is_other = idx < len(is_other_flags) and is_other_flags[idx]
 
-        # Mark options that should expose an "Other" free-text input.
-        if idx < len(is_other_flags) and is_other_flags[idx]:
-            option["isOther"] = True
+        # Google Forms API forbids setting 'value' when 'isOther' is true
+        if is_other:
+            option = {"isOther": True}
+        else:
+            option = {"value": opt}
 
         # Only resolve logic if section_id_map is provided
         if section_id_map and "logic" in q:

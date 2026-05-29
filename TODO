@@ -3,7 +3,7 @@
 === General technical ===
 - [x] Need to figure out a way to put descriptions under the questions to clarify - was already implemented and I forgot 😅
 - [x] DeviceID is confusing for users, but is difficult to generate automatically... We can try and direct users to `data/` dir and ask to check existing deviceIDs, or we need a different solution altogether. 
-- [ ] Need to introduce much more data input validation (i.e. valid link, valid email) whenever easy / possible
+- [x] Need to introduce much more data input validation (i.e. valid link, valid email) whenever easy / possible - DONE WHAT I COULD, VERY LIMITED OPTIONS WITH GOOGLE FORMS API...
 === General non-technical ===
 - [ ] Need to clarify the scope better, and remind users of difference between deployments and hardware
 - [ ] Section descriptions are often skipped; can make them a lot shorter and/or ask if understood (mandatory) to proceed
@@ -17,15 +17,15 @@
 - [x] Substitute with question to flag wether the submissions is intended for a new device or to update an existing entry (we can use this as flag for user intentionality)
 - [x] Explain how deviceID are generated and how to check for existing devices in the database, i.e. the landing page: https://insectai-cost-action.github.io/hardware-db/
 === Basic info ===
-- [ ] Resolve ambiguity between contact person, data owner, creator, maintainer etc. 
+- [x] Resolve ambiguity between contact person, data owner, creator, maintainer etc. REVIEWED
 - [x] Device description: add explicit character limit and clarify purpose (i.e. "abstract explaining what your device is and does, should be understandable to a non-specialist audience.")
-- [ ] Device description (i.e. device summary) should perhaps be placed later after the technical questions? 
+- [ ] Device description (i.e. device summary) should perhaps be placed later after the technical questions? STILL UNDECIDED IF ITS A GOOD IDEA...
 === Contributors details ===
 - [x] Description of section does not match content (it's about device versions); remove or modify
 - [x] Simplify questions about device creator, maintainer etc; "creator" makes people too self-conscious, change term. 
 - [x] Allow multiple persons' names with separator (e.g. `;`)
 - [x] Add question on project duration and/or person/hours involved (as an estimate of the team size and time invested)? 
-- [ ] Move versioning question to device details
+- [x] Move versioning question to device details
 === Device links ===
 - [x] Add language of documentation as a question?? 
 - [x] DOI field to accept multiple DOIs???
@@ -63,7 +63,7 @@
 - [x] Data: change "Supported File Types" to a checklist. 
 - [x] Software: add specific field for On-device Software Version and Repository Link (distinct from hardware version).
 - [x] firmware_version_repo maybe belongs somewhere else... Maybe in maintenance and repairs? 
-- [ ] Move "Attractants" to to a dedicated section
+- [x] Move "Attractants" to to a dedicated section - MOVING TO INTENDED USAGE AND SCOPE
 === Maintenance and repairs ===
 - [x] Repairability: Add a 1-5 scale with definitions/examples (e.g., "1 = Soldering required, 5 = Tool-free replacement").
 - [x] Maintenance: Add Maintenance Intervals (e.g., "Clean lens every 2 weeks").

@@ -736,14 +736,6 @@
             false, 
             true
           ]
-        },
-        {
-          "id": "attractants",
-          "title": "Attractants used",
-          "description": "Describe any attractants employed by the device (e.g. UV light, pheromone lure, sugar bait). Enter 'None' if no attractants are used.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
         }
       ]
     },
@@ -942,6 +934,36 @@
             "Aquatic (freshwater)",
             "Aquatic (marine)",
             "Aerial"
+          ]
+        },
+        {
+          "id": "attractants",
+          "title": "Attractants used",
+          "description": "Select all attractants employed by the device. Attractants are used to draw insects toward the sensor.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "UV light",
+            "Visible light (white/coloured LED)",
+            "Pheromone lure",
+            "Floral scent / synthetic volatile",
+            "Sugar bait / fermented liquid",
+            "CO2 (carbon dioxide)",
+            "Heat source",
+            "None",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
           ]
         },
         {

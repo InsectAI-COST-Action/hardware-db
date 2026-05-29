@@ -63,6 +63,7 @@
               "properties": {
                 "id": { "type": "string" },
                 "title": { "type": "string" },
+                "description": { "type": ["string", "null"] },
                 "required": { "type": "boolean" },
                 "type": { "type": "string" },
                 "paragraph": { "type": "boolean" },
@@ -72,6 +73,10 @@
                 "options": {
                   "type": "array",
                   "items": { "type": "string" }
+                },
+                "isOther": {
+                  "type": "array",
+                  "items": { "type": "boolean" }
                 },
                 "logic": {
                   "type": "object",
@@ -89,7 +94,7 @@
             }
           }
         },
-        "required": ["id", "title", "questions"]
+        "required": ["id", "title"]
       }
     }
   },

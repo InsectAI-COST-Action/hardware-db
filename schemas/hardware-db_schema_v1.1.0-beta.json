@@ -1,0 +1,312 @@
+{
+  "_metadata": {
+    "schema_version": "1.1.0",
+    "created_date": "2026-05-28T00:00:00Z",
+    "description": "Restructured questionnaire based on workshop feedback suggestions"
+  },
+  "info": {
+    "title": "InsectAI hardware database",
+    "description": "A questionnaire to collect information about insect monitoring hardware devices for the InsectAI COST Action hardware database. For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
+  },
+  "settings": {
+    "emailCollectionType": "DO_NOT_COLLECT"
+  },
+  "sections": [
+    {
+      "id": "new_or_update",
+      "title": "Submission type",
+      "questions": [
+        {
+          "id": "have_deviceID",
+          "title": "Do you want to submit a new device, or update an existing entry?",
+          "description": "Unsure if you have already submitted? You can check what has already been submitted to the database here: https://insectai-cost-action.github.io/hardware-db/",
+          "required": true,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "New device submission.",
+            "Update an existing entry."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "basic_info",
+      "title": "Basic information",
+      "description": "Core details about the device and its contact person.",
+      "questions": [
+        {
+          "id": "contact_name",
+          "title": "Contact person name",
+          "description": "The person who should be contacted about this database entry. This does not have to be the device designer — it can be a project manager, lab lead, or current maintainer.",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contact_email",
+          "title": "Contact email",
+          "description": "A valid email address (e.g. name@institution.org) for the contact person above. \n\n Please note this email address will be publicly visible!",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_name",
+          "title": "Device name",
+          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (reversible by maintainers). \n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
+          "required": true,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_description",
+          "title": "Device description",
+          "description": "A short abstract (max 300 characters) explaining what the device is and does, for a non-specialist audience. Focus on purpose and key features rather than technical specifications.",
+          "required": true,
+          "type": "text",
+          "paragraph": true
+        }
+      ]
+    },
+    {
+      "id": "contributor_details",
+      "title": "Contributor details",
+      "description": "...",
+      "questions": [
+        {
+          "id": "contributor_name",
+          "title": "Contributor name (can be the same as contact name)",
+          "description": "The person filling in this form. May differ from the device creator if someone else is submitting on their behalf.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contributor_email",
+          "title": "Contributor email (can be the same as contact email)",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "institution_name",
+          "title": "Institution name(s)",
+          "description": "The institution(s) affiliated with this device or project. Separate multiple institutions with ';' (e.g. 'University of Edinburgh; NERC').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_creator",
+          "title": "Device creator(s)",
+          "description": "The person(s) who originally designed or built this device. Separate multiple names with ';' (e.g. 'Alan Turner; Dave Johnson'). This may differ from the contributor submitting this form.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_creator_email",
+          "title": "Device creator email(s)",
+          "description": "Email address(es) for the creator(s) above, in the same order, separated by ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "maintainer_name",
+          "title": "Maintainer name",
+          "description": "The person currently responsible for maintaining or updating the device design. Leave blank if the same as the creator.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "maintainer_email",
+          "title": "Maintainer email",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "device_details",
+      "title": "Device details",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "device_version_name",
+          "title": "Device version name",
+          "description": "A label for this specific version of the device (e.g. 'v2.1', '2024-field-edition'). Useful when multiple versions exist.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_licence",
+          "title": "Device licence (e.g. CC-BY-4.0)",
+          "description": "The licence under which the device design and associated materials are released. Use a standard SPDX identifier where possible (e.g. 'CC-BY-4.0', 'MIT', 'CERN-OHL-S-2.0'). Leave blank if unknown.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "device_construction",
+          "title": "Device construction",
+          "description": "Select all that apply. 'Off-the-shelf' means the device is used as purchased with no modification. 'Partly custom' includes devices assembled from standard components with some user-designed parts (e.g. a 3D-printed enclosure or custom PCB). 'Fully custom' means the device was designed and fabricated entirely by the user.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Off-the-shelf: Purchased and used as-is",
+            "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
+            "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
+            "Fully custom: Designed and fabricated by the user (hardware and potentially software)"
+          ]
+        },
+        {
+          "id": "device_cost",
+          "title": "Device cost (€) - excluding operational costs",
+          "description": "Approximate unit build cost for the hardware only (components, PCBs, enclosure, etc.). Do not include deployment consumables, cloud subscriptions, or labour costs.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "component_details",
+      "title": "Component details",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "power_sources",
+          "title": "Power source(s)",
+          "description": "Select all power sources that can be used to operate the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Mains",
+            "Solar",
+            "Rechargeable battery",
+            "Non-rechargeable battery"
+          ]
+        },
+        {
+          "id": "power_duration_continuous",
+          "title": "Power duration under continuous use",
+          "description": "How long the device can run on a single charge or battery set during continuous operation (e.g. '8 hours', '3 days'). Enter 'N/A' if mains-powered only.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "power_duration_standard",
+          "title": "Power duration under standard use",
+          "description": "How long the device operates between charges or battery changes under typical deployment conditions (e.g. motion-triggered, scheduled intervals). Enter 'N/A' if mains-powered only.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "processing_unit",
+          "title": "Processing unit",
+          "description": "The main compute component of the device (e.g. 'Raspberry Pi 4', 'NVIDIA Jetson Nano', 'Arduino Uno', 'ESP32'). Include model name and version where known.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "model_processing",
+          "title": "Model processing",
+          "description": "Where detection or classification models are run. 'On-device' means inference happens on the device itself. 'Offboard' means data is transferred to another computer or the cloud before processing.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "On-device (edge processing)",
+            "Local computing (near edge processing using locally connected computers on the network)",
+            "Offboard processing (data transfer to and processing on separate computer)",
+            "Cloud processing",
+            "Hybrid"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "maintenance_and_repairs",
+      "title": "Maintenance and repairs",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "repairability_score",
+          "title": "Repairability score",
+          "description": "Rate from 1 (hardest) to 5 (easiest). 1 = requires soldering or specialist tools; 2 = requires tools but no specialist skills; 3 = screwdriver assembly, standard parts; 4 = snap-fit or modular replacement; 5 = fully tool-free, hot-swap components.",
+          "required": false,
+          "type": "scale",
+          "low": 1,
+          "high": 5
+        },
+        {
+          "id": "firmware_update_frequency",
+          "title": "Firmware update frequency",
+          "description": "How often firmware updates are typically released or applied (e.g. 'monthly', 'as needed', 'once per season', 'never').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "firmware_update_method",
+          "title": "Firmware update method",
+          "description": "How firmware is delivered to the device (e.g. 'Over-the-Air (OTA)', 'USB cable', 'SD card', 'SSH').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    },
+    {
+      "id": "intended_usage_scope_and_operational_constraints",
+      "title": "Intended usage scope and operational constraints",
+      "description": "n/a",
+      "questions": [
+        {
+          "id": "taxonomic_groups",
+          "title": "Taxonomic group(s)",
+          "description": "The insect or arthropod groups this device is designed or validated for (e.g. 'Lepidoptera', 'Coleoptera', 'Hymenoptera'). Use scientific names where possible; separate multiple groups with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_temperature_range_c",
+          "title": "Operational temperature range (°C)",
+          "description": "The minimum and maximum ambient temperatures within which the device functions reliably (e.g. '-5 to 40'). Refer to manufacturer specifications or field experience.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "weatherproofing",
+          "title": "Weatherproofing",
+          "description": "The IP (Ingress Protection) rating or equivalent, if known (e.g. 'IP65', 'IP54'). If no formal rating exists, describe the protection level (e.g. 'splash-proof enclosure', 'not weatherproof').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "operational_costs",
+          "title": "Operational costs (€)",
+          "description": "Estimated running costs for a typical deployment season (e.g. one summer field season). Include consumables (batteries, lures), cloud storage, SIM data plans, etc. Exclude the initial hardware build cost.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        }
+      ]
+    }
+  ]
+}

@@ -33,12 +33,12 @@
     {
       "id": "basic_info",
       "title": "Basic information",
-      "description": "Core details about the device and its contact person.",
+      "description": "Core details about the device and its contact person. \n\n Important: all this information will be publicly accessible!",
       "questions": [
         {
           "id": "contact_name",
           "title": "Contact person name",
-          "description": "The person who should be contacted about this database entry. This does not have to be the device designer — it can be a project manager, lab lead, or current maintainer.",
+          "description": "The person who should be contacted about this database entry. This does not have to be the device designer: it can be a user, project manager, lab lead, or maintainer.",
           "required": true,
           "type": "text",
           "paragraph": false
@@ -54,7 +54,7 @@
         {
           "id": "device_name",
           "title": "Device name",
-          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (reversible by maintainers). \n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
+          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
           "required": true,
           "type": "text",
           "paragraph": false
@@ -62,7 +62,7 @@
         {
           "id": "device_description",
           "title": "Device description",
-          "description": "A short abstract (max 300 characters) explaining what the device is and does, for a non-specialist audience. Focus on purpose and key features rather than technical specifications.",
+          "description": "A short abstract (max 300 characters) explaining what the device is and does, for a non-specialist audience. Focus on purpose and key features rather than technical specifications here.",
           "required": true,
           "type": "text",
           "paragraph": true

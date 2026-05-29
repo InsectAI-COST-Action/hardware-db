@@ -5,11 +5,12 @@
 - [x] DeviceID is confusing for users, but is difficult to generate automatically... We can try and direct users to `data/` dir and ask to check existing deviceIDs, or we need a different solution altogether. 
 - [x] Need to introduce much more data input validation (i.e. valid link, valid email) whenever easy / possible - DONE WHAT I COULD, VERY LIMITED OPTIONS WITH GOOGLE FORMS API...
 === General non-technical ===
-- [ ] Need to clarify the scope better, and remind users of difference between deployments and hardware
+- [x] Need to clarify the scope better, and remind users of difference between deployments and hardware
 - [ ] Section descriptions are often skipped; can make them a lot shorter and/or ask if understood (mandatory) to proceed
 - [ ] Not clear that all but the basic info sections are optional
-- [ ] Incentives for filling in the questionnaire (i.e. card at the end, etc.)"
+- [ ] Incentives for filling in the questionnaire (i.e. card at the end, etc.)
 - [ ] Licencing
+- [ ] Add contact details of current maintainers in `CONTACTS.md` and link to it
 - [ ] Need to ask user's permission to licence data
 *Suggestions for specific questions or sections*
 === Device ID === 
@@ -47,7 +48,7 @@
 - [ ] ~~~~Device material change to "primary material", with dropdown list & other~~ REMOVED
 - [ ] ~~Device mobility, simplify and enforce choice from dropdown.~~ REMOVED
 - [x] New Fields: Skills & Tools Required (for construction) as a filterable tag.
-- [ ] Not sure hardware device licence goes here...
+- [ ] Not sure hardware device licence goes here... I THINK SO, DON'T HAVE BETTER IDEAS... 
 === Component details === 
 - [ ] ~~Details abut the sensor should be asked before or at the same time as the device details.~~ DISAGREE
 - [ ] ~~Sensor type might need some logic to only show lens, resolution, framerate etc if "Optical/Camera" has been selected. ~~ ONLY OPTICAL SENSORS SUPPORTED

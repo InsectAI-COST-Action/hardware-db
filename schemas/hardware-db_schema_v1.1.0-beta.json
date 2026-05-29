@@ -6,7 +6,7 @@
   },
   "info": {
     "title": "InsectAI hardware database",
-    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n At the moment, only optical systems (i.e that use cameras) are supported. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
+    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n At the moment, only optical systems (i.e that use cameras) are supported. \n\n This database records the hardware device itself — its design, capabilities, and intended use cases — independently of any specific deployment or field campaign. A deployment is the environmental, logistical, and ecological context in which a device is used (e.g. a particular field site, season, or target species). Please answer questions based on what the device supports or is designed for, not on what you did in a single deployment. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db"
   },
   "settings": {
     "emailCollectionType": "DO_NOT_COLLECT"
@@ -482,7 +482,7 @@
         {
           "id": "mounting_system",
           "title": "Mounting system(s)",
-          "description": "Select all methods by which the device can be attached to or positioned in the environment.",
+          "description": "Select all mounting methods this device is compatible with or designed to support that you know of, not just what was used in a particular deployment.",
           "required": false,
           "type": "choice",
           "choiceType": "CHECKBOX",
@@ -856,7 +856,7 @@
     {
       "id": "intended_usage_scope",
       "title": "Intended usage scope and operational constraints",
-      "description": "Information about where, how, and for what organisms the device is designed to be used.",
+      "description": "Information about the device's design intent and validated capabilities, independent of any specific deployment. Select all options that apply to the device itself (i.e. what it supports or has been validated for), not just to a single field campaign or deployment instance.",
       "questions": [
         {
           "id": "classification_target_type",
@@ -939,7 +939,7 @@
         {
           "id": "habitat_type",
           "title": "Habitat type(s)",
-          "description": "Select all habitat types where this device is designed to operate.",
+          "description": "Select all habitat types where this device is designed or validated to operate in that you know of, select all that apply to the device's capabilities, not just a single deployment site.",
           "required": false,
           "type": "choice",
           "choiceType": "CHECKBOX",
@@ -990,8 +990,8 @@
         },
         {
           "id": "attractants",
-          "title": "Attractants used",
-          "description": "Select all attractants employed by the device. Attractants are used to draw insects toward the sensor.",
+          "title": "Attractants supported",
+          "description": "Select all attractants this device is designed or validated to use. Attractants draw insects toward the sensor. Select all that the device supports, even if not all were used in every deployment.",
           "required": false,
           "type": "choice",
           "choiceType": "CHECKBOX",

@@ -78,7 +78,7 @@
 - [x] Target: add typical subject size range (Min/Max mm) as numeric fields.
 - [ ] ~~"Operational costs": need to clarify, add something about running costs for one season~~ REMOVED, all costs are in device details now
 === Missing questions to add (maybe) ===
-- [ ] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
+- [x] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
 - [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles.
 - [ ] Alternative components? How "flexible" are devices? 
 - [ ] Institution Type: categorization of the organization (NGO, Academic, Government, Commercial).

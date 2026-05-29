@@ -456,6 +456,34 @@
           "paragraph": false
         },
         {
+          "id": "mounting_system",
+          "title": "Mounting system(s)",
+          "description": "Select all methods by which the device can be attached to or positioned in the environment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Tripod",
+            "Pole / stake (ground)",
+            "Tree strap / clamp",
+            "Wall / fence bracket",
+            "T-bar / cross-arm",
+            "Floating platform",
+            "Freestanding (no mount required)",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        }, 
+        {
           "id": "skills_tools_required",
           "title": "Skills and tools required for construction",
           "description": "Select all skills/tools needed to build or assemble the device.",

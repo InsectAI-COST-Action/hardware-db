@@ -9,9 +9,9 @@
 - [x] Section descriptions are often skipped; can make them a lot shorter and/or ask if understood (mandatory) to proceed
 - [x] Not clear that all but the basic info sections are optional
 - [ ] Incentives for filling in the questionnaire (i.e. card at the end, etc.)
-- [ ] Licencing
+- [x] Licencing - going for CC-BY-4.0
 - [x] Add contact details of current maintainers in `CONTACTS.md` and link to it - ADDED LINK TO `CONTACTS` on the `main` branch, even though it's not merged yet
-- [ ] Need to ask user's permission to licence data
+- [x] Need to ask user's permission to licence data
 *Suggestions for specific questions or sections*
 === Device ID === 
 - [x] Remove question about deviceID and contained navigation logic. 

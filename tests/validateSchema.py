@@ -127,11 +127,15 @@ def check_version_format(schema_file: Path) -> Tuple[bool, List[str]]:
     if len(parts) != 3:
         errors.append(
             f"Invalid schema_version '{version}': "
-            f"must be MAJOR.MINOR.PATCH format"
+            f"must be MAJOR.MINOR.PATCH format (with optional pre-release label, e.g. 1.0.0-beta)"
         )
         return False, errors
     
-    for i, part in enumerate(parts):
+    # Strip pre-release label from the PATCH component (e.g. '0-beta' → '0')
+    patch_base = parts[2].split("-")[0]
+    patch_parts = parts[:2] + [patch_base]
+    
+    for i, part in enumerate(patch_parts):
         try:
             int(part)
         except ValueError:

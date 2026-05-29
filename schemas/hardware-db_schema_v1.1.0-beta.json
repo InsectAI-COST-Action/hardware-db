@@ -103,12 +103,12 @@
     },
     {
       "id": "navigation_optional_details",
-      "title": "Technical questions",
+      "title": "Technical questions — all optional",
       "description": "In the following sections there are several technical questions. \n They are all skippable, and we DO NOT expect that you will be able to fill in every single one! \n They are intended as a guide to help you report important information about your hardware. \n\n When you are ready to submit, navigate to the end of the questionnaire and click 'Submit'."
     },
     {
       "id": "people_and_project",
-      "title": "People and project details",
+      "title": "People and project details (optional)",
       "description": "Information about the people involved in using, designing, building, and/or maintaining the device.",
       "questions": [
         {
@@ -367,7 +367,7 @@
     },
     {
       "id": "device_links",
-      "title": "Device links and documentation",
+      "title": "Device links and documentation (optional)",
       "description": "Links to external documentation, publications, and resources. We cannot host files directly — please provide URLs to externally hosted content (e.g. GitHub, Zenodo, institutional repositories).",
       "questions": [
         {
@@ -406,7 +406,7 @@
     },
     {
       "id": "device_details",
-      "title": "Device details",
+      "title": "Device details (optional)",
       "description": "Physical characteristics, construction, and cost information for the device.",
       "questions": [
         {
@@ -548,7 +548,7 @@
     },
     {
       "id": "component_details",
-      "title": "Component details",
+      "title": "Component details (optional)",
       "description": "Technical specifications of the device's sensors, power system, processing, and connectivity.",
       "questions": [
         {
@@ -793,7 +793,7 @@
     },
     {
       "id": "maintenance_and_repairs",
-      "title": "Maintenance and repairs",
+      "title": "Maintenance and repairs (optional)",
       "description": "Information about device upkeep, repairability, and firmware updates.",
       "questions": [
         {
@@ -855,7 +855,7 @@
     },
     {
       "id": "intended_usage_scope",
-      "title": "Intended usage scope and operational constraints",
+      "title": "Intended usage scope and operational constraints (optional)",
       "description": "Information about the device's design intent and validated capabilities, independent of any specific deployment. Select all options that apply to the device itself (i.e. what it supports or has been validated for), not just to a single field campaign or deployment instance.",
       "questions": [
         {

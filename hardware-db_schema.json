@@ -1,57 +1,58 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0-beta",
-    "created_date": "2026-05-25T00:00:00Z",
-    "description": "Added per-question descriptions for clarification"
+    "schema_version": "1.1.0-beta",
+    "created_date": "2026-05-28T00:00:00Z",
+    "description": "Restructured questionnaire based on workshop feedback suggestions"
   },
   "info": {
-    "title": "InsectAI hardware form - full version",
-    "description": "..."
+    "title": "InsectAI hardware database",
+    "description": "A questionnaire to collect information about automated insect monitoring hardware devices for the InsectAI COST Action hardware database. \n At the moment, only optical systems (i.e that use cameras) are supported. \n\n This database records the hardware device itself — its design, capabilities, and intended use cases — independently of any specific deployment or field campaign. A deployment is the environmental, logistical, and ecological context in which a device is used (e.g. a particular field site, season, or target species). Please answer questions based on what the device supports or is designed for, not on what you did in a single deployment. \n\n Only the basic details about an entry are mandatory, (i.e. new/update submission, contact name, email, device name and description). Following the basic info, there are several technical questions intended to guide you in reporting important information about the hardware, but they are all skippable, and not everything will be relevant for all devices. \n  Filling in the questionnaire should not take longer than a half hour.  \n\n Data submitted through this form will be published in the database under the Creative Commons Attribution 4.0 International licence (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/ \n\n For more details see: https://github.com/InsectAI-COST-Action/hardware-db \n\n In case of questions or doubts, reach out to a database maintainer: https://github.com/InsectAI-COST-Action/hardware-db/blob/main/CONTACTS.md"
+  },
+  "settings": {
+    "emailCollectionType": "DO_NOT_COLLECT"
   },
   "sections": [
     {
-      "id": "device_id_section",
-      "title": "Device ID and version",
-      "description": null,
+      "id": "new_or_update",
+      "title": "Submission type",
       "questions": [
         {
           "id": "have_deviceID",
-          "title": "Do you already have a deviceID for this hardware?",
-          "description": "A deviceID is a short unique identifier assigned to your device when you first submitted it to this database (e.g. 'TrapCam_v1_Smith2023'). Check your confirmation email or the public database at ___ if unsure.",
+          "title": "Do you want to submit a new device, or update an existing entry?",
+          "description": "Unsure if you have already submitted? \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n\n You can check what has already been submitted to the database here: https://insectai-cost-action.github.io/hardware-db/",
           "required": true,
           "type": "choice",
           "choiceType": "RADIO",
-          "options": ["Yes", "No"],
-          "logic": {
-            "Yes": { "go_to": "new_device_version" },
-            "No": { "go_to": "basic_info" }
-          }
-        }
-      ]
-    },
-    {
-      "id": "new_device_version",
-      "title": "New device version",
-      "description": "...",
-      "questions": [
-        {
-          "id": "previous_deviceID",
-          "title": "Previous deviceID",
-          "description": "Enter the deviceID from your previous submission exactly as it appears (e.g. 'TrapCam_v1_Smith2023'). This links the new version to the existing record.",
-          "required": true,
-          "type": "text",
-          "paragraph": false
+          "options": [
+            "New device submission.",
+            "Update an existing entry."
+          ]
         }
       ]
     },
     {
       "id": "basic_info",
       "title": "Basic information",
+      "description": "Core details about the device and its contact person. \n\n Important: all this information will be publicly accessible!",
       "questions": [
         {
+          "id": "data_licence_consent",
+          "title": "Data licence agreement",
+          "description": "The information you submit through this form will be stored in a publicly accessible database and published under the Creative Commons Attribution 4.0 International licence (CC BY 4.0). This means anyone can freely use, share, and adapt the data, provided they give appropriate credit. \n\n Full licence text: https://creativecommons.org/licenses/by/4.0/",
+          "required": true,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "I understand that the data I submit will be published under CC BY 4.0"
+          ],
+          "isOther": [
+            false
+          ]
+        },
+        {
           "id": "contact_name",
-          "title": "Contact name",
-          "description": "The name of the person who should be contacted about this database entry. This does not have to be the device creator — it can be a project manager or maintainer.",
+          "title": "Contact person name",
+          "description": "The person who should be contacted about this database entry. This does not have to be the device designer: it can be a user, project manager, lab lead, or maintainer.",
           "required": true,
           "type": "text",
           "paragraph": false
@@ -59,15 +60,47 @@
         {
           "id": "contact_email",
           "title": "Contact email",
-          "description": "A valid email address for the contact person above. This will not be publicly displayed; it is used only for database management queries.",
+          "description": "A valid email address (e.g. name@institution.org) for the contact person above. \n\n Please note this email address will be publicly visible!",
           "required": true,
           "type": "text",
           "paragraph": false
         },
         {
+          "id": "contact_institution",
+          "title": "Institutional affiliation(s) of the contact person",
+          "description": "The institution name(s) that the contact person is affiliated with, no address needed. \n\n Please separate multiple affiliations with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contact_institution_type",
+          "title": "Contact institution type",
+          "description": "Select the category that best describes the contact person's primary institution.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Academic / Research institute",
+            "Government / Public authority",
+            "NGO / Non-profit",
+            "Commercial / Private company",
+            "Citizen science group / Community organisation",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
           "id": "device_name",
           "title": "Device name",
-          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label.",
+          "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n\n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",
           "required": true,
           "type": "text",
           "paragraph": false
@@ -75,7 +108,7 @@
         {
           "id": "device_description",
           "title": "Device description",
-          "description": "A short abstract (max ~300 characters) describing what the device is and what it does, written for a non-specialist audience. Focus on purpose and key features rather than technical specifications.",
+          "description": "A short abstract (max 300 characters) explaining what the device is and does, for a non-specialist audience. Focus on purpose and key features rather than technical specifications here.",
           "required": true,
           "type": "text",
           "paragraph": true
@@ -83,73 +116,432 @@
       ]
     },
     {
-      "id": "contributor_details",
-      "title": "Contributor details",
-      "description": "...",
+      "id": "navigation_optional_details",
+      "title": "Technical questions — all optional",
+      "description": "In the following sections there are several technical questions. \n They are all skippable, and we DO NOT expect that you will be able to fill in every single one! \n They are intended as a guide to help you report important information about your hardware. \n\n When you are ready to submit, navigate to the end of the questionnaire and click 'Submit'."
+    },
+    {
+      "id": "people_and_project",
+      "title": "People and project details (optional)",
+      "description": "Information about the people involved in using, designing, building, and/or maintaining the device.",
       "questions": [
         {
+          "id": "team_size",
+          "title": "Team size",
+          "description": "How many people are part of the team responsible for the device?",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "1",
+            "2",
+            "3-5",
+            "6–10",
+            "10+"
+          ]
+        },
+        {
+          "id": "person_hours",
+          "title": "Person hours",
+          "description": "Approximately, how many Full-Time Equivalents (FTEs) were committed to working with or on the device? Select the appropriate range (e.g. 1 person full-time, 1 person 60% = 1.6 FTE, select '1-2 FTEs')",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "<1 FTE",
+            ">1 and <2 FTEs",
+            ">2 and <5 FTEs",
+            ">5 FTEs",
+            "20+ FTEs"
+          ]
+        },
+        {
+          "id": "project duration",
+          "title": "Project duration",
+          "description": "What is / was the overall duration of the project that this device was developed or used in?",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "<1 year",
+            "1 year",
+            "2 years",
+            "3 years",
+            "4 years", 
+            ">4 years"
+          ]
+        },
+        {
           "id": "contributor_name",
-          "title": "Contributor name (can be the same as contact name)",
-          "description": "The person filling in this form. May differ from the device creator if someone else is submitting on their behalf.",
+          "title": "Contributor name",
+          "description": "May differ from the contact person or device creator if someone else is submitting on their behalf.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "contributor_email",
-          "title": "Contributor email (can be the same as contact email)",
+          "title": "Contributor email",
+          "description": "Email of the person filling in this form. \n If it would be the same as the contact person's, simply leave blank.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "contributor_role",
+          "title": "Contributor role",
+          "description": "Role of the person submitting this form \n\n Select between: \nProject lead: directs the project (e.g. PI, lab lead)\nHardware developer: designed or built the device hardware\nSoftware developer: wrote device firmware or software\nField researcher or practitioner: deploys or operates the device in the field\nTechnician: handles assembly, maintenance, or repair\nData manager: processes or curates data from the device",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_1_name",
+          "title": "Team member 1 - Name",
+          "description": "Full name of a person involved in the project.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_1_affiliation",
+          "title": "Team member 1 - Affiliation(s)",
+          "description": "Institution(s) this person is affiliated with. Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_1_role",
+          "title": "Team member 1 - Role",
+          "description": "Select the role that best describes this person's involvement with the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_2_name",
+          "title": "Team member 2 - Name",
           "description": null,
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "institution_name",
-          "title": "Institution name(s)",
-          "description": "The institution(s) affiliated with this device or project. Separate multiple institutions with ';' (e.g. 'University of Edinburgh; NERC').",
+          "id": "team_member_2_affiliation",
+          "title": "Team member 2 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "device_creator",
-          "title": "Device creator(s)",
-          "description": "The person(s) who originally designed or built this device. Separate multiple names with ';' (e.g. 'Alan Turner; Dave Johnson'). This may differ from the contributor submitting this form.",
+          "id": "team_member_2_role",
+          "title": "Team member 2 - Role",
+          "description": null,
           "required": false,
-          "type": "text",
-          "paragraph": false
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
         },
         {
-          "id": "device_creator_email",
-          "title": "Device creator email(s)",
-          "description": "Email address(es) for the creator(s) above, in the same order, separated by ';'.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "maintainer_name",
-          "title": "Maintainer name",
-          "description": "The person currently responsible for maintaining or updating the device design. Leave blank if the same as the creator.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "maintainer_email",
-          "title": "Maintainer email",
+          "id": "team_member_3_name",
+          "title": "Team member 3 - Name",
           "description": null,
           "required": false,
           "type": "text",
           "paragraph": false
+        },
+        {
+          "id": "team_member_3_affiliation",
+          "title": "Team member 3 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_3_role",
+          "title": "Team member 3 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_4_name",
+          "title": "Team member 4 - Name",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_4_affiliation",
+          "title": "Team member 4 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_4_role",
+          "title": "Team member 4 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "team_member_5_name",
+          "title": "Team member 5 - Name",
+          "description": null,
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_5_affiliation",
+          "title": "Team member 5 - Affiliation(s)",
+          "description": "Separate multiple with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "team_member_5_role",
+          "title": "Team member 5 - Role",
+          "description": null,
+          "required": false,
+          "type": "choice",
+          "choiceType": "DROP_DOWN",
+          "options": [
+            "Project lead",
+            "Hardware developer",
+            "Software developer",
+            "Field researcher or practitioner",
+            "Technician",
+            "Data manager",
+            "Other"
+          ]
+        },
+        {
+          "id": "additional_team_members",
+          "title": "Additional team members",
+          "description": "Here you can list any additional team members, their affiliation and their role. \n Please separate name, affiliation and role using ';', and separate team member entries with '|'. \n For example: 'Name Surname; Affiliation 1, Affiliation 2; Role | Name Surname; Affiliation 1; Role' and so on",
+          "required": false,
+          "type": "text",
+          "paragraph": true
+        }
+      ]
+    },
+    {
+      "id": "device_links",
+      "title": "Device links and documentation (optional)",
+      "description": "Links to external documentation, publications, and resources. We cannot host files directly — please provide URLs to externally hosted content (e.g. GitHub, Zenodo, institutional repositories).",
+      "questions": [
+        {
+          "id": "documentation_url",
+          "title": "Documentation URL",
+          "description": "Link to the main documentation or repository for this device (e.g. GitHub repo, wiki, or project page).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "documentation_language",
+          "title": "Documentation language",
+          "description": "Primary language(s) of the documentation; if multilingual please separate wih ';' (e.g. 'English'; 'French'; 'Spanish')",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "doi_references",
+          "title": "DOI(s)",
+          "description": "Digital Object Identifier(s) for publications related to this device. Separate multiple DOIs with ';' (e.g. '10.1234/example1; 10.5678/example2').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "additional_resources",
+          "title": "Additional resources",
+          "description": "Links to other relevant resources such as video tutorials, YouTube channels, blog posts, or community forums. Separate multiple URLs with ';'.",
+          "required": false,
+          "type": "text",
+          "paragraph": true
         }
       ]
     },
     {
       "id": "device_details",
-      "title": "Device details",
-      "description": "n/a",
+      "title": "Device details (optional)",
+      "description": "Physical characteristics, construction, and cost information for the device.",
       "questions": [
+        {
+          "id": "device_construction",
+          "title": "Device construction",
+          "description": "Select all that apply.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Off-the-shelf: Purchased and used as-is",
+            "Modified off-the-shelf: Pre-built device with user-made adjustments",
+            "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+            "Fully custom: Designed and fabricated entirely by the user (e.g custom PCB)"
+          ]
+        },
+        {
+          "id": "cost_unit_build",
+          "title": "Unit build cost (€) — hardware only",
+          "description": "Approximate cost of components, electronics, enclosure, etc. for one unit.",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_deployment_seasonal",
+          "title": "Deployment/seasonal costs (€/season)",
+          "description": "Consumables per deployment or season (batteries, lures, SIM data, etc.).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_software_compute",
+          "title": "Ongoing software/compute costs (€/year)",
+          "description": "Cloud services, subscriptions, or compute costs per year (if applicable).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "cost_assembly_time",
+          "title": "Assembly time/cost",
+          "description": "Estimated human-hours to assemble one unit (e.g. '4 hours', '2 days').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "size_transport",
+          "title": "Packaged dimensions for transport (L × W × H)",
+          "description": "Approximate dimensions in mm when the device is packed for transport (e.g. '300 × 200 × 150').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "size_deployed",
+          "title": "Deployed dimensions (L × W × H)",
+          "description": "Approximate dimensions in mm when the device is set up and operational (e.g. '500 × 400 × 800').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "weight",
+          "title": "Weight (kg)",
+          "description": "Approximate weight of one complete unit, including batteries, supports, fasteners, solar panel, etc. ",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "mounting_system",
+          "title": "Mounting system(s)",
+          "description": "Select all mounting methods this device is compatible with or designed to support that you know of, not just what was used in a particular deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Tripod",
+            "Pole / stake (ground)",
+            "Tree strap / clamp",
+            "Wall / fence bracket",
+            "T-bar / cross-arm",
+            "Floating platform",
+            "Freestanding (no mount required)",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        }, 
+        {
+          "id": "skills_tools_required",
+          "title": "Skills and tools required for construction",
+          "description": "Select all skills/tools needed to build or assemble the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Soldering",
+            "3D printing",
+            "Laser cutting",
+            "CNC machining",
+            "PCB design/fabrication",
+            "Basic hand tools (screwdriver, pliers)",
+            "Woodworking",
+            "Programming/software setup",
+            "Wiring/crimping",
+            "No tools required (snap-fit assembly)",
+            "Other"
+          ]
+        },
         {
           "id": "device_version_name",
           "title": "Device version name",
@@ -161,29 +553,7 @@
         {
           "id": "device_licence",
           "title": "Device licence (e.g. CC-BY-4.0)",
-          "description": "The licence under which the device design and associated materials are released. Use a standard SPDX identifier where possible (e.g. 'CC-BY-4.0', 'MIT', 'CERN-OHL-S-2.0'). Leave blank if unknown.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "device_construction",
-          "title": "Device construction",
-          "description": "Select all that apply. 'Off-the-shelf' means the device is used as purchased with no modification. 'Partly custom' includes devices assembled from standard components with some user-designed parts (e.g. a 3D-printed enclosure or custom PCB). 'Fully custom' means the device was designed and fabricated entirely by the user.",
-          "required": false,
-          "type": "choice",
-          "choiceType": "CHECKBOX",
-          "options": [
-            "Off-the-shelf: Purchased and used as-is",
-            "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
-            "Partly custom: Assembled from off-the-shelf and/or open-source components with some user design or modification",
-            "Fully custom: Designed and fabricated by the user (hardware and potentially software)"
-          ]
-        },
-        {
-          "id": "device_cost",
-          "title": "Device cost (€) - excluding operational costs",
-          "description": "Approximate unit build cost for the hardware only (components, PCBs, enclosure, etc.). Do not include deployment consumables, cloud subscriptions, or labour costs.",
+          "description": "The licence under which the device design is released. Use a standard SPDX identifier where possible (e.g. 'CC-BY-4.0', 'CERN-OHL-S-2.0'). Leave blank if unknown.",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -192,8 +562,8 @@
     },
     {
       "id": "component_details",
-      "title": "Component details",
-      "description": "n/a",
+      "title": "Component details (optional)",
+      "description": "Technical specifications of the device's sensors, power system, processing, and connectivity.",
       "questions": [
         {
           "id": "power_sources",
@@ -203,24 +573,24 @@
           "type": "choice",
           "choiceType": "CHECKBOX",
           "options": [
-            "Mains",
+            "Grid electricity",
             "Solar",
             "Rechargeable battery",
-            "Non-rechargeable battery"
+            "Non-rechargeable battery",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            true
           ]
         },
         {
-          "id": "power_duration_continuous",
-          "title": "Power duration under continuous use",
-          "description": "How long the device can run on a single charge or battery set during continuous operation (e.g. '8 hours', '3 days'). Enter 'N/A' if mains-powered only.",
-          "required": false,
-          "type": "text",
-          "paragraph": false
-        },
-        {
-          "id": "power_duration_standard",
-          "title": "Power duration under standard use",
-          "description": "How long the device operates between charges or battery changes under typical deployment conditions (e.g. motion-triggered, scheduled intervals). Enter 'N/A' if mains-powered only.",
+          "id": "power_autonomy_continuous",
+          "title": "Power autonomy under continuous use",
+          "description": "How long the device can run on a single charge/battery set during continuous operation (e.g. '8 hours', '3 days'). \n If fully autonomous (e.g. solar panels), report the longest period a unit has been left unattended and was functioning. Leave blank if grid-powered only.",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -228,46 +598,239 @@
         {
           "id": "processing_unit",
           "title": "Processing unit",
-          "description": "The main compute component of the device (e.g. 'Raspberry Pi 4', 'NVIDIA Jetson Nano', 'Arduino Uno', 'ESP32'). Include model name and version where known.",
+          "description": "The main compute component (e.g. 'Raspberry Pi 4', 'NVIDIA Jetson Nano', 'Arduino Uno', 'ESP32'). Include model and version where known.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
           "id": "model_processing",
-          "title": "Model processing",
-          "description": "Where detection or classification models are run. 'On-device' means inference happens on the device itself. 'Offboard' means data is transferred to another computer or the cloud before processing.",
+          "title": "AI model processing",
+          "description": "Where detection or classification AI models are run. Select all that apply.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "On-device (edge processing)",
+            "Offboard processing (data transfer to separate computer)",
+            "Cloud processing",
+            "No model / manual identification only"
+          ]
+        },
+        {
+          "id": "capture_modes",
+          "title": "Available image capture modes",
+          "description": "Select all image/video capture modes supported by the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Continuous video",
+            "Time-lapse",
+            "Motion-triggered photo",
+            "Motion-triggered video",
+            "Scheduled photo",
+            "Event-triggered (e.g. AI model detection)",
+            "Manual capture",
+            "Other"
+          ],
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            true
+          ]
+        },
+        {
+          "id": "main_optical_sensor_model_name",
+          "title": "Main optical sensor model name, if known",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "main_sensor_resolution",
+          "title": "Main sensor resolution.",
+          "description": "If multiple resolutions are supported, please choose the closest typical output resolution.",
           "required": false,
           "type": "choice",
           "choiceType": "RADIO",
           "options": [
-            "On-device (edge processing)",
-            "Local computing (near edge processing using locally connected computers on the network)",
-            "Offboard processing (data transfer to and processing on separate computer)",
-            "Cloud processing",
-            "Hybrid"
+            "<= 1 MP (e.g. 1280 x 720, 0.9 MP or lower)",
+            "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)",
+            "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
+            "~6-8 MP (e.g. 3264 x 2448 or 3840 x 2160)",
+            "> 8 MP (e.g. 4056 x 3040 or higher)",
+            "Other (please specify)"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "main_sensor_framerate",
+          "title": "Main sensor frame-rate (frames per second, fps)",
+          "description": "If multiple frame-rates are supported, choose the most commonly used during deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "<1 fps",
+            "1-5 fps",
+            "5-10 fps",
+            "10-30 fps",
+            ">60 fps"
+          ]
+        },
+        {
+          "id": "lens_focusing",
+          "title": "Lens focusing",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Fixed distance",
+            "Manual",
+            "Automatic"
+          ]
+        },
+        {
+          "id": "min_focal_distance",
+          "title": "Minimum focal distance (closest focus distance)",
+          "description": "Closest distance at which the camera can focus sharply on the target.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "< 2 cm (macro)",
+            "2-5 cm",
+            "5-10 cm",
+            "10-20 cm",
+            "20-50 cm",
+            "> 50 cm",
+            "Other (please specify)"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "field_of_view",
+          "title": "Sensor/lens field of view (FoV)",
+          "description": "The angular field of view of the main imaging sensor, if known (e.g. '120°', '62° horizontal').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "connectivity",
+          "title": "Connectivity options",
+          "description": "Select all connectivity options available on the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "WiFi",
+            "Bluetooth",
+            "Cellular (4G/LTE-M/NB-IoT)",
+            "LoRa/LoRaWAN",
+            "Satellite",
+            "USB (wired)",
+            "Ethernet",
+            "SSH/VNC (remote access)",
+            "SD card",
+            "None",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false,
+            false,
+            false, 
+            true
+          ]
+        },
+        {
+          "id": "file_types",
+          "title": "Supported file types",
+          "description": "Select all data file types produced by the device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "JPEG",
+            "PNG",
+            "RAW (DNG/CR2/ARW)",
+            "TIFF",
+            "MP4",
+            "AVI/MKV",
+            "CSV/TSV",
+            "JSON",
+            "HDF5",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false, 
+            false,
+            false, 
+            true
           ]
         }
       ]
     },
     {
       "id": "maintenance_and_repairs",
-      "title": "Maintenance and repairs",
-      "description": "n/a",
+      "title": "Maintenance and repairs (optional)",
+      "description": "Information about device upkeep, repairability, and firmware updates.",
       "questions": [
         {
+          "id": "maintenance_interval",
+          "title": "Maintenance interval",
+          "description": "How often routine maintenance is needed (e.g. 'Clean lens every 2 weeks', 'Replace desiccant monthly', 'Battery swap every 3 days').",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
           "id": "repairability_score",
-          "title": "Repairability score",
-          "description": "Rate from 1 (hardest) to 5 (easiest). 1 = requires soldering or specialist tools; 2 = requires tools but no specialist skills; 3 = screwdriver assembly, standard parts; 4 = snap-fit or modular replacement; 5 = fully tool-free, hot-swap components.",
+          "title": "Repairability score (1 = very difficult, 5 = very easy)",
+          "description": "1 = requires soldering or specialist tools; 2 = requires tools but no specialist skills; 3 = screwdriver assembly, standard parts; 4 = snap-fit or modular replacement; 5 = fully tool-free, hot-swap components.",
           "required": false,
           "type": "scale",
           "low": 1,
           "high": 5
         },
         {
-          "id": "firmware_update_frequency",
-          "title": "Firmware update frequency",
-          "description": "How often firmware updates are typically released or applied (e.g. 'monthly', 'as needed', 'once per season', 'never').",
+          "id": "last_firmware_update",
+          "title": "Date of last firmware/software update",
+          "description": "Approximate date of the most recent firmware or software update (e.g. 'January 2026').",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -275,7 +838,29 @@
         {
           "id": "firmware_update_method",
           "title": "Firmware update method",
-          "description": "How firmware is delivered to the device (e.g. 'Over-the-Air (OTA)', 'USB cable', 'SD card', 'SSH').",
+          "description": "Select all methods by which firmware can be updated on this device.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Over-the-Air (OTA)",
+            "USB cable",
+            "SD card",
+            "SSH/remote access",
+            "Other"
+          ], 
+          "isOther": [
+            false,
+            false, 
+            false, 
+            false,
+            true
+          ]
+        },
+        {
+          "id": "firmware_version_repo",
+          "title": "On-device software or firmware version and repository link",
+          "description": "Version of the software or firmware running on the device and a link to its source repository, if available, use '|' as separator (e.g. 'v1.3.2 | https://github.com/org/repo').",
           "required": false,
           "type": "text",
           "paragraph": false
@@ -283,38 +868,206 @@
       ]
     },
     {
-      "id": "intended_usage_scope_and_operational_constraints",
-      "title": "Intended usage scope and operational constraints",
-      "description": "n/a",
+      "id": "intended_usage_scope",
+      "title": "Intended usage scope and operational constraints (optional)",
+      "description": "Information about the device's design intent and validated capabilities, independent of any specific deployment. Select all options that apply to the device itself (i.e. what it supports or has been validated for), not just to a single field campaign or deployment instance.",
       "questions": [
         {
+          "id": "classification_target_type",
+          "title": "Does this device target organisms primarily by taxonomic identity or functional group?",
+          "description": "Taxonomic: the device is designed to detect and/or classify organisms by species or higher taxonomic rank (e.g. genus, family, order). \nFunctional: the device is designed to detect or classify organisms by ecological role or trait (e.g. pollinators, nocturnal insects). \nBoth: the device supports or has been used for both approaches.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Taxonomic groups (species, genus, family, order, etc.)",
+            "Functional groups (ecological role or trait)",
+            "Both taxonomic and functional"
+          ]
+        },
+        {
           "id": "taxonomic_groups",
-          "title": "Taxonomic group(s)",
-          "description": "The insect or arthropod groups this device is designed or validated for (e.g. 'Lepidoptera', 'Coleoptera', 'Hymenoptera'). Use scientific names where possible; separate multiple groups with ';'.",
+          "title": "Target taxonomic group(s)",
+          "description": "Select all taxonomic groups this device is designed or validated for.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Lepidoptera (butterflies & moths)",
+            "Coleoptera (beetles)",
+            "Hymenoptera (bees, wasps, ants)",
+            "Diptera (flies, mosquitoes)",
+            "Hemiptera (true bugs)",
+            "Odonata (dragonflies & damselflies)",
+            "Orthoptera (grasshoppers & crickets)",
+            "Trichoptera (caddisflies)",
+            "Ephemeroptera (mayflies)",
+            "Plecoptera (stoneflies)",
+            "Arachnida (spiders, mites)",
+            "Other arthropods",
+            "Non-specific / all insects"
+          ]
+        },
+        {
+          "id": "functional_groups",
+          "title": "Target functional group(s)",
+          "description": "Select all functional groups that device is designed or has been used to record.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Pollinators (flower-visiting insects)",
+            "Day-flying insects (diurnal)",
+            "Night-flying insects (nocturnal)",
+            "Crepuscular insects (dusk/dawn active)",
+            "Herbivores (plant feeders)",
+            "Predatory insects (e.g. ground beetles, dragonflies)",
+            "Parasitoids (e.g. parasitic wasps)",
+            "Decomposers / detritivores (e.g. dung beetles, carrion feeders)",
+            "Aquatic insects (larval or adult stage)",
+            "Soil-dwelling insects",
+            "Wood-boring insects",
+            "Crop pests",
+            "Disease vectors (e.g. mosquitoes, sandflies)",
+            "Invasive species",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "habitat_type",
+          "title": "Habitat type(s)",
+          "description": "Select all habitat types where this device is designed or validated to operate in that you know of, select all that apply to the device's capabilities, not just a single deployment site.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Temperate forest",
+            "Tropical forest",
+            "Grassland/meadow",
+            "Wetland/marsh",
+            "Agricultural land",
+            "Urban/suburban",
+            "Desert/arid",
+            "Alpine/montane",
+            "Freshwater (rivers, lakes)",
+            "Coastal/marine",
+            "Cave/subterranean",
+            "Indoor/laboratory",
+            "Other"
+          ], 
+          "isOther": [
+            false, 
+            false, 
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "operational_environment",
+          "title": "Operational environment",
+          "description": "The broad environment category for device deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "Terrestrial",
+            "Aquatic (freshwater)",
+            "Aquatic (marine)",
+            "Aerial"
+          ]
+        },
+        {
+          "id": "attractants",
+          "title": "Attractants supported",
+          "description": "Select all attractants this device is designed or validated to use. Attractants draw insects toward the sensor. Select all that the device supports, even if not all were used in every deployment.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "CHECKBOX",
+          "options": [
+            "UV light",
+            "Visible light (white/coloured LED)",
+            "Pheromone lure",
+            "Floral scent / synthetic volatile",
+            "Sugar bait / fermented liquid",
+            "CO2 (carbon dioxide)",
+            "Heat source",
+            "None",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "id": "temperature_min_c",
+          "title": "Minimum operational temperature (°C)",
+          "description": "The lowest ambient temperature at which the device functions reliably.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "operational_temperature_range_c",
-          "title": "Operational temperature range (°C)",
-          "description": "The minimum and maximum ambient temperatures within which the device functions reliably (e.g. '-5 to 40'). Refer to manufacturer specifications or field experience.",
+          "id": "temperature_max_c",
+          "title": "Maximum operational temperature (°C)",
+          "description": "The highest ambient temperature at which the device functions reliably.",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "weatherproofing",
-          "title": "Weatherproofing",
-          "description": "The IP (Ingress Protection) rating or equivalent, if known (e.g. 'IP65', 'IP54'). If no formal rating exists, describe the protection level (e.g. 'splash-proof enclosure', 'not weatherproof').",
+          "id": "ip_rating",
+          "title": "IP rating (weatherproofing)",
+          "description": "The Ingress Protection rating, if known (e.g. 'IP65', 'IP67'); see here for more details: https://www.iec.ch/ip-ratings. If no formal rating, describe the protection and estimate the closest IP rating (e.g. 'splash-proof enclosure, IP64', 'fully sealed, IP68').",
           "required": false,
           "type": "text",
           "paragraph": false
         },
         {
-          "id": "operational_costs",
-          "title": "Operational costs (€)",
-          "description": "Estimated running costs for a typical deployment season (e.g. one summer field season). Include consumables (batteries, lures), cloud storage, SIM data plans, etc. Exclude the initial hardware build cost.",
+          "id": "subject_size_min_mm",
+          "title": "Minimum detectable subject size (mm)",
+          "description": "The smallest organism or object size the device can reliably detect or image (in mm).",
+          "required": false,
+          "type": "text",
+          "paragraph": false
+        },
+        {
+          "id": "subject_size_max_mm",
+          "title": "Maximum detectable subject size (mm)",
+          "description": "The largest organism or object size the device is designed to capture (in mm). Leave blank if not applicable.",
           "required": false,
           "type": "text",
           "paragraph": false

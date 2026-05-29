@@ -352,7 +352,7 @@ It runs `collectResponses.py` (writing CSV, per-device JSON, and any collision r
 
 
 # Contacts
-If you have questions please get in touch: [luca.pegoraro@wsl.ch](mailto:luca.pegoraro@wsl.ch)
+If you have questions please get in touch with the current maintainers listed in [CONTACTS.md](CONTACTS.md).
 
 # Citation
 If you found this repo useful, please cite it as: 

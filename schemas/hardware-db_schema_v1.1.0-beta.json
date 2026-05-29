@@ -60,6 +60,30 @@
           "paragraph": false
         },
         {
+          "id": "contact_institution_type",
+          "title": "Contact institution type",
+          "description": "Select the category that best describes the contact person's primary institution.",
+          "required": false,
+          "type": "choice",
+          "choiceType": "RADIO",
+          "options": [
+            "Academic / Research institute",
+            "Government / Public authority",
+            "NGO / Non-profit",
+            "Commercial / Private company",
+            "Citizen science group / Community organisation",
+            "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
+          ]
+        },
+        {
           "id": "device_name",
           "title": "Device name",
           "description": "The common or published name of the device (e.g. 'AMI-trap', 'InsectDetect', 'PitfallCam'). If the device has no established name, use a short descriptive label. \n\n Important: this name will be used as a basis to create a unique deviceID in the database; if a record for a deviceID already exists, it will be overwritten (this can be reversed by database maintainers). \n\n You can check for existing deviceID using ths page: https://insectai-cost-action.github.io/hardware-db/",

@@ -79,9 +79,9 @@
 - [ ] ~~"Operational costs": need to clarify, add something about running costs for one season~~ REMOVED, all costs are in device details now
 === Missing questions to add (maybe) ===
 - [x] Mounting Systems: how the device attaches to the environment (e.g. tripod, tree mount, pole, etc).
-- [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles.
+- [ ] Charging infrastructure: Number of batteries, solar panel wattage, charging cycles. - REMOVED BATTERY SPECS ALTOGETHER, RELYING ON AUTONOMY UNDER CONTINUOUS USE...  
 - [ ] Alternative components? How "flexible" are devices? 
-- [ ] Institution Type: categorization of the organization (NGO, Academic, Government, Commercial).
+- [x] Institution Type: categorization of the organization (NGO, Academic, Government, Commercial).
 - [ ] Pros/Cons: A qualitative field for users to list known limitations or advantages of the device.
 - [ ] Data Analysis Platform: Where the data is processed (local machine, cloud platform name).
 

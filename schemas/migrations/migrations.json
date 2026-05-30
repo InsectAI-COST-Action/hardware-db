@@ -2,12 +2,388 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-04-09T00:00:00Z"
+    "last_updated": "2026-06-01T00:00:00Z"
   },
   "migrations": {
-    "1.0.0→1.1.0": {
-      "created_date": "TBD - define when needed",
-      "description": "TBD - describe the changes between 1.0.0 and 1.1.0",
+    "0.2.0→1.0.0": {
+      "created_date": "2026-05-30",
+      "description": "Metadata-only migration: v0.2.0 and v1.0.0 have identical question IDs. This migration adds schema versioning metadata to records that predate the versioning system.",
+      "mappings": {
+        "drops": [],
+        "adds": [],
+        "renames": [],
+        "transforms": []
+      }
+    },
+    "1.0.0→1.1.0-beta": {
+      "created_date": "2026-06-01",
+      "description": "Restructured questionnaire based on workshop feedback. Drops 43 fields, renames 7, and adds 47 new fields covering team composition, costs breakdown, documentation, connectivity, and environmental parameters.",
+      "mappings": {
+        "drops": [
+          "additional_external_environmental_sensors",
+          "additional_internal_environmental_sensors",
+          "data_storage_types",
+          "data_transfer_methods",
+          "device__image",
+          "device_billofmaterials",
+          "device_colour",
+          "device_cost",
+          "device_creator",
+          "device_creator_email",
+          "device_material",
+          "device_mobility",
+          "device_size",
+          "documentation_link",
+          "documentation_upload",
+          "firmware_update_frequency",
+          "github_link",
+          "institution_name",
+          "lens_aperture_fnumber",
+          "lens_diameter_mm",
+          "lens_focal_range",
+          "lens_mounting_options",
+          "main_sensor_bitrate",
+          "main_sensor_type",
+          "maintainer_email",
+          "maintainer_name",
+          "maximum_data_storage_capacity_gb",
+          "operational_context",
+          "operational_costs",
+          "operational_elevation_range",
+          "operational_height_range",
+          "operational_locality_tested",
+          "operational_temperature_range_c",
+          "other_device_peripherals",
+          "physical_connectivity_options",
+          "power_duration_standard",
+          "power_storage_capacity_mah",
+          "power_storage_type",
+          "previous_deviceID",
+          "publication_DOI",
+          "subject_size_range_mm",
+          "to_full_form",
+          "wireless_connectivity_options"
+        ],
+        "adds": [
+          {
+            "question_id": "additional_resources",
+            "title": "Additional resources",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "additional_team_members",
+            "title": "Additional team members",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "attractants",
+            "title": "Attractants",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "classification_target_type",
+            "title": "Classification target type",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "connectivity",
+            "title": "Connectivity options",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "contact_institution",
+            "title": "Contact institution",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "contact_institution_type",
+            "title": "Contact institution type",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "contributor_role",
+            "title": "Contributor role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "cost_assembly_time",
+            "title": "Assembly time cost",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "cost_deployment_seasonal",
+            "title": "Seasonal deployment cost",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "cost_software_compute",
+            "title": "Software/compute cost",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "cost_unit_build",
+            "title": "Unit build cost",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "data_licence_consent",
+            "title": "Data licence consent",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "documentation_language",
+            "title": "Documentation language",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "documentation_url",
+            "title": "Documentation URL",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "doi_references",
+            "title": "DOI references",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "field_of_view",
+            "title": "Field of view",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "firmware_version_repo",
+            "title": "Firmware version/repo",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "last_firmware_update",
+            "title": "Last firmware update",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "maintenance_interval",
+            "title": "Maintenance interval",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "min_focal_distance",
+            "title": "Minimum focal distance",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "mounting_system",
+            "title": "Mounting system",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "person_hours",
+            "title": "Person hours",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "project duration",
+            "title": "Project duration",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "size_deployed",
+            "title": "Size deployed",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "size_transport",
+            "title": "Size for transport",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "skills_tools_required",
+            "title": "Skills/tools required",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "subject_size_max_mm",
+            "title": "Maximum subject size (mm)",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "subject_size_min_mm",
+            "title": "Minimum subject size (mm)",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_1_affiliation",
+            "title": "Team member 1 affiliation",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_1_name",
+            "title": "Team member 1 name",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_1_role",
+            "title": "Team member 1 role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_2_affiliation",
+            "title": "Team member 2 affiliation",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_2_name",
+            "title": "Team member 2 name",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_2_role",
+            "title": "Team member 2 role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_3_affiliation",
+            "title": "Team member 3 affiliation",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_3_name",
+            "title": "Team member 3 name",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_3_role",
+            "title": "Team member 3 role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_4_affiliation",
+            "title": "Team member 4 affiliation",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_4_name",
+            "title": "Team member 4 name",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_4_role",
+            "title": "Team member 4 role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_5_affiliation",
+            "title": "Team member 5 affiliation",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_5_name",
+            "title": "Team member 5 name",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_member_5_role",
+            "title": "Team member 5 role",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "team_size",
+            "title": "Team size",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "temperature_max_c",
+            "title": "Maximum operational temperature (°C)",
+            "type": "text",
+            "default_value": null
+          },
+          {
+            "question_id": "temperature_min_c",
+            "title": "Minimum operational temperature (°C)",
+            "type": "text",
+            "default_value": null
+          }
+        ],
+        "renames": [
+          {
+            "old_id": "device_weight",
+            "new_id": "weight"
+          },
+          {
+            "old_id": "functional_guilds",
+            "new_id": "functional_groups"
+          },
+          {
+            "old_id": "habitats",
+            "new_id": "habitat_type"
+          },
+          {
+            "old_id": "main_sensor_model_name",
+            "new_id": "main_optical_sensor_model_name"
+          },
+          {
+            "old_id": "power_duration_continuous",
+            "new_id": "power_autonomy_continuous"
+          },
+          {
+            "old_id": "supported_file_types",
+            "new_id": "file_types"
+          },
+          {
+            "old_id": "weatherproofing",
+            "new_id": "ip_rating"
+          }
+        ],
+        "transforms": []
+      }
+    },
+    "1.0.0-beta→1.0.0": {
+      "created_date": "2026-06-01",
+      "description": "Identity migration: 1.0.0-beta and 1.0.0 have identical question IDs. This normalizes pre-release version tags to stable release.",
       "mappings": {
         "drops": [],
         "adds": [],

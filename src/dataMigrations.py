@@ -284,7 +284,7 @@ def migrate_response(
     """
     Migrate a single response from source to target schema version.
     
-    For sequential migrations (e.g., 1.0.0 → 1.1.0 → 1.2.0), this applies
+    For sequential migrations (e.g., 0.2.0 → 1.0.0 → 1.1.0-beta), this applies
     each migration in sequence. If only a direct migration exists, it uses that.
     
     Args:
@@ -299,15 +299,71 @@ def migrate_response(
     if source_version == target_version:
         return response
     
-    # For now, support only direct migrations
-    # (Future: implement version chain resolution)
+    # Try direct migration first
     migration = registry.get_migration(source_version, target_version)
-    if migration is None:
+    if migration is not None:
+        return migration.apply_to_response(response)
+    
+    # Try to find a chain of migrations
+    chain = _find_migration_chain(source_version, target_version, registry)
+    if chain is None:
         raise MigrationError(
             f"No migration path from {source_version} to {target_version}"
         )
     
-    return migration.apply_to_response(response)
+    # Apply migrations sequentially
+    current = response
+    for step_source, step_target in chain:
+        step_migration = registry.get_migration(step_source, step_target)
+        if step_migration is None:
+            raise MigrationError(
+                f"Migration step {step_source}→{step_target} not found in chain"
+            )
+        current = step_migration.apply_to_response(current)
+    
+    return current
+
+
+def _find_migration_chain(
+    source_version: str,
+    target_version: str,
+    registry: MigrationRegistry
+) -> Optional[List[Tuple[str, str]]]:
+    """
+    Find a chain of migrations from source to target using BFS.
+    
+    Returns:
+        List of (source, target) tuples representing the migration path,
+        or None if no path exists.
+    """
+    available = registry.list_available_migrations()
+    
+    # Build adjacency map
+    graph: Dict[str, List[str]] = {}
+    for src, tgt in available:
+        if src not in graph:
+            graph[src] = []
+        graph[src].append(tgt)
+    
+    if source_version not in graph:
+        return None
+    
+    # BFS to find shortest path
+    from collections import deque
+    queue: deque = deque([(source_version, [])])
+    visited = {source_version}
+    
+    while queue:
+        current, path = queue.popleft()
+        for neighbor in graph.get(current, []):
+            new_path = path + [(current, neighbor)]
+            if neighbor == target_version:
+                return new_path
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, new_path))
+    
+    return None
 
 
 def migrate_responses_batch(

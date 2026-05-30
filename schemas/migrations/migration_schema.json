@@ -35,9 +35,9 @@
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": ["id", "title"],
+                  "required": ["question_id", "title"],
                   "properties": {
-                    "id": {"type": "string"},
+                    "question_id": {"type": "string"},
                     "title": {"type": "string"},
                     "type": {"type": "string"},
                     "default_value": {}
@@ -61,10 +61,10 @@
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": ["id", "type"],
+                  "required": ["question_id", "type"],
                   "properties": {
-                    "id": {"type": "string"},
-                    "type": {"enum": ["value_map", "split", "merge", "format"]},
+                    "question_id": {"type": "string"},
+                    "type": {"enum": ["value_map", "split", "merge", "format", "custom"]},
                     "mapping": {"type": "object"},
                     "format": {"type": "string"},
                     "split_regex": {"type": "string"}

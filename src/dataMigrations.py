@@ -9,6 +9,7 @@ data, transforming them from an old schema version to a target schema version.
 
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from datetime import datetime
@@ -117,6 +118,10 @@ class SchemaMigration:
             self._apply_split(data, question_id, transform)
         elif transform_type == "merge":
             self._apply_merge(data, question_id, transform)
+        elif transform_type == "fill_if_empty":
+            self._apply_fill_if_empty(data, question_id, transform)
+        elif transform_type == "numeric_to_range_option":
+            self._apply_numeric_to_range_option(data, question_id, transform)
         elif transform_type == "custom":
             logger.warning(
                 f"Custom transform for '{question_id}' not implemented; skipping"
@@ -125,81 +130,256 @@ class SchemaMigration:
             raise MigrationError(f"Unknown transform type: {transform_type}")
     
     def _apply_value_map(
-        self, 
-        data: Dict[str, Any], 
-        question_id: str, 
+        self,
+        data: Dict[str, Any],
+        question_id: str,
         transform: Dict[str, Any]
     ) -> None:
-        """Map old values to new values for a question."""
+        """Map old values to new values for a question.
+
+        When ``multi_value=True`` the field is treated as a semicolon-separated
+        checkbox string.  Each token is looked up in ``value_map``; tokens with a
+        ``null`` mapping are explicitly dropped, tokens absent from ``value_map``
+        are preserved when ``fallback_value='preserve'`` or dropped otherwise.
+        Duplicate mapped values are removed to keep the output clean.
+        """
         if question_id not in data:
             return
-        
+
         old_value = data[question_id]
         value_map = transform.get("value_map", {})
         fallback = transform.get("fallback_value")
-        
-        # Map the value; use fallback if not found
-        if old_value in value_map:
-            data[question_id] = value_map[old_value]
-        elif fallback is not None:
-            data[question_id] = fallback
+        multi_value = transform.get("multi_value", False)
+        separator = transform.get("separator", "; ")
+
+        if multi_value:
+            if not isinstance(old_value, str) or not old_value:
+                return
+            tokens = [t.strip() for t in old_value.replace(",", ";").split(";") if t.strip()]
+            mapped: List[str] = []
+            seen: set = set()
+            for token in tokens:
+                if token in value_map:
+                    new_val = value_map[token]
+                    if new_val is not None and new_val not in seen:
+                        mapped.append(new_val)
+                        seen.add(new_val)
+                    # null in value_map → explicitly drop this token
+                elif fallback == "preserve":
+                    if token not in seen:
+                        mapped.append(token)
+                        seen.add(token)
+                # else: no mapping entry, fallback is not "preserve" → drop
+            data[question_id] = separator.join(mapped) if mapped else None
         else:
-            logger.warning(
-                f"Value '{old_value}' for question '{question_id}' not in mapping; "
-                f"preserving original"
-            )
+            # Simple single-value mapping
+            if old_value in value_map:
+                data[question_id] = value_map[old_value]
+            elif fallback is not None:
+                data[question_id] = fallback
+            else:
+                logger.warning(
+                    f"Value '{old_value}' for question '{question_id}' not in mapping; "
+                    f"preserving original"
+                )
     
     def _apply_split(
-        self, 
-        data: Dict[str, Any], 
-        source_question_id: str, 
+        self,
+        data: Dict[str, Any],
+        source_question_id: str,
         transform: Dict[str, Any]
     ) -> None:
-        """
-        Split one question into multiple new questions.
-        
-        For now, this is a placeholder that removes the old question and adds
-        empty placeholders for new questions. Custom logic would be needed
-        to parse/split the actual value.
+        """Split one question into multiple new questions.
+
+        ``split_type='numeric_range'``: parses the source text for numeric
+        values and places the first in ``target_questions[0]`` (minimum) and
+        the last in ``target_questions[-1]`` (maximum).  Handles formats like
+        ``"5-50"``, ``"-10 to 40"``, ``"5 - 50 mm"``, etc.
+
+        Default behaviour (no ``split_type``) logs a warning and leaves target
+        fields as ``None``.
         """
         target_questions = transform.get("target_questions", [])
+        split_type = transform.get("split_type", "default")
         old_value = data.pop(source_question_id, None)
-        
-        logger.info(
-            f"Split: question '{source_question_id}' (value: '{old_value}') "
-            f"→ {target_questions}. Manual mapping required if not implemented."
-        )
-        
-        # Add placeholder values for new questions
-        for new_q_id in target_questions:
-            if new_q_id not in data:
-                data[new_q_id] = None
+
+        if split_type == "numeric_range":
+            text = str(old_value or "")
+            # Match explicit "min-max" or "min to max" patterns.
+            # Using a named separator avoids misreading "5-50" as min=5, max=-50.
+            range_match = re.search(
+                r'(-?\d+(?:\.\d+)?)\s*(?:to|-)\s*(-?\d+(?:\.\d+)?)',
+                text, re.IGNORECASE
+            )
+            if range_match and len(target_questions) >= 2:
+                if target_questions[0] not in data or data[target_questions[0]] is None:
+                    data[target_questions[0]] = range_match.group(1)
+                if target_questions[-1] not in data or data[target_questions[-1]] is None:
+                    data[target_questions[-1]] = range_match.group(2)
+            elif text:
+                # Fallback: single number → populate first target only
+                single = re.search(r'-?\d+(?:\.\d+)?', text)
+                if single and target_questions:
+                    if target_questions[0] not in data or data[target_questions[0]] is None:
+                        data[target_questions[0]] = single.group(0)
+            # Ensure all targets exist (even if None)
+            for t in target_questions:
+                if t not in data:
+                    data[t] = None
+        else:
+            logger.info(
+                f"Split: question '{source_question_id}' (value: '{old_value}') "
+                f"→ {target_questions}. Manual mapping required if not implemented."
+            )
+            for new_q_id in target_questions:
+                if new_q_id not in data:
+                    data[new_q_id] = None
     
     def _apply_merge(
-        self, 
-        data: Dict[str, Any], 
-        target_question_id: str, 
+        self,
+        data: Dict[str, Any],
+        target_question_id: str,
         transform: Dict[str, Any]
     ) -> None:
-        """
-        Merge multiple old questions into one new question.
-        
-        For now, this concatenates values with a separator. Custom logic would
-        be needed for more sophisticated merging.
+        """Merge multiple old questions into one new question.
+
+        When ``multi_value=True`` and a ``value_map`` is provided each source
+        field is treated as a semicolon-separated checkbox string; tokens are
+        mapped individually, deduplicated, then joined.  Tokens with a ``null``
+        mapping are explicitly dropped; tokens absent from ``value_map`` are
+        preserved when ``fallback_value='preserve'`` or dropped otherwise.
+
+        Default behaviour concatenates non-empty source values with ``"; "``.
         """
         source_questions = transform.get("source_questions", [])
-        values = []
-        
-        for old_q_id in source_questions:
-            if old_q_id in data and data[old_q_id]:
-                values.append(str(data[old_q_id]))
-            data.pop(old_q_id, None)
-        
-        merged_value = "; ".join(values) if values else None
-        data[target_question_id] = merged_value
-        
+        multi_value = transform.get("multi_value", False)
+        value_map = transform.get("value_map", {})
+        fallback = transform.get("fallback_value")
+        separator = transform.get("separator", "; ")
+        dedup = transform.get("dedup", True)
+
+        if multi_value:
+            all_tokens: List[str] = []
+            seen: set = set()
+            for old_q_id in source_questions:
+                val = data.pop(old_q_id, None)
+                if not val or not isinstance(val, str):
+                    continue
+                tokens = [t.strip() for t in val.replace(",", ";").split(";") if t.strip()]
+                for token in tokens:
+                    if token in value_map:
+                        new_val = value_map[token]
+                        if new_val is not None:
+                            if not dedup or new_val not in seen:
+                                all_tokens.append(new_val)
+                                seen.add(new_val)
+                        # null in value_map → explicitly drop this token
+                    elif fallback == "preserve":
+                        if not dedup or token not in seen:
+                            all_tokens.append(token)
+                            seen.add(token)
+                    # else: no mapping entry, fallback not "preserve" → drop
+            merged_value = separator.join(all_tokens) if all_tokens else None
+            data[target_question_id] = merged_value
+            logger.info(
+                f"Merge (multi-value): {source_questions} → '{target_question_id}' = '{merged_value}'"
+            )
+        else:
+            values = []
+            for old_q_id in source_questions:
+                if old_q_id in data and data[old_q_id]:
+                    values.append(str(data[old_q_id]))
+                data.pop(old_q_id, None)
+            merged_value = "; ".join(values) if values else None
+            data[target_question_id] = merged_value
+            logger.info(
+                f"Merge: {source_questions} → '{target_question_id}' = '{merged_value}'"
+            )
+
+    def _apply_fill_if_empty(
+        self,
+        data: Dict[str, Any],
+        target_question_id: str,
+        transform: Dict[str, Any]
+    ) -> None:
+        """Copy a source field's value to the target only if the target is empty.
+
+        The source field is always removed from the record regardless of whether
+        its value was used.  This is intended for best-effort fallback mappings
+        where a semantically similar (but not identical) field should fill in
+        when the canonical target has no data.
+        """
+        source_id = transform.get("source_question_id")
+        if not source_id or source_id not in data:
+            return
+
+        source_val = data.pop(source_id)
+        if source_val and not data.get(target_question_id):
+            data[target_question_id] = source_val
+            logger.info(
+                f"fill_if_empty: '{source_id}' → '{target_question_id}' = '{source_val}'"
+            )
+        else:
+            logger.info(
+                f"fill_if_empty: '{target_question_id}' already set or source empty; "
+                f"dropped '{source_id}'"
+            )
+
+    def _apply_numeric_to_range_option(
+        self,
+        data: Dict[str, Any],
+        question_id: str,
+        transform: Dict[str, Any]
+    ) -> None:
+        """Parse a free-text numeric value and map it to a labelled range option.
+
+        The minimum *positive* numeric value found in the string (after optional
+        unit conversion to a common reference unit) is compared against a list
+        of ``option_ranges`` to select the appropriate label.  Falls back to
+        ``fallback_option`` if no usable number is found or no range matches.
+
+        Example ``option_ranges`` entry::
+
+            {"label": "2-5 cm", "min": 2, "max": 5}
+
+        Omit ``min`` (or ``max``) to represent an open-ended bound.
+        """
+        if question_id not in data or not data[question_id]:
+            return
+
+        old_value = str(data[question_id])
+        unit_conversion: Dict[str, float] = transform.get("unit_conversion", {})
+        option_ranges: List[Dict[str, Any]] = transform.get("option_ranges", [])
+        fallback = transform.get("fallback_option", "Other (please specify)")
+
+        # Find all (number, optional_unit) pairs
+        matches = re.findall(r'(-?\d+(?:\.\d+)?)\s*(mm|cm|m)?', old_value.lower())
+
+        values_converted: List[float] = []
+        for num_str, unit in matches:
+            num = float(num_str)
+            if num <= 0:
+                continue  # ignore zero/negative (e.g. separator hyphens)
+            if unit and unit in unit_conversion:
+                num *= unit_conversion[unit]
+            values_converted.append(num)
+
+        if not values_converted:
+            data[question_id] = fallback
+            return
+
+        min_val = min(values_converted)
+        result = fallback
+        for opt in option_ranges:
+            low = opt.get("min", float("-inf"))
+            high = opt.get("max", float("inf"))
+            if low <= min_val < high:
+                result = opt["label"]
+                break
+
+        data[question_id] = result
         logger.info(
-            f"Merge: {source_questions} → '{target_question_id}' = '{merged_value}'"
+            f"numeric_to_range_option: '{question_id}' parsed min={min_val} → '{result}'"
         )
 
 

@@ -36,6 +36,24 @@
     "schema_version": ""
   },
   {
+    "filename": "DIOPSIS",
+    "device_name": "DIOPSIS",
+    "institution_name": "",
+    "contact_name": "Stephan Peterse",
+    "contact_email": "info@faunabit.eu",
+    "contributor_name": "Stephan Peterse",
+    "contributor_email": "info@faunabit.eu",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "The DIOPSIS is a smart camera that automatically photographs and identifies insects in the wild. Set up in nature, it works day and night to capture which species are present and how often they appear, helping researchers track insect populations and monitor biodiversity over time.",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-06-01T14:52:19.946457Z",
+    "schema_version": "1.1.0-beta"
+  },
+  {
     "filename": "GoPro",
     "device_name": "GoPro",
     "institution_name": "Federal Research Institute WSL",
@@ -90,6 +108,24 @@
     "schema_version": ""
   },
   {
+    "filename": "LepiSense",
+    "device_name": "LepiSense",
+    "institution_name": "",
+    "contact_name": "Jonas Beuchert",
+    "contact_email": "www.linkedin.com/in/jonas-beuchert",
+    "contributor_name": "Jonas Beuchert",
+    "contributor_email": "https://www.linkedin.com/in/jonas-beuchert/",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "LepiSense features colourful lighting to attract insects, a high-resolution camera, and high-capacity data storage for pictures. Solar-powered and easy to set up, it aims to enable scalable, automated long-term monitoring of nocturnal insects.",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-06-01T14:46:30.026456Z",
+    "schema_version": "1.1.0-beta"
+  },
+  {
     "filename": "Lépinoc",
     "device_name": "Lépinoc",
     "institution_name": "Noé",
@@ -124,6 +160,24 @@
     "documentation_link": "",
     "collected_date": "2026-04-22T06:02:35.990080Z",
     "schema_version": "1.0.0"
+  },
+  {
+    "filename": "Mothbox",
+    "device_name": "Mothbox",
+    "institution_name": "",
+    "contact_name": "Andrew Quitmeyer",
+    "contact_email": "andy@dinalab.net",
+    "contributor_name": "Kit Quitmeyer",
+    "contributor_email": "kathleen.quitmeyer@gmail.com",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "The Mothbox is an open-source nocturnal insect monitoring device. It is designed to be low-cost, small, and lightweight, and although it can be used anywhere, it was designed for tropical field biologists who are working in remote locations. The Mothbox is typically powered by a lithium battery so that it can be used without a power grid, but it can be plugged in to constant power, attached to a solar panel, or use another type of battery. Anyone can make their own Mothbox - find out how by going to mothbox.org!",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-06-01T14:52:19.946457Z",
+    "schema_version": "1.1.0-beta"
   },
   {
     "filename": "PICT",

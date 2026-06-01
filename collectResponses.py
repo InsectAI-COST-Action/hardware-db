@@ -212,6 +212,8 @@ def main():
 
 
     ### Write individual JSON files for each response, with shorthand keys
+    written = 0
+    skipped = 0
     for item in responses_shorthand:
 
         device_name = item.get("device_name")
@@ -219,10 +221,21 @@ def main():
 
         json_path = output_dir / f"{filename}.json"
 
+        # Only write if actual data changed (ignore _metadata when comparing)
+        new_data = {k: v for k, v in item.items() if k != "_metadata"}
+        if json_path.exists():
+            with open(json_path, "r", encoding="utf-8") as jf:
+                existing = json.load(jf)
+            existing_data = {k: v for k, v in existing.items() if k != "_metadata"}
+            if existing_data == new_data:
+                skipped += 1
+                continue
+
         with open(json_path, "w", encoding="utf-8") as jf:
             json.dump(item, jf, indent=2, ensure_ascii=False)
+        written += 1
 
-    print(f"JSON files written to {output_dir}")
+    print(f"JSON files written to {output_dir}: {written} updated, {skipped} unchanged")
     
 if __name__ == "__main__":
     main()

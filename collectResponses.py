@@ -36,6 +36,42 @@ def get_schema_version(schema_path: str) -> str:
         return "1.0.0"
 
 
+def write_csv_from_json_files(
+    output_dir: Path,
+    csv_file: Path,
+    ordered_shortQ_to_titleQ: list[str],
+) -> int:
+    """Rebuild CSV from all JSON records currently present in data/."""
+    def normalize_csv_cell(value) -> str:
+        # Keep CSV one-record-per-line by flattening embedded line breaks in free-text fields.
+        if value is None:
+            return ""
+        text = str(value)
+        return " ".join(text.replace("\r\n", "\n").replace("\r", "\n").splitlines())
+
+    rows_written = 0
+    with open(csv_file, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(ordered_shortQ_to_titleQ)
+
+        for json_path in sorted(output_dir.glob("*.json")):
+            try:
+                with open(json_path, "r", encoding="utf-8") as jf:
+                    item = json.load(jf)
+            except (json.JSONDecodeError, OSError) as e:
+                print(f"Warning: skipping {json_path.name}: {e}")
+                continue
+
+            row_values = [
+                normalize_csv_cell(item.get(short, ""))
+                for short in ordered_shortQ_to_titleQ
+            ]
+            writer.writerow(row_values)
+            rows_written += 1
+
+    return rows_written
+
+
 # ----------------------------------------------------------------------
 # Main fun: call APIs, parse responses, write outputs
 # ----------------------------------------------------------------------
@@ -94,27 +130,38 @@ def main():
     shortQ_to_titleQ = {}
     ordered_shortQ_to_titleQ = []
 
-    for section in schema["sections"]:
-        for q in section["questions"]:
-            qid = q["id"]
-            title = q["title"]
+    for section in schema.get("sections", []):
+        for q in section.get("questions", []):
+            qid = q.get("id")
+            title = q.get("title")
+            if not qid or not title:
+                continue
             shortQ_to_titleQ[qid] = title
             ordered_shortQ_to_titleQ.append(qid)
 
 
-    ### Grab the responses - this contains the answers proper
-    responses = forms_service.forms().responses().list(formId=cfg["GOOGLE_FORM_ID"]).execute()
-    if cfg["DEBUG"]:
-        print("responses:")
-        print(responses)
+    ### Grab all responses (handle pagination explicitly)
+    responses = []
+    page_token = None
+    while True:
+        req = forms_service.forms().responses().list(
+            formId=cfg["GOOGLE_FORM_ID"],
+            pageToken=page_token,
+        )
+        page = req.execute()
+        if cfg["DEBUG"]:
+            print("responses page:")
+            print(page)
 
-    responses = responses.get("responses", [])
+        responses.extend(page.get("responses", []))
+        page_token = page.get("nextPageToken")
+        if not page_token:
+            break
+
     count = len(responses)
     print(f"Found {count} responses")
-
     if count == 0:
-        print("Warning: no form responses found, nothing to export.")
-        return
+        print("Warning: no form responses found in API response.")
 
 
     ### Parse responses into questionId to answer
@@ -190,37 +237,16 @@ def main():
     output_dir.mkdir(exist_ok=True)
 
 
-    ### Write CSV with shorthand keys as headers, and answers as rows
-    # Skip _metadata column; include only actual form fields
-    csv_file = output_dir / "form_responses.csv"
-
-    with open(csv_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        
-        # Use ordered schema IDs as headers, excluding _metadata
-        header = [short for short in ordered_shortQ_to_titleQ]
-        writer.writerow(header)
-
-        for item in responses_shorthand:
-            row_values = [item.get(short, "") for short in ordered_shortQ_to_titleQ]
-            writer.writerow(row_values)
-
-    print(f"CSV written to {csv_file}")
-
-
     ### Write individual JSON files for each response, with shorthand keys
     written = 0
     skipped = 0
+    latest_by_filename = {}
     for item in responses_shorthand:
         device_name = item.get("device_name", "")
         filename = sanitize_filename(device_name)
         if not filename:
             filename = "unnamed_device"
         latest_by_filename[filename] = item
-
-    writes_ok = 0
-    collisions = []
-    run_stamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
 
     for filename, item in latest_by_filename.items():
         json_path = output_dir / f"{filename}.json"
@@ -240,6 +266,11 @@ def main():
         written += 1
 
     print(f"JSON files written to {output_dir}: {written} updated, {skipped} unchanged")
-    
+
+    ### Always rebuild CSV from all JSON files currently in data/
+    csv_file = output_dir / "_InsectAI_hardware-db.csv"
+    rows_written = write_csv_from_json_files(output_dir, csv_file, ordered_shortQ_to_titleQ)
+    print(f"CSV written to {csv_file} ({rows_written} rows)")
+
 if __name__ == "__main__":
     main()

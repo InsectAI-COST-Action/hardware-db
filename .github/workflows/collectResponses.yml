@@ -80,7 +80,7 @@ jobs:
           COLLISION_FILES=$(python -c "import json,pathlib;reports=list(pathlib.Path('data/collisions').glob('collision_report_*.json'));filenames=[c['filename'] for r in reports for c in json.loads(r.read_text(encoding='utf-8')).get('collisions',[])];print(json.dumps(filenames))")
 
           # Stage always-included files
-          git add data/form_responses.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true
+          git add data/_InsectAI_hardware-db.csv docs/devices_index.json docs/form_config.json 2>/dev/null || true
 
           # Stage device JSON files, skipping those involved in collisions
           COLLISION_FILES_JSON="$COLLISION_FILES" python -c "import json,pathlib,subprocess,os;collision_set=set(f+'.json' for f in json.loads(os.environ['COLLISION_FILES_JSON']));[subprocess.run(['git','add',str(f)],check=False) for f in pathlib.Path('data').glob('*.json') if f.name not in collision_set]"

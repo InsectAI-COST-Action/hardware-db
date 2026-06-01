@@ -112,9 +112,9 @@ def reprocess_single_file(
     try:
         response = load_response_json(json_path)
         
-        # Get response version (from metadata or default to 1.0.0)
+        # Get response version (from metadata or default to 0.2.0)
         response_version = (
-            response.get("_metadata", {}).get("schema_version", "1.0.0")
+            response.get("_metadata", {}).get("schema_version", "0.2.0")
         )
         status["old_version"] = response_version
         

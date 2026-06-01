@@ -2,12 +2,13 @@ name: Tests
 
 on:
   push:
+    branches: [main]
     paths:
-      - '*schema*.json'
-      - 'tests/**'
+      - 'hardware-db_schema.json'
+      - 'collectResponses.py'
+      - 'createForm.py'
       - 'src/**'
-      - '.env'
-      - '*.py'
+      - 'tests/**'
       - 'pyproject.toml'
   workflow_dispatch:
 

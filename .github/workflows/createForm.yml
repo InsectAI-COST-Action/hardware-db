@@ -5,14 +5,46 @@ on:
     workflows: ["Tests"]
     types: 
       - completed
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  create_form:
+  check_tests:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    outputs:
+      tests_ok: ${{ steps.check.outputs.tests_ok }}
+
+    steps:
+      - name: Check latest tests run success
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'tests.yml',
+              per_page: 1
+            });
+
+            if (!runs.data.workflow_runs || runs.data.workflow_runs.length === 0) {
+              core.setOutput('tests_ok', 'false');
+            } else {
+              const conclusion = runs.data.workflow_runs[0].conclusion;
+              core.setOutput('tests_ok', conclusion === 'success' ? 'true' : 'false');
+            }
+
+  create_form:
+    needs: check_tests
+    runs-on: ubuntu-latest
+    if: ${{ needs.check_tests.outputs.tests_ok == 'true' }}
     env:
         TZ: Europe/Zurich
         OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}

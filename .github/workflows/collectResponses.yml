@@ -3,10 +3,6 @@ name: Collect Responses
 on:
   schedule:
     - cron: '0 4 * * *'
-  workflow_run:
-    workflows: ["Create Form"]
-    types:
-      - completed
   workflow_dispatch:
 
 permissions:
@@ -16,35 +12,33 @@ permissions:
 jobs:
   check_tests:
     runs-on: ubuntu-latest
-    # Only proceed if:
-    # - not triggered by workflow_run
-    # - OR Create Form succeeded
-    if: >
-      github.event_name != 'workflow_run' ||
-      github.event.workflow_run.conclusion == 'success'
 
     outputs:
       tests_ok: ${{ steps.check.outputs.tests_ok }}
 
     steps:
-      - name: Check latest tests run success
+      - name: Check latest tests and createForm run success
         id: check
         uses: actions/github-script@v6
         with:
           script: |
-            const runs = await github.rest.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'tests.yml',
-              per_page: 1
-            });
-
-            if (!runs.data.workflow_runs || runs.data.workflow_runs.length === 0) {
-              core.setOutput('tests_ok', 'false');
-            } else {
-              const conclusion = runs.data.workflow_runs[0].conclusion;
-              core.setOutput('tests_ok', conclusion === 'success' ? 'true' : 'false');
+            async function getLatestConclusion(workflow_id) {
+              const runs = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id,
+                per_page: 1
+              });
+              if (!runs.data.workflow_runs || runs.data.workflow_runs.length === 0) return null;
+              return runs.data.workflow_runs[0].conclusion;
             }
+
+            const testsConclusion = await getLatestConclusion('tests.yml');
+            const formConclusion = await getLatestConclusion('createForm.yml');
+
+            const ok = testsConclusion === 'success' && formConclusion === 'success';
+            core.info(`tests.yml: ${testsConclusion}, createForm.yml: ${formConclusion}`);
+            core.setOutput('tests_ok', ok ? 'true' : 'false');
 
   collect_responses:
     needs: check_tests

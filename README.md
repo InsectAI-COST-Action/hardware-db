@@ -22,7 +22,7 @@ For more info on InsectAI, visit our official website [insectai.eu](https://inse
 ## Contribute data 
 If you want to submit a system to the database, you can fill in the form here: 
 <!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->
-https://docs.google.com/forms/d/1tNogHhoMUmxk8j424FYuJMs09FsaRNw3-64MvX2eNZo/viewform
+https://docs.google.com/forms/d/18vSt8r3DN1T1WuNl3OZszols0ePIehYQb-sTC8gcaxs/viewform
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
 
 <!-- ### Beginning of spoiler section -->

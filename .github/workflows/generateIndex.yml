@@ -1,0 +1,35 @@
+name: Generate Device Index
+
+on:
+  # Allow manual triggering to backfill the index (e.g. after merging data files)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate_index:
+    runs-on: ubuntu-latest
+    # For workflow_run triggers, only proceed when the upstream job succeeded
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    steps:
+      - name: Check out the branch that triggered the upstream workflow
+        uses: actions/checkout@v4
+        with:
+          # For workflow_run: check out the same branch collectResponses ran on.
+          # For workflow_dispatch: check out the branch the dispatch was sent to.
+          ref: ${{ github.event.workflow_run.head_branch || github.ref }}
+
+      - name: Generate device index
+        run: python generateIndex.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/devices_index.json docs/form_config.json || true
+          git commit -m "Regenerate device index" || echo "No changes to commit"
+          git push

@@ -1,7 +1,5 @@
 import json
 import csv
-import os
-import sys
 from pathlib import Path
 from datetime import datetime
 
@@ -114,10 +112,9 @@ def main():
     count = len(responses)
     print(f"Found {count} responses")
 
-    # Fail if no responses so workflows can detect the issue
     if count == 0:
-        print("Error: no form responses found, cannot proceed.")
-        sys.exit(1)
+        print("Warning: no form responses found, nothing to export.")
+        return
 
 
     ### Parse responses into questionId to answer
@@ -215,10 +212,17 @@ def main():
     written = 0
     skipped = 0
     for item in responses_shorthand:
-
-        device_name = item.get("device_name")
+        device_name = item.get("device_name", "")
         filename = sanitize_filename(device_name)
+        if not filename:
+            filename = "unnamed_device"
+        latest_by_filename[filename] = item
 
+    writes_ok = 0
+    collisions = []
+    run_stamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+
+    for filename, item in latest_by_filename.items():
         json_path = output_dir / f"{filename}.json"
 
         # Only write if actual data changed (ignore _metadata when comparing)

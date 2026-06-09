@@ -72,6 +72,24 @@
     "schema_version": "1.1.0-beta"
   },
   {
+    "filename": "Entocam",
+    "device_name": "Entocam",
+    "institution_name": "",
+    "contact_name": "Hughes La Vigne",
+    "contact_email": "hlavigne@outreachrobotics.com",
+    "contributor_name": "",
+    "contributor_email": "",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "The Entocam is a camera system entirely dedicated to capturing Moths and Nocturnal insect pictures. It consists of a waterproof, programmable camera that features a 8MP Sony Starvis Sensor, built-in with a white flash and designed to focus on a screen located at 45 cm mounted with carbon rods. It is paired with the EntoCam Beam, a strong and adjustable Moth-Attracting LED.",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-06-09T07:54:34.742380Z",
+    "schema_version": "1.1.0-beta"
+  },
+  {
     "filename": "GoPro",
     "device_name": "GoPro",
     "institution_name": "Federal Research Institute WSL",

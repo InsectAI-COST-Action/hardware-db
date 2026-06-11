@@ -216,6 +216,24 @@
     "schema_version": "1.1.0-beta"
   },
   {
+    "filename": "NewtCAM",
+    "device_name": "NewtCAM",
+    "institution_name": "",
+    "contact_name": "Xavier Mestdagh",
+    "contact_email": "xavier.mestdagh@list.lu",
+    "contributor_name": "Xavier Mestdagh",
+    "contributor_email": "xavier.mestdagh@list.lu",
+    "maintainer_name": "",
+    "maintainer_email": "",
+    "device_creator": "",
+    "device_creator_email": "",
+    "device_description": "NewtCam is an automated underwater camera system for monitoring freshwater wildlife without capturing or handling animals. Organisms move freely through a tunnel where their movement triggers the recording of images or videos. The aquatic unit consists of a camera and a dual lighting system enclosed in a rugged watertight housing with adjustable ballasts for deployment at different depths and imaging orientations. Visible light produces colour images and attracts many taxa, including invertebrates, while near-infrared light produces greyscale images and enables observation of light-averse species. A cable connects the aquatic unit to a battery and a computing unit based on a System on Module integrated into a custom printed circuit board. App4Cam is an open-source, user-friendly configuration app available on GitHub under the GPL v3 licence. ",
+    "github_link": "",
+    "documentation_link": "",
+    "collected_date": "2026-06-11T08:48:38.234666Z",
+    "schema_version": "1.1.0-beta"
+  },
+  {
     "filename": "PICT",
     "device_name": "PICT",
     "institution_name": "Federal Research Institute WSL",

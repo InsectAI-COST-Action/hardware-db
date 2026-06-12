@@ -10,7 +10,7 @@
 <img src="./assets/hardware-db_pictogram.svg" height="250"/>
 </p>
 
-# Quickstart
+# 1.0 Quickstart
 Welcome! This is the InsectAI hardware database, designed to collate information on devices used for automated monitoring of insects. 
 
 Here you can submit details about systems you use, develop or commercialise for the monitoring insects, and you can visualise the data we have collected to choose a system for your needs. 
@@ -19,11 +19,17 @@ More info on the scope of the InsectAI hardware database *coming soon*...
 
 For more info on InsectAI, visit our official website [insectai.eu](https://insectai.eu/), or the [InsectAI page](https://www.cost.eu/actions/CA22129/) on the [COST Association](https://www.cost.eu/) website. 
 
-## Contribute data 
-If you want to submit a system to the database, you can fill in the form here: 
+## 1.1 Contribute data
+
+<!-- Feedback: Device ID checker moved here as users will likely miss this otherwise, and some text bolded to add reading clarity. Numbering sections may also be useful for if users remember the section number they get to but not the title -->
+
+If you want to **submit a system to the database**, you can fill in the form **here:** 
 <!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->
 https://docs.google.com/forms/d/1yeIc4kEuAwaYnVYmzQCOsLPFA81qBMLZtS9XKuMnmKQ/viewform
 <!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
+
+> [!NOTE]
+> A **deviceID checker** tool is available via GitHub Pages (`docs/index.html`). Use it to type your intended device name, preview the device ID it will produce, and check whether it is already taken. A full data-browsing and filtering frontend is planned separately.
 
 <!-- ### Beginning of spoiler section -->
 <details>
@@ -38,18 +44,20 @@ Form w/ first batch of responses for testing: https://docs.google.com/forms/d/e/
 <!-- ### End of spoilers section -->
 </details>
 
-## Visualise data
-If you want to visualise information on insect monitoring systems we collected, you can click here: 
+## 1.2 Browse submissions
+All submissions are stored in the `/data` directory in this repo. There is one JSON file stored here for each system.
+
+Publicly available information for all systems is stored in a CSV file with each JSON file corresponding to one row.
+
+Here you will be able to see your submission once it has been processed.
+
+## 1.3 Visualise data
+To visualise information on submitted insect monitoring systems, click here: 
 <!-- FRONTEND-BEGIN comment to anchor auto-update of form link -->
 *...link coming soon...*
 <!-- FRONTEND-END comment to anchor auto-update of form link -->
 
-All the data is also stored in the `/data` directory in this repo, both in a CSV file with one row for each system, and as JSON files (one file per system). 
-
-> [!NOTE]
-> A **deviceID checker** tool is available via GitHub Pages (`docs/index.html`). Use it to type your intended device name, preview the device ID it will produce, and check whether it is already taken. A full data-browsing and filtering frontend is planned separately.
-
-# Documentation
+# 2.0 Documentation
 Below we explain what does what in the repository and how to use it. 
 If you only want to contribute or read data, you should not need to read this section. 
 
@@ -59,7 +67,7 @@ For progress also see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG
 <details>
   <summary>Expand section</summary>
 
-## Intro
+## 2.1 Intro
 The workflow is, at its most basic: 
 ```
 hardware-db_schema.json --- createForm.py ---> Google Form
@@ -73,7 +81,7 @@ data/ (JSON) --- generateIndex.py ---> docs/devices_index.json
 
 The repo is set up to run certain workflows automatically, but if you want to run things locally you will need to install it. 
 
-### Install locally
+### 2.1.1 Install locally
 What you need before getting started: 
  - Python >3.11
 
@@ -116,7 +124,7 @@ Anytime you close / reopen the terminal, make sure the virtual environment is pr
 source .venv/bin/activate
 ```
 
-## The database schema
+## 2.2 The database schema
 We store the main database ontology in `hardware-db_schema.json`. This is a modified version of Google Forms API schema to make it easier to edit by hand. 
 
 Example of valid JSON schema:
@@ -192,7 +200,7 @@ The terms in the schema map to Google Forms API's terms like so:
 
 Importantly, the `id` field is what we use to collect the answers, as a shorthand for the question itself, and it needs to be unique. 
 
-### Logic navigation
+### 2.2.1 Logic navigation
 For now, *only choice questions is supported*, and maps onto Google API like this:
 | JSON schema    | Google Forms API                      | Meaning              |
 | -------------- | ------------------------------------- | -------------------- |
@@ -202,7 +210,7 @@ For now, *only choice questions is supported*, and maps onto Google API like thi
 
 The current implementation does two passes of the form, because the API only allows redirection to a specific sectionID, and these are non-meaningful (i.e. created on the fly), so you need to query the form you just created to retrieve these ids and then apply the logic to them. 
 
-### Mandatory fields
+### 2.2.2 Mandatory fields
 In an effort to align with other existing hardware repositories, we align our required field with [Wildlabs' Inventory](https://wildlabs.net/inventory). 
 Below the mapping in out schema to their naming. 
 
@@ -214,7 +222,7 @@ Below the mapping in out schema to their naming.
 | `device_description`   | `Overview`                      |
 
 
-# Authenticating in Google APIs
+# 3.0 Authenticating in Google APIs
 We only support regular OAuth2 authentication via personal access token, not via service account tokens. This is because personal Google accounts (i.e. non-GSuite, non-Workspace accounts) cannot grant service accounts Drive storage space, and this creates issues with managing forms and responses. 
 
 We support both local and CI/CD deployments, and there are a few parts to it:
@@ -226,9 +234,9 @@ We support both local and CI/CD deployments, and there are a few parts to it:
       3. .secrets and .env file entry (if present)
       4. Hardcoded defaults for some variables (e.g. debug, secrets-file)
 
-## Secrets and environmental variables
+## 3.1 Secrets and environmental variables
 
-### Local
+### 3.1.1 Local
 To avoid hosting in the repo sensitive information, the OAuth access tokens are stored locally in a `.secrets` file. The format is simply
 
 ```bash
@@ -241,7 +249,7 @@ TOKEN_TEST_AUTH=path_to_file
 The file `.env` contains non-sensitive information, like the permissions to be granted to the API, and locations of the form, etc. It is structured in a similar way as the `.secrets` file. 
 The parser `src/configParsing.py` attempts to coerce values into sensible types (i.e. string, boolean, etc) and passes them to the caller as a dictionary. 
 
-### CI/CD workflows
+### 3.1.2 CI/CD workflows
 When using CD/CI runners, like Github Actions, we can pass the authentication information via Github's [Repository Secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). 
 
 Basically, you name a secret variable appropriately, `OAUTH_CLIENT_JSON` and `REFRESH TOKEN` in our case, and paste the content of the your JSON file into it. This variables are made available to Github Action runners via the construct `OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}`. 
@@ -251,10 +259,10 @@ To generate the refresh token that Github needs, you can run the script `generat
 Environmental variables can be assigned directly in the workflow, but if not they will fall back to the `.env` file that is available in the repo. 
 
 
-# Using Google API to manage forms and responses
+# 4.0 Using Google API to manage forms and responses
 There are two scripts responsible for creating the form based on the schema, and collecting the answers.
 
-## Creating the form
+## 4.1 Creating the form
 `createForm.py` uses helpers in `src/configParsing.py` and `src/authFlow_helpers.py` to create authenticate with [Google Forms API](https://developers.google.com/workspace/forms/api/reference/rest), and create the form based on `hardware-db_schema.json`. 
 
 The variables that are needed are declared at the top, without values, in order for the parser to find the value fro those keys: 
@@ -275,7 +283,7 @@ DEBUG = False
 It then basically parses the schema and build the body of the request in a format that is compatible with Google Form API. 
 It first creates the sections and adds questions to the form; then it applies the required section navigation logic to the created sections; it then renames the file and moves it the specified folder in Google Drive. 
 
-## Collecting the data
+## 4.2 Collecting the data
 `collectResponses.py` again depends on `src/configParsing.py` and `src/authFlow_helpers.py`, and needs the variables specified at the top of the script (again without their values, the config parser takes care of filling them):
 ```python
 # ----------------------------------------------------------------------
@@ -300,7 +308,7 @@ It first reads the responses from the form identified by `FORM_ID`; then, it loa
 **Collision handling**: if the normalized device name matches an existing file in `data/` and the incoming response differs from the stored record, a collision is flagged. The new record is still written to `data/` (making the diff visible in the review PR), and a timestamped report is saved to `data/collisions/collision_report_<timestamp>.json` listing each affected device with submitter contact details. Non-colliding records are committed directly to the branch; collisions trigger an automatic pull request for maintainer review (see [Collecting and parsing responses](#collecting-and-parsing-responses) below).
 
 
-## Generating the device index
+## 4.3 Generating the device index
 `generateIndex.py` reads every JSON file in `data/` and writes two files to `docs/`:
  - `docs/devices_index.json` — a compact index of all records, consumed by the GitHub Pages landing page.
  - `docs/form_config.json` — the current form URL; existing `entry_ids` written by `createForm.py` are preserved.
@@ -308,7 +316,7 @@ It first reads the responses from the form identified by `FORM_ID`; then, it loa
 The script has no third-party dependencies and runs automatically after `collectResponses.py` in CI.
 
 
-## The deviceID checker landing page
+## 4.4 The deviceID checker landing page
 `docs/index.html` is published via GitHub Pages and provides two tabs:
 1. **Check device ID**: type your intended device name to preview the normalised device ID it will produce and confirm it is not already taken (checked against `docs/devices_index.json`).
 2. **Browse existing devices**: search by system name, institution, or contributor; select a device to view its metadata card.
@@ -319,10 +327,10 @@ The JS normalization (`normalizeDeviceId()`) mirrors `sanitize_filename()` in `s
 > This page is a submission helper only. A separate full-featured data-browsing and filtering frontend is planned.
 
 
-# Lifecycle of the automated workflows
+# 5.0 Lifecycle of the automated workflows
 The automated workflows on Github actions are set up to only run on a schedule or when certain files are modified in the repo. 
 
-## Tests
+## 5.1 Tests
 Various tests are defined in `.github/workflows/tests.yml`. This workflow get triggered when certain files are modified in the repo, mainly `hardware-db_schema.json`, the python scripts and `.env`. 
 
 It runs three jobs: 
@@ -332,12 +340,12 @@ It runs three jobs:
 
 If any fail, the other workflows will not get triggered. This is desirable, because failing these basic tests early makes it easier to troubleshoot issues and does not generate spurious forms. 
 
-## Creating the Google Form from the schema
+## 5.2 Creating the Google Form from the schema
 The workflow `.github/workflows/createForm.yml` triggers after a successful run of the Tests workflow. This means that it only triggers when Tests is triggered, and only if Tests succeeds. 
 
 It reads access tokens from Github repo secrets, and then calls `createForm.py --update-links`, which updates `.env`, the form link in `README.md`, and `docs/form_config.json`.
 
-## Collecting and parsing responses
+## 5.3 Collecting and parsing responses
 The workflow `.github/workflows/collectResponses.yml` starts on a schedule at 4am every day, and checks that the latest run of Tests was successful before running. 
 
 It reads access tokens from Github repo secrets, and other variables, notably `FORM_ID`, from `.env`; if `FORM_ID` is assigned within the workflow itself, this takes precedence over the value in `.env` (i.e. for testing purposes). 

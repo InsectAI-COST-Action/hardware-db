@@ -1,0 +1,6 @@
+- Section on where to find/search for devices moved
+- Headers given numberings to make it easier to navigate (discuss)
+- Use of bold employed in some sections to clarify key information
+- Some text sections reduced for brevity
+- Browse submissions section added
+- NOTE: change not made but if possible could the text for links be changed to easy to interpret text rather than the link itself

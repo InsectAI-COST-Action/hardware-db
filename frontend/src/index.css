@@ -1,0 +1,29 @@
+:root {
+  /* Color vars */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+
+  /* Font size vars */
+  --font-size-sm: 0.75em; /* 12px */
+  --font-size-base: 1em; /* 16px */
+  --font-size-lg: 1.5em; /* 24px */
+  --font-size-xl: 2em; /* 32px */
+
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: ui-sans-serif, sans-serif;
+  font-size: var(--font-size-base);
+  line-height: 150%;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+body {
+  margin: 0;
+}

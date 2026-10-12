@@ -10,7 +10,7 @@ import json
 import sys
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 
 from src.dataMigrations import MigrationRegistry, migrate_response, MigrationError
@@ -44,6 +44,41 @@ def load_schema_version(schema_path: str) -> str:
     except Exception as e:
         logger.error(f"Failed to load schema version from {schema_path}: {e}")
         raise
+
+
+def load_schema_question_order(schema_path: str) -> List[str]:
+    """Return question IDs in the order used by collectResponses.py."""
+    try:
+        with open(schema_path, "r", encoding="utf-8") as f:
+            schema = json.load(f)
+        return [
+            question["id"]
+            for section in schema.get("sections", [])
+            for question in section.get("questions", [])
+            if question.get("id") and question.get("title")
+        ]
+    except Exception as e:
+        logger.error(f"Failed to load question order from {schema_path}: {e}")
+        raise
+
+
+def reorder_response_fields(
+    response: Dict[str, Any], question_order: List[str]
+) -> Dict[str, Any]:
+    """Order schema fields first, unknown fields next, and metadata last."""
+    ordered = {
+        key: response[key]
+        for key in question_order
+        if key in response and key != "_metadata"
+    }
+    ordered.update(
+        (key, value)
+        for key, value in response.items()
+        if key not in ordered and key != "_metadata"
+    )
+    if "_metadata" in response:
+        ordered["_metadata"] = response["_metadata"]
+    return ordered
 
 
 def load_response_json(json_path: Path) -> Dict[str, Any]:
@@ -89,19 +124,22 @@ def reprocess_single_file(
     json_path: Path,
     current_version: str,
     registry: MigrationRegistry,
-    dry_run: bool = False
+    dry_run: bool = False,
+    reorder_data: bool = False,
+    question_order: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """
     Reprocess a single response JSON file.
     
     Returns:
-        Status dict with keys: file, old_version, new_version, migrated, error
+        Status dict with file versions, migration/reordering outcomes, and errors.
     """
     status = {
         "file": str(json_path),
         "old_version": None,
         "new_version": current_version,
         "migrated": False,
+        "reordered": False,
         "error": None
     }
     
@@ -114,30 +152,42 @@ def reprocess_single_file(
         )
         status["old_version"] = response_version
         
-        if response_version == current_version:
+        needs_migration = response_version != current_version
+        if not needs_migration:
             logger.info(f"{json_path.name}: already at version {current_version}")
-            return status
-        
-        # Attempt migration
-        logger.info(
-            f"{json_path.name}: migrating from {response_version} "
-            f"to {current_version}"
-        )
-        
-        migrated_response = migrate_response(
-            response, response_version, current_version, registry
-        )
-        
-        # Ensure schema version is updated in metadata
-        if "_metadata" not in migrated_response:
-            migrated_response["_metadata"] = {}
-        migrated_response["_metadata"]["schema_version"] = current_version
-        
-        if not dry_run:
-            save_response_json(json_path, migrated_response, backup=True)
-        
-        status["migrated"] = True
-        logger.info(f"{json_path.name}: migrated successfully")
+            migrated_response = response
+        else:
+            logger.info(
+                f"{json_path.name}: migrating from {response_version} "
+                f"to {current_version}"
+            )
+            migrated_response = migrate_response(
+                response, response_version, current_version, registry
+            )
+
+            if "_metadata" not in migrated_response:
+                migrated_response["_metadata"] = {}
+            migrated_response["_metadata"]["schema_version"] = current_version
+            status["migrated"] = True
+
+        if reorder_data:
+            if question_order is None:
+                raise ValueError("Question order is required when reordering data")
+            reordered_response = reorder_response_fields(
+                migrated_response, question_order
+            )
+            status["reordered"] = (
+                list(reordered_response) != list(migrated_response)
+            )
+            migrated_response = reordered_response
+            if status["reordered"]:
+                logger.info(f"{json_path.name}: reordered fields to schema order")
+
+        if status["migrated"] or status["reordered"]:
+            if not dry_run:
+                save_response_json(json_path, migrated_response, backup=True)
+            if status["migrated"]:
+                logger.info(f"{json_path.name}: migrated successfully")
         
     except MigrationError as e:
         status["error"] = f"Migration failed: {str(e)}"
@@ -151,7 +201,8 @@ def reprocess_single_file(
 
 def reprocess_all(
     dry_run: bool = False,
-    verbose: bool = False
+    verbose: bool = False,
+    reorder_data: bool = False,
 ) -> None:
     """
     Reprocess all response JSON files in data/ directory.
@@ -159,11 +210,23 @@ def reprocess_all(
     Args:
         dry_run: If True, don't actually write changes
         verbose: If True, print extra debug info
+        reorder_data: If True, order fields to match the current schema
     """
     cfg = build_config(globals())
     
     current_version = load_schema_version(cfg["SCHEMA_FILE"])
     logger.info(f"Current schema version: {current_version}")
+    question_order = None
+    if reorder_data:
+        latest_version = load_schema_version("hardware-db_schema.json")
+        if current_version != latest_version:
+            logger.warning(
+                "--reorder-data requested for non-current schema version "
+                f"{current_version}; field reordering will be skipped"
+            )
+            reorder_data = False
+        else:
+            question_order = load_schema_question_order(cfg["SCHEMA_FILE"])
     
     # Load migration registry
     registry_path = Path("schemas/migrations/migrations.json")
@@ -197,7 +260,12 @@ def reprocess_all(
             continue
         
         status = reprocess_single_file(
-            json_path, current_version, registry, dry_run=dry_run
+            json_path,
+            current_version,
+            registry,
+            dry_run=dry_run,
+            reorder_data=reorder_data,
+            question_order=question_order,
         )
         results.append(status)
     
@@ -205,11 +273,18 @@ def reprocess_all(
     logger.info("\n" + "="*60 + " REPROCESSING SUMMARY " + "="*60)
     
     migrated_count = sum(1 for r in results if r["migrated"])
-    unchanged_count = sum(1 for r in results if not r["migrated"] and not r["error"])
+    reordered_count = sum(1 for r in results if r["reordered"])
+    unchanged_count = sum(
+        1
+        for r in results
+        if not r["migrated"] and not r["reordered"] and not r["error"]
+    )
     error_count = sum(1 for r in results if r["error"])
     
     logger.info(f"Total files: {len(results)}")
     logger.info(f"  - Migrated:  {migrated_count}")
+    if reorder_data:
+        logger.info(f"  - Reordered: {reordered_count}")
     logger.info(f"  - Unchanged: {unchanged_count}")
     logger.info(f"  - Errors:    {error_count}")
     
@@ -242,6 +317,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Print verbose debug information"
     )
+    parser.add_argument(
+        "--reorder-data",
+        action="store_true",
+        help="Reorder response fields to match the current schema"
+    )
     
     args, remaining = parser.parse_known_args()
     # build_config parses sys.argv itself; hand it only the args we didn't consume
@@ -253,7 +333,11 @@ if __name__ == "__main__":
     logger.info(f"Starting reprocessing at {datetime.now(timezone.utc).isoformat()}")
     
     try:
-        reprocess_all(dry_run=args.dry_run, verbose=args.verbose)
+        reprocess_all(
+            dry_run=args.dry_run,
+            verbose=args.verbose,
+            reorder_data=args.reorder_data,
+        )
         logger.info("Reprocessing completed successfully")
         sys.exit(0)
     except Exception as e:

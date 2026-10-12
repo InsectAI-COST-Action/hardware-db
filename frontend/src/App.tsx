@@ -1,13 +1,65 @@
-function App() {
+import { useMemo, useState } from "react";
+import styles from "./App.module.css";
+import { DeviceGallery } from "./components/DeviceGallery/DeviceGallery";
+import { useDevices } from "./hooks/useDevices";
+
+const App = () => {
+  const { devices, isLoading, error } = useDevices();
+  const [search, setSearch] = useState("");
+
+  const filteredDevices = useMemo(() => {
+    const normalizedQuery = search.trim().toLowerCase();
+
+    if (!normalizedQuery) {
+      return devices;
+    }
+
+    return devices.filter((device) =>
+      [device.deviceName].some((field) =>
+        field?.toLowerCase().includes(normalizedQuery),
+      ),
+    );
+  }, [devices, search]);
+
   return (
-    <div>
-      <h1>InsectAI Hardware Database</h1>
-      <p>
-        This is the InsectAI hardware database, designed to collate information
-        on devices used for automated monitoring of insects.
-      </p>
+    <div className={styles.container}>
+      <div className={styles.intro}>
+        <div className={styles.introText}>
+          <span>Open community catalogue · CC BY 4.0</span>
+          <h1>Hardware for automated insect monitoring</h1>
+          <p>
+            This is the InsectAI hardware database, designed to collate
+            information on devices used for automated monitoring of insects.
+            Here you can submit details about systems and explore the data we
+            have collected to choose a system for your needs.
+          </p>
+        </div>
+      </div>
+      <div className={styles.main}>
+        <div className={styles.sidebar}>
+          <h4>Filters</h4>
+        </div>
+        <div className={styles.content}>
+          <input
+            aria-label="Search devices"
+            className={styles.searchInput}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search devices..."
+            type="search"
+            value={search}
+          />
+          <p className={styles.deviceCount}>
+            Showing {filteredDevices.length} of {devices.length} devices
+          </p>
+          <DeviceGallery
+            devices={filteredDevices}
+            isLoading={isLoading}
+            error={error}
+          />
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;

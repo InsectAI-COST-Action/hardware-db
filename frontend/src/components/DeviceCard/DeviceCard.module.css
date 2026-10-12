@@ -1,0 +1,31 @@
+.container {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.title {
+  margin-bottom: 4px;
+}
+
+.subTitle {
+  color: var(--color-muted-foreground);
+  display: -webkit-box;
+  line-clamp: 2;
+  margin-bottom: 16px;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.description {
+  display: -webkit-box;
+  font-size: var(--font-size-sm);
+  line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

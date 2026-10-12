@@ -1,23 +1,35 @@
 :root {
   /* Color vars */
-  --color-background: #ffffff;
-  --color-foreground: #171717;
+  --color-background: #f8fafc; /* slate-50 */
+  --color-foreground: #0f172b; /* slate-900 */
+  --color-surface: #ffffff; /* white */
+  --color-primary: #2fb44a; /* brand color */
+  --color-primary-foreground: #ffffff; /* white */
+  --color-accent: #c9da2b; /* brand color */
+  --color-accent-foreground: #0f172b; /* slate-900 */
+  --color-border: #e2e8f0; /* slate-200 */
+  --color-muted: #f1f5f9; /* slate-100 */
+  --color-muted-foreground: #45556c; /* slate-600 */
 
   /* Font size vars */
   --font-size-sm: 0.75em; /* 12px */
   --font-size-base: 1em; /* 16px */
   --font-size-lg: 1.5em; /* 24px */
   --font-size-xl: 2em; /* 32px */
+  --font-size-2xl: 3em; /* 48px */
 
+  /* Border radius vars */
+  --radius-md: 6px;
+
+  /* Global styles */
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: ui-sans-serif, sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: var(--font-size-base);
-  line-height: 150%;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
@@ -26,4 +38,39 @@
 
 body {
   margin: 0;
+}
+
+h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  margin: 0;
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  margin: 0;
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  margin: 0;
+}
+
+h4 {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  margin: 0;
+}
+
+p {
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  margin: 0;
+}
+
+input {
+  font-family: inherit;
+  font-size: var(--font-size-base);
 }

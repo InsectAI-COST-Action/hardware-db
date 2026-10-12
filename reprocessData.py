@@ -15,7 +15,7 @@ from datetime import datetime
 
 from src.dataMigrations import MigrationRegistry, migrate_response, MigrationError
 from src.misc_helpers import sanitize_filename, slugify
-from configParsing import build_config
+from src.configParsing import build_config
 
 
 # Configure logging with timestamps
@@ -32,10 +32,6 @@ logger = logging.getLogger(__name__)
 
 # Configuration keys needed
 SCHEMA_FILE = ""
-CURRENT_SCHEMA_VERSION = ""
-DATA_DIR = "data"
-MIGRATIONS_REGISTRY = "schemas/migrations/migrations.json"
-BACKUP_SUFFIX = ".backup"
 DEBUG = False
 
 
@@ -70,7 +66,7 @@ def save_response_json(
 ) -> None:
     """Save a response JSON file, optionally creating a backup."""
     if backup and json_path.exists():
-        backup_path = json_path.with_suffix(json_path.suffix + BACKUP_SUFFIX)
+        backup_path = json_path.with_suffix(json_path.suffix + ".backup")
         try:
             with open(json_path, "r", encoding="utf-8") as f:
                 backup_data = json.load(f)
@@ -170,11 +166,11 @@ def reprocess_all(
     logger.info(f"Current schema version: {current_version}")
     
     # Load migration registry
-    registry_path = Path(cfg.get("MIGRATIONS_REGISTRY", "migrations/migrations.json"))
+    registry_path = Path("schemas/migrations/migrations.json")
     registry = MigrationRegistry(registry_path)
     
     # Find all JSON files in data directory
-    data_dir = Path(cfg.get("DATA_DIR", "data"))
+    data_dir = Path("data")
     if not data_dir.exists():
         logger.warning(f"Data directory not found: {data_dir}")
         return
@@ -194,7 +190,7 @@ def reprocess_all(
     results = []
     for json_path in sorted(json_files):
         # Skip if it looks like a backup or metadata file
-        if json_path.name.endswith(BACKUP_SUFFIX):
+        if json_path.name.endswith(".backup"):
             continue
         if json_path.name.startswith("form_responses"):
             logger.debug(f"Skipping non-device file: {json_path.name}")
@@ -247,8 +243,10 @@ if __name__ == "__main__":
         help="Print verbose debug information"
     )
     
-    args = parser.parse_args()
-    
+    args, remaining = parser.parse_known_args()
+    # build_config parses sys.argv itself; hand it only the args we didn't consume
+    sys.argv = [sys.argv[0]] + remaining
+
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     

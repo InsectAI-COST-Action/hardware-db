@@ -1,4 +1,4 @@
-# src/dataMigrations.py
+﻿# src/dataMigrations.py
 
 """
 Data migration utilities for transforming form responses between schema versions.
@@ -12,7 +12,7 @@ import logging
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -97,7 +97,7 @@ class SchemaMigration:
         if "migrated_from_version" not in migrated["_metadata"]:
             migrated["_metadata"]["migrated_from_version"] = self.source_version
         migrated["_metadata"]["migrated_to_version"] = self.target_version
-        migrated["_metadata"]["last_migration_date"] = datetime.utcnow().isoformat() + "Z"
+        migrated["_metadata"]["last_migration_date"] = datetime.now(timezone.utc).isoformat()
         
         return migrated
     
@@ -164,12 +164,12 @@ class SchemaMigration:
                     if new_val is not None and new_val not in seen:
                         mapped.append(new_val)
                         seen.add(new_val)
-                    # null in value_map → explicitly drop this token
+                    # null in value_map -> explicitly drop this token
                 elif fallback == "preserve":
                     if token not in seen:
                         mapped.append(token)
                         seen.add(token)
-                # else: no mapping entry, fallback is not "preserve" → drop
+                # else: no mapping entry, fallback is not "preserve" -> drop
             data[question_id] = separator.join(mapped) if mapped else None
         else:
             # Simple single-value mapping
@@ -217,7 +217,7 @@ class SchemaMigration:
                 if target_questions[-1] not in data or data[target_questions[-1]] is None:
                     data[target_questions[-1]] = range_match.group(2)
             elif text:
-                # Fallback: single number → populate first target only
+                # Fallback: single number -> populate first target only
                 single = re.search(r'-?\d+(?:\.\d+)?', text)
                 if single and target_questions:
                     if target_questions[0] not in data or data[target_questions[0]] is None:
@@ -227,9 +227,9 @@ class SchemaMigration:
                 if t not in data:
                     data[t] = None
         else:
-            logger.info(
+            logger.debug(
                 f"Split: question '{source_question_id}' (value: '{old_value}') "
-                f"→ {target_questions}. Manual mapping required if not implemented."
+                f"-> {target_questions}. Manual mapping required if not implemented."
             )
             for new_q_id in target_questions:
                 if new_q_id not in data:
@@ -273,16 +273,16 @@ class SchemaMigration:
                             if not dedup or new_val not in seen:
                                 all_tokens.append(new_val)
                                 seen.add(new_val)
-                        # null in value_map → explicitly drop this token
+                        # null in value_map -> explicitly drop this token
                     elif fallback == "preserve":
                         if not dedup or token not in seen:
                             all_tokens.append(token)
                             seen.add(token)
-                    # else: no mapping entry, fallback not "preserve" → drop
+                    # else: no mapping entry, fallback not "preserve" -> drop
             merged_value = separator.join(all_tokens) if all_tokens else None
             data[target_question_id] = merged_value
-            logger.info(
-                f"Merge (multi-value): {source_questions} → '{target_question_id}' = '{merged_value}'"
+            logger.debug(
+                f"Merge (multi-value): {source_questions} -> '{target_question_id}' = '{merged_value}'"
             )
         else:
             values = []
@@ -292,8 +292,8 @@ class SchemaMigration:
                 data.pop(old_q_id, None)
             merged_value = "; ".join(values) if values else None
             data[target_question_id] = merged_value
-            logger.info(
-                f"Merge: {source_questions} → '{target_question_id}' = '{merged_value}'"
+            logger.debug(
+                f"Merge: {source_questions} -> '{target_question_id}' = '{merged_value}'"
             )
 
     def _apply_fill_if_empty(
@@ -316,11 +316,11 @@ class SchemaMigration:
         source_val = data.pop(source_id)
         if source_val and not data.get(target_question_id):
             data[target_question_id] = source_val
-            logger.info(
-                f"fill_if_empty: '{source_id}' → '{target_question_id}' = '{source_val}'"
+            logger.debug(
+                f"fill_if_empty: '{source_id}' -> '{target_question_id}' = '{source_val}'"
             )
         else:
-            logger.info(
+            logger.debug(
                 f"fill_if_empty: '{target_question_id}' already set or source empty; "
                 f"dropped '{source_id}'"
             )
@@ -378,8 +378,8 @@ class SchemaMigration:
                 break
 
         data[question_id] = result
-        logger.info(
-            f"numeric_to_range_option: '{question_id}' parsed min={min_val} → '{result}'"
+        logger.debug(
+            f"numeric_to_range_option: '{question_id}' parsed min={min_val} -> '{result}'"
         )
 
 
@@ -432,7 +432,7 @@ class MigrationRegistry:
         """
         key = f"{source_version}→{target_version}"
         if key not in self.migrations:
-            logger.warning(
+            logger.debug(
                 f"No migration defined from {source_version} to {target_version}"
             )
             return None
@@ -464,7 +464,7 @@ def migrate_response(
     """
     Migrate a single response from source to target schema version.
     
-    For sequential migrations (e.g., 0.2.0 → 1.0.0 → 1.1.0-beta), this applies
+    For sequential migrations (e.g., 0.2.0 -> 1.0.0 -> 1.1.0-beta), this applies
     each migration in sequence. If only a direct migration exists, it uses that.
     
     Args:
@@ -497,7 +497,7 @@ def migrate_response(
         step_migration = registry.get_migration(step_source, step_target)
         if step_migration is None:
             raise MigrationError(
-                f"Migration step {step_source}→{step_target} not found in chain"
+                f"Migration step {step_source}->{step_target} not found in chain"
             )
         current = step_migration.apply_to_response(current)
     

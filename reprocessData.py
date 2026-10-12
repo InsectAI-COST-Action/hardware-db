@@ -1,4 +1,4 @@
-"""
+﻿"""
 Reprocess historical form responses through schema migrations.
 
 This script walks through all JSON files in the data/ directory, checks their
@@ -11,7 +11,7 @@ import sys
 import logging
 from pathlib import Path
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 from src.dataMigrations import MigrationRegistry, migrate_response, MigrationError
 from src.misc_helpers import sanitize_filename, slugify
@@ -137,7 +137,7 @@ def reprocess_single_file(
             save_response_json(json_path, migrated_response, backup=True)
         
         status["migrated"] = True
-        logger.info(f"{json_path.name}: ✓ migrated successfully")
+        logger.info(f"{json_path.name}: migrated successfully")
         
     except MigrationError as e:
         status["error"] = f"Migration failed: {str(e)}"
@@ -250,7 +250,7 @@ if __name__ == "__main__":
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     
-    logger.info(f"Starting reprocessing at {datetime.utcnow().isoformat()}Z")
+    logger.info(f"Starting reprocessing at {datetime.now(timezone.utc).isoformat()}")
     
     try:
         reprocess_all(dry_run=args.dry_run, verbose=args.verbose)

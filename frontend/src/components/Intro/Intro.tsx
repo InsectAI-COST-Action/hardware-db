@@ -1,0 +1,26 @@
+import styles from "./Intro.module.css";
+
+export const Intro = () => (
+  <div className={styles.container}>
+    <div className={styles.text}>
+      <span>Open community catalogue · CC BY 4.0</span>
+      <h1>Hardware for automated insect monitoring</h1>
+      <p>
+        This is the InsectAI hardware database, designed to collate information
+        on devices used for automated monitoring of insects. Here you can submit
+        details about systems and explore the data we have collected to choose a
+        system for your needs.
+      </p>
+    </div>
+    <div className={`dark ${styles.card}`}>
+      <div>
+        <h2>Built or deployed a device?</h2>
+        <p>
+          Add it to the database through our submission form. Entries are
+          published openly so others can learn from your design.
+        </p>
+      </div>
+      <a href="#">Submit a device</a>
+    </div>
+  </div>
+);

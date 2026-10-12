@@ -5,33 +5,6 @@
   padding: 64px;
 }
 
-.intro {
-  display: grid;
-  gap: 32px;
-  grid-template-columns: 1fr 1fr;
-}
-
-.introText {
-  display: flex;
-  flex-direction: column;
-}
-
-.introText span {
-  color: var(--color-muted-foreground);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.introText h1 {
-  margin-bottom: 16px;
-}
-
-.introText p {
-  color: var(--color-muted-foreground);
-}
-
 .main {
   display: grid;
   gap: 32px;

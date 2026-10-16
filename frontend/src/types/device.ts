@@ -5,7 +5,7 @@ export interface Device {
   contactName?: string;
   contactInstitution?: string;
   documentationUrl?: string;
-  deviceConstruction?: string;
+  deviceConstruction?: string[];
   powerSources?: string;
   processingUnit?: string;
   modelProcessing?: string;

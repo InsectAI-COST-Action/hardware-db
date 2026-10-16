@@ -1,9 +1,7 @@
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
+import { DEVICE_CSV_URL } from "../constants";
 import type { Device } from "../types/device";
-
-export const DEVICE_CSV_URL =
-  "https://raw.githubusercontent.com/InsectAI-COST-Action/hardware-db/main/data/_InsectAI_hardware-db.csv";
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -64,7 +62,7 @@ const fetchDevices = async () => {
       contactName: row.contact_name,
       contactInstitution: row.contact_institution,
       documentationUrl: row.documentation_url,
-      deviceConstruction: row.device_construction,
+      deviceConstruction: parseDeviceConstruction(row.device_construction),
       powerSources: row.power_sources,
       processingUnit: row.processing_unit,
       modelProcessing: row.model_processing,
@@ -82,3 +80,9 @@ const fetchDevices = async () => {
     }))
     .filter((device) => Boolean(device.deviceName));
 };
+
+const parseDeviceConstruction = (value?: string) =>
+  value
+    ?.split(";")
+    .map((value) => value?.split(":")?.[0].trim())
+    .filter((value) => value[0] === value[0].toUpperCase());

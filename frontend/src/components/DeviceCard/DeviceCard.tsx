@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import type { Device } from "../../types/device";
+import { Tag } from "../Tag/Tag";
 import styles from "./DeviceCard.module.css";
 
 export const DeviceCard = ({ device }: { device: Device }) => {
@@ -13,6 +14,13 @@ export const DeviceCard = ({ device }: { device: Device }) => {
 
   return (
     <div className={styles.container}>
+      {device.deviceConstruction?.length ? (
+        <div className={styles.tags}>
+          {device.deviceConstruction.map((type) => (
+            <Tag key={type}>{type}</Tag>
+          ))}
+        </div>
+      ) : null}
       <h3 className={styles.title}>{device.deviceName}</h3>
       <h4 className={styles.subTitle}>{subTitle}</h4>
       {device.deviceDescription ? (

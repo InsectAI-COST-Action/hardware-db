@@ -32,3 +32,24 @@
   color: var(--color-muted-foreground);
   font-size: var(--font-size-sm);
 }
+
+.smallScreenMessage {
+  display: none;
+}
+
+/* TODO: Remove once the layout supports small screens */
+@media (max-width: 768px) {
+  .container {
+    display: none;
+  }
+
+  .smallScreenMessage {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding: 0 16px;
+    text-align: center;
+  }
+}

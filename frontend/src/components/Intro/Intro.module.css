@@ -1,5 +1,6 @@
 .container {
   display: grid;
+  gap: 32px;
   grid-template-columns: 1fr 480px;
 }
 
@@ -52,4 +53,10 @@
   justify-content: center;
   padding: 0 12px;
   text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
 }

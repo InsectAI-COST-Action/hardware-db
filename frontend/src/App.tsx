@@ -11,30 +11,35 @@ const App = () => {
     useDeviceFilters(devices);
 
   return (
-    <div className={styles.container}>
-      <Intro />
-      <div className={styles.main}>
-        <Filters onChange={setSelected} sections={sections} />
-        <div className={styles.content}>
-          <input
-            aria-label="Search devices"
-            className={styles.searchInput}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search devices..."
-            type="search"
-            value={search}
-          />
-          <p className={styles.deviceCount}>
-            Showing {filteredDevices.length} of {devices.length} devices
-          </p>
-          <DeviceGallery
-            devices={filteredDevices}
-            isLoading={isLoading}
-            error={error}
-          />
+    <>
+      <div className={styles.smallScreenMessage}>
+        <p>Small screen layout is not yet implemented</p>
+      </div>
+      <div className={styles.container}>
+        <Intro />
+        <div className={styles.main}>
+          <Filters onChange={setSelected} sections={sections} />
+          <div className={styles.content}>
+            <input
+              aria-label="Search devices"
+              className={styles.searchInput}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search devices..."
+              type="search"
+              value={search}
+            />
+            <p className={styles.deviceCount}>
+              Showing {filteredDevices.length} of {devices.length} devices
+            </p>
+            <DeviceGallery
+              devices={filteredDevices}
+              isLoading={isLoading}
+              error={error}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

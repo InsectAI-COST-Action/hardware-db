@@ -1,34 +1,20 @@
-import { useMemo, useState } from "react";
 import styles from "./App.module.css";
 import { DeviceGallery } from "./components/DeviceGallery/DeviceGallery";
+import { Filters } from "./components/Filters/Filters";
 import { Intro } from "./components/Intro/Intro";
+import { useDeviceFilters } from "./hooks/useDeviceFilters";
 import { useDevices } from "./hooks/useDevices";
 
 const App = () => {
   const { devices, isLoading, error } = useDevices();
-  const [search, setSearch] = useState("");
-
-  const filteredDevices = useMemo(() => {
-    const normalizedQuery = search.trim().toLowerCase();
-
-    if (!normalizedQuery) {
-      return devices;
-    }
-
-    return devices.filter((device) =>
-      [device.deviceName].some((field) =>
-        field?.toLowerCase().includes(normalizedQuery),
-      ),
-    );
-  }, [devices, search]);
+  const { search, setSearch, filteredDevices, sections, setSelected } =
+    useDeviceFilters(devices);
 
   return (
     <div className={styles.container}>
       <Intro />
       <div className={styles.main}>
-        <div className={styles.sidebar}>
-          <h4>Filters</h4>
-        </div>
+        <Filters onChange={setSelected} sections={sections} />
         <div className={styles.content}>
           <input
             aria-label="Search devices"

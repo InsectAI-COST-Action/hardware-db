@@ -1,0 +1,55 @@
+.container {
+  align-self: start;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.title {
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 500;
+  padding: 12px 16px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.section:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sectionTitle {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.option {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+}
+
+.option input {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+}
+
+.optionLabel {
+  flex: 1;
+  font-size: var(--font-size-sm);
+}
+
+.optionCount {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+}

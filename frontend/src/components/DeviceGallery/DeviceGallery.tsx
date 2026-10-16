@@ -1,4 +1,4 @@
-import type { Device } from "../../types/device";
+import type { Device } from "../../types";
 import { DeviceCard } from "../DeviceCard/DeviceCard";
 import styles from "./DeviceGallery.module.css";
 

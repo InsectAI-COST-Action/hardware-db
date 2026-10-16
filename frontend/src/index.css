@@ -73,4 +73,5 @@ p {
 input {
   font-family: inherit;
   font-size: var(--font-size-base);
+  margin: 0;
 }

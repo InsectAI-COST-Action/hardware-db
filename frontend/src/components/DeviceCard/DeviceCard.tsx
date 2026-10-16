@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { Device } from "../../types/device";
+import type { Device } from "../../types";
 import { Tag } from "../Tag/Tag";
 import styles from "./DeviceCard.module.css";
 

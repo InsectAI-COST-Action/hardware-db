@@ -11,13 +11,6 @@
   grid-template-columns: 240px 1fr;
 }
 
-.sidebar {
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  padding: 16px;
-}
-
 .searchInput {
   background: var(--color-surface);
   border-radius: var(--radius-md);

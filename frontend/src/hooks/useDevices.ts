@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 import { DEVICE_CSV_URL } from "../constants";
-import type { Device } from "../types/device";
+import type { Device } from "../types";
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -63,26 +63,42 @@ const fetchDevices = async () => {
       contactInstitution: row.contact_institution,
       documentationUrl: row.documentation_url,
       deviceConstruction: parseDeviceConstruction(row.device_construction),
-      powerSources: row.power_sources,
+      powerSources: parseList(row.power_sources),
       processingUnit: row.processing_unit,
-      modelProcessing: row.model_processing,
-      captureModes: row.capture_modes,
+      modelProcessing: parseList(row.model_processing),
+      captureModes: parseList(row.capture_modes),
       mainOpticalSensorModelName: row.main_optical_sensor_model_name,
       classificationTargetType: row.classification_target_type,
-      taxonomicGroups: row.taxonomic_groups,
-      functionalGroups: row.functional_groups,
-      habitatType: row.habitat_type,
-      operationalEnvironment: row.operational_environment,
+      taxonomicGroups: parseList(row.taxonomic_groups),
+      functionalGroups: parseList(row.functional_groups),
+      habitatType: parseList(row.habitat_type),
+      operationalEnvironment: parseList(row.operational_environment),
       costUnitBuild: row.cost_unit_build,
       weight: row.weight,
-      connectivity: row.connectivity,
+      connectivity: parseList(row.connectivity),
       ipRating: row.ip_rating,
     }))
     .filter((device) => Boolean(device.deviceName));
 };
 
-const parseDeviceConstruction = (value?: string) =>
-  value
-    ?.split(";")
-    .map((value) => value?.split(":")?.[0].trim())
-    .filter((value) => value[0] === value[0].toUpperCase());
+/**
+ * Splits a `;`-separated list and normalizes each value by dropping a trailing
+ * parenthetical, so e.g. "Lepidoptera" and "Lepidoptera (butterflies & moths)"
+ * become the same value.
+ */
+const parseList = (value?: string) => [
+  ...new Set(
+    (value ?? "")
+      .split(";")
+      .map((item) => item.trim().replace(/\s*\(.*\)$/, ""))
+      .filter(Boolean),
+  ),
+];
+
+const parseDeviceConstruction = (value?: string) => [
+  ...new Set(
+    parseList(value)
+      .map((item) => item.split(":")[0].trim())
+      .filter((item) => item[0] === item[0].toUpperCase()),
+  ),
+];

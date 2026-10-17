@@ -1,6 +1,6 @@
+import type { ViewMode } from "@/lib/types";
 import type { Dispatch, SetStateAction } from "react";
 import { useOutletContext } from "react-router";
-import type { ViewMode } from "../lib/types";
 import type { useDeviceFilters } from "./useDeviceFilters";
 import type { useDevices } from "./useDevices";
 

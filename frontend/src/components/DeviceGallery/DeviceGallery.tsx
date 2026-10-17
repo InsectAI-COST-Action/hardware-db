@@ -1,5 +1,5 @@
-import type { Device } from "../../lib/types";
-import { DeviceCard } from "../DeviceCard/DeviceCard";
+import { DeviceCard } from "@/components/DeviceCard/DeviceCard";
+import type { Device } from "@/lib/types";
 import styles from "./DeviceGallery.module.css";
 
 export const DeviceGallery = ({

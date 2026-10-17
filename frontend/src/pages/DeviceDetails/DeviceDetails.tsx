@@ -1,11 +1,11 @@
+import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { Tabs } from "@/components/Tabs/Tabs";
+import { Tag } from "@/components/Tag/Tag";
+import { useAppContext } from "@/hooks/useAppContext";
+import type { Device } from "@/lib/types";
+import { getContributor, getOverviewSpecs } from "@/lib/utils";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
-import { LinkButton } from "../../components/LinkButton/LinkButton";
-import { Tabs } from "../../components/Tabs/Tabs";
-import { Tag } from "../../components/Tag/Tag";
-import { useAppContext } from "../../hooks/useAppContext";
-import type { Device } from "../../lib/types";
-import { getContributor, getOverviewSpecs } from "../../lib/utils";
 import styles from "./DeviceDetails.module.css";
 
 const TABS: { value: string; label: string }[] = [

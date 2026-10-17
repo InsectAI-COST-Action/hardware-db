@@ -1,11 +1,11 @@
-import { DeviceGallery } from "../../components/DeviceGallery/DeviceGallery";
-import { Filters } from "../../components/Filters/Filters";
-import { Input } from "../../components/Input/Input";
-import { Intro } from "../../components/Intro/Intro";
-import { Select } from "../../components/Select/Select";
-import { Switch } from "../../components/Switch/Switch";
-import { useAppContext } from "../../hooks/useAppContext";
-import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "../../lib/constants";
+import { DeviceGallery } from "@/components/DeviceGallery/DeviceGallery";
+import { Filters } from "@/components/Filters/Filters";
+import { Input } from "@/components/Input/Input";
+import { Intro } from "@/components/Intro/Intro";
+import { Select } from "@/components/Select/Select";
+import { Switch } from "@/components/Switch/Switch";
+import { useAppContext } from "@/hooks/useAppContext";
+import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "@/lib/constants";
 import styles from "./Devices.module.css";
 
 export const Devices = () => {

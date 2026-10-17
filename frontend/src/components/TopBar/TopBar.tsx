@@ -1,7 +1,7 @@
-import { EXTERNAL_LINKS, THEME_OPTIONS } from "../../lib/constants";
-import { useTheme } from "../../hooks/useTheme";
-import { LinkButton } from "../LinkButton/LinkButton";
-import { Switch } from "../Switch/Switch";
+import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { Switch } from "@/components/Switch/Switch";
+import { useTheme } from "@/hooks/useTheme";
+import { EXTERNAL_LINKS, THEME_OPTIONS } from "@/lib/constants";
 import styles from "./TopBar.module.css";
 
 export const TopBar = () => {

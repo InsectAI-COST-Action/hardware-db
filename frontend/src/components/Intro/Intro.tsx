@@ -1,5 +1,5 @@
-import { SUBMIT_LINK } from "../../lib/constants";
-import { LinkButton } from "../LinkButton/LinkButton";
+import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { SUBMIT_LINK } from "@/lib/constants";
 import styles from "./Intro.module.css";
 
 export const Intro = () => (

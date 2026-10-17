@@ -1,7 +1,7 @@
+import { DEVICE_CSV_URL } from "@/lib/constants";
+import type { Device } from "@/lib/types";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
-import { DEVICE_CSV_URL } from "../lib/constants";
-import type { Device } from "../lib/types";
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<Device[]>([]);

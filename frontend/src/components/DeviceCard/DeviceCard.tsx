@@ -1,8 +1,8 @@
+import { Tag } from "@/components/Tag/Tag";
+import type { Device } from "@/lib/types";
+import { getContributor, getOverviewSpecs } from "@/lib/utils";
 import { useMemo } from "react";
 import { Link } from "react-router";
-import type { Device } from "../../lib/types";
-import { getContributor, getOverviewSpecs } from "../../lib/utils";
-import { Tag } from "../Tag/Tag";
 import styles from "./DeviceCard.module.css";
 
 export const DeviceCard = ({ device }: { device: Device }) => {

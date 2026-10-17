@@ -1,4 +1,4 @@
-import type { FilterOption, ListField } from "../../lib/types";
+import type { FilterOption, ListField } from "@/lib/types";
 import { FilterSection } from "./FilterSection";
 import styles from "./Filters.module.css";
 

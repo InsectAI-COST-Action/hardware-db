@@ -470,6 +470,20 @@
             "fallback_value": "preserve"
           },
           {
+            "_comment": "Normalize legacy functional-guild text to the new functional-group checkbox options.",
+            "type": "value_map",
+            "question_id": "functional_groups",
+            "multi_value": true,
+            "value_map": {
+              "Day flying pollinators": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+              "Day-flying pollinators": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+              "Pollinating insects": "Pollinators (flower-visiting insects)",
+              "night flying insects": "Night-flying insects (nocturnal)",
+              "nocturnal insects": "Night-flying insects (nocturnal)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

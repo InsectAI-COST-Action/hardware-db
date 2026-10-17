@@ -6,6 +6,7 @@ interface LinkButtonProps {
   className?: string;
   external?: boolean;
   href: string;
+  variant?: "primary" | "ghost";
 }
 
 export const LinkButton = ({
@@ -13,9 +14,10 @@ export const LinkButton = ({
   className,
   external = false,
   href,
+  variant = "primary",
 }: LinkButtonProps) => (
   <a
-    className={`${styles.linkButton} ${className ?? ""}`}
+    className={`${styles.linkButton} ${styles[variant]} ${className ?? ""}`}
     href={href}
     {...(external && { rel: "noopener noreferrer", target: "_blank" })}
   >

@@ -34,3 +34,7 @@ export type ListField = {
 }[keyof Device];
 
 export type SortOption = "random" | "name";
+
+export type Theme = "light" | "dark";
+
+export type ViewMode = "gallery" | "table";

@@ -7,8 +7,7 @@
   display: inline-flex;
   font-family: inherit;
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  line-height: 1;
+  font-weight: 500;
   padding: 4px 8px;
   white-space: nowrap;
 }

@@ -3,7 +3,7 @@
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   display: flex;
-  gap: 32px;
+  gap: 16px;
   padding: 12px 64px;
   position: sticky;
   top: 0;
@@ -25,26 +25,6 @@
 
 .externalLinks {
   display: flex;
-  gap: 32px;
+  gap: 16px;
   margin-left: auto;
-}
-
-.externalLink {
-  align-items: center;
-  color: var(--color-foreground);
-  display: flex;
-  font-weight: 500;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.externalLink:hover {
-  color: var(--color-foreground);
-}
-
-.externalIcon {
-  background: currentColor;
-  height: 16px;
-  mask: url("/images/external-link.svg") center / contain no-repeat;
-  width: 16px;
 }

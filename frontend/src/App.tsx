@@ -1,15 +1,20 @@
+import { useState } from "react";
 import styles from "./App.module.css";
 import { DeviceGallery } from "./components/DeviceGallery/DeviceGallery";
 import { Filters } from "./components/Filters/Filters";
 import { Input } from "./components/Input/Input";
 import { Intro } from "./components/Intro/Intro";
 import { Select } from "./components/Select/Select";
+import { Switch } from "./components/Switch/Switch";
 import { TopBar } from "./components/TopBar/TopBar";
-import { SORT_OPTIONS } from "./constants";
+import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "./constants";
 import { useDeviceFilters } from "./hooks/useDeviceFilters";
 import { useDevices } from "./hooks/useDevices";
+import type { ViewMode } from "./types";
 
 const App = () => {
+  const [viewMode, setViewMode] = useState<ViewMode>("gallery");
+
   const { devices, isLoading, error } = useDevices();
   const {
     filteredDevices,
@@ -48,6 +53,13 @@ const App = () => {
                   onChange={setSort}
                   options={SORT_OPTIONS}
                   value={sort}
+                />
+                <Switch
+                  label="View mode"
+                  onChange={setViewMode}
+                  options={VIEW_MODE_OPTIONS}
+                  showLabels
+                  value={viewMode}
                 />
               </div>
               <p className={styles.deviceCount}>

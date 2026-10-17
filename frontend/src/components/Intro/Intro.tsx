@@ -1,3 +1,5 @@
+import { SUBMIT_LINK } from "../../constants";
+import { LinkButton } from "../LinkButton/LinkButton";
 import styles from "./Intro.module.css";
 
 export const Intro = () => (
@@ -14,13 +16,15 @@ export const Intro = () => (
     </div>
     <div className={`dark ${styles.card}`}>
       <div>
-        <h2>Built or deployed a device?</h2>
+        <h3>Built or deployed a device?</h3>
         <p>
           Add it to the database through our submission form. Entries are
           published openly so others can learn from your design.
         </p>
       </div>
-      <a href="#">Submit a device</a>
+      <LinkButton external href={SUBMIT_LINK}>
+        Open submission form
+      </LinkButton>
     </div>
   </div>
 );

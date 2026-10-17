@@ -138,10 +138,10 @@ class SchemaMigration:
         """Map old values to new values for a question.
 
         When ``multi_value=True`` the field is treated as a semicolon-separated
-        checkbox string.  Each token is looked up in ``value_map``; tokens with a
-        ``null`` mapping are explicitly dropped, tokens absent from ``value_map``
-        are preserved when ``fallback_value='preserve'`` or dropped otherwise.
-        Duplicate mapped values are removed to keep the output clean.
+        checkbox string. Tokens absent from ``value_map`` are preserved when
+        ``fallback_value='preserve'`` and dropped otherwise. For single values,
+        that fallback preserves the original value; other fallback values replace
+        it. Duplicate mapped values are removed from checkbox strings.
         """
         if question_id not in data:
             return
@@ -175,6 +175,8 @@ class SchemaMigration:
             # Simple single-value mapping
             if old_value in value_map:
                 data[question_id] = value_map[old_value]
+            elif fallback == "preserve":
+                data[question_id] = old_value
             elif fallback is not None:
                 data[question_id] = fallback
             else:

@@ -4,14 +4,14 @@
   border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  gap: 16px;
+  padding: 24px;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 16px;
 }
 
 .title {
@@ -22,7 +22,6 @@
   color: var(--color-muted-foreground);
   display: -webkit-box;
   line-clamp: 2;
-  margin-bottom: 16px;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -35,4 +34,29 @@
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+
+.specs {
+  display: grid;
+  gap: 8px 32px;
+  grid-template-columns: min-content 1fr;
+  margin: 0;
+}
+
+.spec {
+  display: contents;
+}
+
+.specLabel {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.specValue {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  margin: 0;
 }

@@ -18,6 +18,9 @@
   --font-size-xl: 2em; /* 32px */
   --font-size-2xl: 3em; /* 48px */
 
+  /* Font family vars */
+  --font-family-mono: ui-monospace, monospace;
+
   /* Border radius vars */
   --radius-md: 6px;
 

@@ -413,6 +413,20 @@
             }
           },
           {
+            "_comment": "Update construction option wording and fold the two old partly-custom choices into one.",
+            "type": "value_map",
+            "question_id": "device_construction",
+            "multi_value": true,
+            "value_map": {
+              "Off-the-shelf: Purchased and used as-is": "Off-the-shelf: Purchased and used as-is",
+              "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades": "Modified off-the-shelf: Pre-built device with user-made adjustments",
+              "Partly custom: Assembled from off-the-shelf and/or open-source components": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+              "with some user design or modification": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+              "Fully custom: Designed and fabricated by the user (hardware and potentially software)": "Fully custom: Designed and fabricated entirely by the user (e.g custom PCB)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

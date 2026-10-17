@@ -484,6 +484,21 @@
             "fallback_value": "preserve"
           },
           {
+            "_comment": "Map legacy habitat descriptions to the new habitat categories by exact text.",
+            "type": "value_map",
+            "question_id": "habitat_type",
+            "value_map": {
+              "": "",
+              "Alpine (British Columbia, CA)": "Alpine/montane",
+              "Cloud forest, oceanic island": "Tropical forest",
+              "Common garden": "Indoor/laboratory",
+              "Meadows": "Grassland/meadow",
+              "many": "Other",
+              "open habitats": "Grassland/meadow",
+              "Rainforest": "Tropical forest"
+            }
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

@@ -452,6 +452,24 @@
             "fallback_value": "preserve"
           },
           {
+            "_comment": "Normalize legacy taxonomic names to schema options; expand broad arthropods to all insect orders and Other.",
+            "type": "value_map",
+            "question_id": "taxonomic_groups",
+            "multi_value": true,
+            "value_map": {
+              "Lepidoptera": "Lepidoptera (butterflies & moths)",
+              "Diptera": "Diptera (flies, mosquitoes)",
+              "Hymenoptera": "Hymenoptera (bees, wasps, ants)",
+              "Coleoptera": "Coleoptera (beetles)",
+              "Flies": "Diptera (flies, mosquitoes)",
+              "Bees": "Hymenoptera (bees, wasps, ants)",
+              "Butterflies": "Lepidoptera (butterflies & moths)",
+              "arthropods": "Non-specific / all insects",
+              "more": "Non-specific / all insects"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

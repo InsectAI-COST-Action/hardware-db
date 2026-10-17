@@ -1,12 +1,11 @@
-import { useState } from "react";
 import { EXTERNAL_LINKS, THEME_OPTIONS } from "../../constants";
-import type { Theme } from "../../types";
+import { useTheme } from "../../hooks/useTheme";
 import { LinkButton } from "../LinkButton/LinkButton";
 import { Switch } from "../Switch/Switch";
 import styles from "./TopBar.module.css";
 
 export const TopBar = () => {
-  const [theme, setTheme] = useState<Theme>("light");
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className={styles.container}>

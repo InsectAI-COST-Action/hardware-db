@@ -10,6 +10,7 @@
   --color-border: #e2e8f0; /* slate-200 */
   --color-muted: #f1f5f9; /* slate-100 */
   --color-muted-foreground: #45556c; /* slate-600 */
+  color-scheme: light;
 
   /* Font size vars */
   --font-size-sm: 0.75em; /* 12px */
@@ -33,6 +34,16 @@
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+}
+
+:root[data-theme="dark"] {
+  --color-background: #0a0a0a; /* neutral-950 */
+  --color-foreground: #fafafa; /* neutral-50 */
+  --color-surface: #171717; /* neutral-900 */
+  --color-border: #404040; /* neutral-700 */
+  --color-muted: #262626; /* neutral-800 */
+  --color-muted-foreground: #d4d4d4; /* neutral-300 */
+  color-scheme: dark;
 }
 
 #root {

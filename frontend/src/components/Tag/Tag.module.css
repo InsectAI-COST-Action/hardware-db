@@ -3,7 +3,6 @@
   background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-accent);
-  color: var(--color-accent-foreground);
   display: inline-flex;
   font-family: inherit;
   font-size: var(--font-size-sm);
@@ -14,10 +13,6 @@
 
 .clickable {
   cursor: pointer;
-}
-
-.clickable:hover {
-  background: var(--color-accent);
 }
 
 .clickable:focus-visible {

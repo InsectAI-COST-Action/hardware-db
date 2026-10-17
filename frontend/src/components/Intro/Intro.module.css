@@ -1,7 +1,8 @@
 .container {
+  --background-image: url("https://insectipsum.com/photos/1024/256?image_id=3");
   background-image:
     linear-gradient(to right, rgb(0 0 0 / 70%), rgb(0 0 0 / 0%)),
-    url("https://insectipsum.com/photos/1024/256?image_id=3");
+    var(--background-image);
   background-position: center;
   background-size: cover;
   border-bottom: 1px solid var(--color-border);
@@ -31,7 +32,7 @@
 
 .card {
   align-items: center;
-  background-color: rgb(255 255 255 / 70%);
+  background-color: color-mix(in srgb, var(--color-surface) 70%, transparent);
   border-radius: var(--radius-md);
   box-sizing: border-box;
   display: flex;
@@ -50,4 +51,8 @@
   .container {
     grid-template-columns: 1fr;
   }
+}
+
+:global(:root[data-theme="dark"]) .container {
+  --background-image: url("https://insectipsum.com/photos/1024/256?image_id=8");
 }

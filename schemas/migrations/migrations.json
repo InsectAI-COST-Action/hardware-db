@@ -404,6 +404,15 @@
         ],
         "transforms": [
           {
+            "_comment": "Translate the old yes/no question into the equivalent new submission type.",
+            "type": "value_map",
+            "question_id": "have_deviceID",
+            "value_map": {
+              "Yes": "Update an existing entry.",
+              "No": "New device submission."
+            }
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

@@ -427,6 +427,20 @@
             "fallback_value": "preserve"
           },
           {
+            "_comment": "Translate old processing choices to the new checkbox values; expand Hybrid to on-device and offboard processing.",
+            "type": "value_map",
+            "question_id": "model_processing",
+            "multi_value": true,
+            "value_map": {
+              "On-device (edge processing)": "On-device (edge processing)",
+              "Local computing (near edge processing using locally connected computers on the network)": "On-device (edge processing)",
+              "Offboard processing (data transfer to and processing on separate computer)": "Offboard processing (data transfer to separate computer)",
+              "Cloud processing": "Cloud processing",
+              "Hybrid": "On-device (edge processing); Offboard processing (data transfer to separate computer)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

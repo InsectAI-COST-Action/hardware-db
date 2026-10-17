@@ -15,6 +15,16 @@
         "transforms": []
       }
     },
+    "1.0.0-beta→1.0.0": {
+      "created_date": "2026-06-01",
+      "description": "Identity migration: 1.0.0-beta and 1.0.0 have identical question IDs. This normalizes pre-release version tags to stable release.",
+      "mappings": {
+        "drops": [],
+        "adds": [],
+        "renames": [],
+        "transforms": []
+      }
+    },
     "1.0.0→1.1.0-beta": {
       "created_date": "2026-06-01",
       "description": "Restructured questionnaire based on workshop feedback. Drops 29 fields, renames 14 (including documentation, costs, connectivity, and sensor fields), adds 9 value transforms (checkbox normalisation, multi-source connectivity merge, numeric range splits, focal distance parsing), and adds 47 new fields covering team composition, costs breakdown, documentation, connectivity, and environmental parameters.",
@@ -508,16 +518,6 @@
             "source_question_id": "maintainer_email"
           }
         ]
-      }
-    },
-    "1.0.0-beta→1.0.0": {
-      "created_date": "2026-06-01",
-      "description": "Identity migration: 1.0.0-beta and 1.0.0 have identical question IDs. This normalizes pre-release version tags to stable release.",
-      "mappings": {
-        "drops": [],
-        "adds": [],
-        "renames": [],
-        "transforms": []
       }
     }
   }

@@ -1,4 +1,6 @@
 # SCHEMAS
+**1.1.1-beta** Added a follow-up migration to normalize legacy values for existing 1.1.0-beta records and renamed the project duration field ID to `project_duration`.
+
 **1.1.0-beta** Overhauled questionnaire structure according to workshop suggestions, added answer validation (but limited options due to Google Forms API), circa 28eb736 - added CC-BY-4.0 licence and ask user consent.
 
 **1.0.0-beta** First attempt at incorporating feedback from workshop at the annual meeting in Niš, but keeping the structure and question order mostly intact, circa 358a5f3

@@ -20,9 +20,7 @@
 
 .subTitle {
   color: var(--color-muted-foreground);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.5;
 }
 
 .description {

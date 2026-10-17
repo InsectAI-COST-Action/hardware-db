@@ -43,6 +43,7 @@ export const VIEW_MODE_OPTIONS: {
   label: string;
   icon: string;
 }[] = [
-  { value: "gallery", label: "Gallery", icon: "/images/grid-2x2.svg" },
   { value: "table", label: "Table", icon: "/images/table.svg" },
+  { value: "gallery", label: "Gallery", icon: "/images/grid-2x2.svg" },
+  { value: "compare", label: "Compare", icon: "/images/scale.svg" },
 ];

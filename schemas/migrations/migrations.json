@@ -202,7 +202,7 @@
           {
             "question_id": "project duration",
             "title": "Project duration",
-            "type": "text",
+            "type": "choice",
             "default_value": null
           },
           {

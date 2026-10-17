@@ -499,6 +499,15 @@
             }
           },
           {
+            "_comment": "Map a specific legacy frame rate and preserve ranges that do not identify the common deployment rate.",
+            "type": "value_map",
+            "question_id": "main_sensor_framerate",
+            "value_map": {
+              "2 FPS": "1-5 fps"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

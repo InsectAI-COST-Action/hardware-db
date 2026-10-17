@@ -1,30 +1,22 @@
 import { useState } from "react";
+import { Outlet, ScrollRestoration } from "react-router";
 import styles from "./App.module.css";
-import { DeviceGallery } from "./components/DeviceGallery/DeviceGallery";
-import { Filters } from "./components/Filters/Filters";
-import { Input } from "./components/Input/Input";
-import { Intro } from "./components/Intro/Intro";
-import { Select } from "./components/Select/Select";
-import { Switch } from "./components/Switch/Switch";
 import { TopBar } from "./components/TopBar/TopBar";
-import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "./constants";
+import type { AppContext } from "./hooks/useAppContext";
 import { useDeviceFilters } from "./hooks/useDeviceFilters";
 import { useDevices } from "./hooks/useDevices";
-import type { ViewMode } from "./types";
+import type { ViewMode } from "./lib/types";
 
 const App = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("gallery");
-
-  const { devices, isLoading, error } = useDevices();
-  const {
-    filteredDevices,
-    search,
-    sections,
-    setSearch,
-    setSelected,
-    setSort,
-    sort,
-  } = useDeviceFilters(devices);
+  const devicesState = useDevices();
+  const filtersState = useDeviceFilters(devicesState.devices);
+  const context: AppContext = {
+    ...devicesState,
+    ...filtersState,
+    setViewMode,
+    viewMode,
+  };
 
   return (
     <>
@@ -33,47 +25,9 @@ const App = () => {
       </div>
       <div className={styles.app}>
         <TopBar />
-        <div className={styles.container}>
-          <Intro />
-          <div className={styles.main}>
-            <Filters onChange={setSelected} sections={sections} />
-            <div className={styles.content}>
-              <div className={styles.toolbar}>
-                <Input
-                  className={styles.searchInput}
-                  label="Search devices"
-                  onChange={setSearch}
-                  placeholder="Search devices..."
-                  type="search"
-                  value={search}
-                />
-                <Select
-                  icon="/images/arrow-down-up.svg"
-                  label="Sort devices"
-                  onChange={setSort}
-                  options={SORT_OPTIONS}
-                  value={sort}
-                />
-                <Switch
-                  label="View mode"
-                  onChange={setViewMode}
-                  options={VIEW_MODE_OPTIONS}
-                  showLabels
-                  value={viewMode}
-                />
-              </div>
-              <p className={styles.deviceCount}>
-                Showing {filteredDevices.length} of {devices.length} devices
-              </p>
-              <DeviceGallery
-                devices={filteredDevices}
-                isLoading={isLoading}
-                error={error}
-              />
-            </div>
-          </div>
-        </div>
+        <Outlet context={context} />
       </div>
+      <ScrollRestoration />
     </>
   );
 };

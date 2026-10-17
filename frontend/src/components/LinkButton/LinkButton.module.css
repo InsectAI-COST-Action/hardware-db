@@ -1,6 +1,8 @@
 .linkButton {
   align-items: center;
   border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  box-sizing: border-box;
   display: flex;
   font-weight: 500;
   gap: 8px;
@@ -10,18 +12,22 @@
   text-decoration: none;
 }
 
-.primary {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
-}
-
 .ghost {
-  background-color: transparent;
   color: var(--color-foreground);
 }
 
 .ghost:hover {
   background-color: var(--color-muted);
+}
+
+.outline {
+  border-color: var(--primary);
+  color: var(--color-primary);
+}
+
+.primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
 }
 
 .externalIcon {

@@ -1,4 +1,4 @@
-import { EXTERNAL_LINKS, THEME_OPTIONS } from "../../constants";
+import { EXTERNAL_LINKS, THEME_OPTIONS } from "../../lib/constants";
 import { useTheme } from "../../hooks/useTheme";
 import { LinkButton } from "../LinkButton/LinkButton";
 import { Switch } from "../Switch/Switch";

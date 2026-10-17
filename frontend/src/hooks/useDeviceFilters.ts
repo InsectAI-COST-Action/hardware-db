@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
-import { FILTER_DEFINITIONS } from "../constants";
+import { FILTER_DEFINITIONS } from "../lib/constants";
 import type {
   Device,
   FilterOption,
   FilterSelections,
   ListField,
   SortOption,
-} from "../types";
+} from "../lib/types";
 
 export const useDeviceFilters = (devices: Device[]) => {
   const [search, setSearch] = useState("");

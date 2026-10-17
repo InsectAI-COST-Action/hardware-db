@@ -1,4 +1,4 @@
-import { SUBMIT_LINK } from "../../constants";
+import { SUBMIT_LINK } from "../../lib/constants";
 import { LinkButton } from "../LinkButton/LinkButton";
 import styles from "./Intro.module.css";
 

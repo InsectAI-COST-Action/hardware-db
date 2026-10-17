@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
-import { DEVICE_CSV_URL } from "../constants";
-import type { Device } from "../types";
+import { DEVICE_CSV_URL } from "../lib/constants";
+import type { Device } from "../lib/types";
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -77,6 +77,7 @@ const fetchDevices = async () => {
       weight: row.weight,
       connectivity: parseList(row.connectivity),
       ipRating: row.ip_rating,
+      slug: slugify(row.device_name ?? ""),
     }))
     .filter((device) => Boolean(device.deviceName));
 
@@ -119,3 +120,14 @@ const parseDeviceConstruction = (value?: string) => [
       .filter((item) => item[0] === item[0].toUpperCase()),
   ),
 ];
+
+/**
+ * Turns a device name into a URL-safe slug, e.g. "Lépinoc 2" -> "lepinoc-2".
+ */
+const slugify = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");

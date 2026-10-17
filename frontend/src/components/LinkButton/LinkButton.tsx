@@ -6,7 +6,7 @@ interface LinkButtonProps {
   className?: string;
   external?: boolean;
   href: string;
-  variant?: "primary" | "ghost";
+  variant?: "ghost" | "outline" | "primary";
 }
 
 export const LinkButton = ({

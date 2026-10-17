@@ -1,6 +1,5 @@
 .tag {
   align-items: center;
-  background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-accent);
   display: inline-flex;
@@ -9,13 +8,4 @@
   font-weight: 500;
   padding: 4px 8px;
   white-space: nowrap;
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-.clickable:focus-visible {
-  outline-offset: 2px;
-  outline: 2px solid var(--color-foreground);
 }

@@ -1,4 +1,4 @@
-import type { FilterOption } from "../../types";
+import type { FilterOption } from "../../lib/types";
 import styles from "./Filters.module.css";
 
 interface FilterSectionProps {

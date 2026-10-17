@@ -2,10 +2,13 @@
   background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
+  color: inherit;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  outline: none;
   padding: 24px;
+  text-decoration: none;
 }
 
 .tags {

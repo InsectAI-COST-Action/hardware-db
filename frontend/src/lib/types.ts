@@ -20,6 +20,7 @@ export interface Device {
   weight?: string;
   connectivity?: string[];
   ipRating?: string;
+  slug: string;
 }
 
 export interface FilterOption {

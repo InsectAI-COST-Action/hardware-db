@@ -1,41 +1,15 @@
 import { useMemo } from "react";
-import type { Device } from "../../types";
+import { Link } from "react-router";
+import type { Device } from "../../lib/types";
+import { getContributor, getOverviewSpecs } from "../../lib/utils";
 import { Tag } from "../Tag/Tag";
 import styles from "./DeviceCard.module.css";
 
-const MAX_LIST_ITEMS = 3;
-
 export const DeviceCard = ({ device }: { device: Device }) => {
-  const subTitle = useMemo(() => {
-    if (device.contactInstitution?.length) {
-      return `By ${device.contactInstitution}`;
-    }
-
-    return `Contributed by ${device.contactName}`;
-  }, [device]);
-
-  const specs = useMemo(() => {
-    const formatList = (items?: string[]) => {
-      if (!items?.length) {
-        return undefined;
-      }
-
-      const shown = items.slice(0, MAX_LIST_ITEMS).join(", ");
-      const remaining = items.length - MAX_LIST_ITEMS;
-
-      return remaining > 0 ? `${shown} +${remaining} more` : shown;
-    };
-
-    return [
-      { label: "Processor", value: device.processingUnit },
-      { label: "Power", value: formatList(device.powerSources) },
-      { label: "Capture", value: formatList(device.captureModes) },
-      { label: "Target taxa", value: formatList(device.taxonomicGroups) },
-    ].filter((spec) => spec.value);
-  }, [device]);
+  const specs = useMemo(() => getOverviewSpecs(device, 3), [device]);
 
   return (
-    <div className={styles.container}>
+    <Link className={styles.container} to={`/devices/${device.slug}`}>
       {device.deviceConstruction?.length ? (
         <div className={styles.tags}>
           {device.deviceConstruction.map((type) => (
@@ -45,7 +19,7 @@ export const DeviceCard = ({ device }: { device: Device }) => {
       ) : null}
       <div>
         <h3 className={styles.title}>{device.deviceName}</h3>
-        <h4 className={styles.subTitle}>{subTitle}</h4>
+        <h4 className={styles.subTitle}>{getContributor(device)}</h4>
       </div>
       {device.deviceDescription ? (
         <p className={styles.description}>{device.deviceDescription}</p>
@@ -60,6 +34,6 @@ export const DeviceCard = ({ device }: { device: Device }) => {
           ))}
         </dl>
       ) : null}
-    </div>
+    </Link>
   );
 };

@@ -90,3 +90,11 @@ select {
   font-size: var(--font-size-base);
   margin: 0;
 }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline-offset: 2px;
+  outline: 2px solid var(--color-foreground);
+}

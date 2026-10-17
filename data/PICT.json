@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "PICT (Plant–Insect Interactions Camera Trap) is a lightweight, waterproof, and inexpensive DIY system built around a Raspberry Pi Zero. It can continuously records high-quality video, with adjustable focus down to 5 cm, and customizable frame rate and resolution. It can run up to 15 days on a single power bank and be remotely controlled via Wi-Fi from a smartphone, tablet, or laptop.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegoraro",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -33,7 +33,7 @@
   "documentation_language": null,
   "doi_references": "",
   "additional_resources": null,
-  "device_construction": "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
+  "device_construction": "Modified off-the-shelf: Pre-built device with user-made adjustments",
   "cost_unit_build": "100",
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
@@ -51,7 +51,7 @@
   "model_processing": "",
   "capture_modes": "Continuous video; Scheduled photo; Time-lapse",
   "main_optical_sensor_model_name": "Raspberry Pi camera v3",
-  "main_sensor_resolution": "max ~1440p",
+  "main_sensor_resolution": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
   "main_sensor_framerate": "1-300",
   "lens_focusing": "Fixed distance; Automatic",
   "min_focal_distance": "< 2 cm (macro)",
@@ -64,9 +64,9 @@
   "firmware_update_method": "ask me :)",
   "firmware_version_repo": null,
   "classification_target_type": null,
-  "taxonomic_groups": "Diptera, Hymenoptera, Coleoptera, more",
-  "functional_groups": "Pollinating insects",
-  "habitat_type": "many",
+  "taxonomic_groups": "Diptera (flies, mosquitoes); Hymenoptera (bees, wasps, ants); Coleoptera (beetles); Non-specific / all insects",
+  "functional_groups": "Pollinators (flower-visiting insects)",
+  "habitat_type": "Other",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": "-10",
@@ -76,8 +76,8 @@
   "subject_size_max_mm": "50",
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.403427+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.882017+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

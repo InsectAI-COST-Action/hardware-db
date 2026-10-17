@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "Brechbühl et al. monitored visitation to the capitula of two Asteraceae species in the presence or absence of predators (i.e. with or without paper crab spider models or dried spiders attached). Continuous video monitoring was conducted with wireless digital surveillance cameras, linked via an access point to a PC running a video surveillance software (go1984 v3.0 Pro). A total of 2838 plant visits were recorded.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegorar",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -65,8 +65,8 @@
   "firmware_version_repo": null,
   "classification_target_type": null,
   "taxonomic_groups": "",
-  "functional_groups": "Day-flying pollinators",
-  "habitat_type": "Common garden",
+  "functional_groups": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+  "habitat_type": "Indoor/laboratory",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.410568+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.898423+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

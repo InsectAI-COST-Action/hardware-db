@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "Zych et al. 2019 published a study monitoring three flowering populations of Angelica sylvestris across a 700 km transect in three consecutive years. This study used a standard camcorder to perform 12 rounds of observations per year, each consisting of 15 min video recording, supplemented by direct insect sampling. Over the three years of monitoring, 8477 visits were recorded, and visitors were manually scored into morphogroups.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegoraro",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -65,8 +65,8 @@
   "firmware_version_repo": null,
   "classification_target_type": null,
   "taxonomic_groups": "",
-  "functional_groups": "Day-flying pollinators",
-  "habitat_type": "Meadows",
+  "functional_groups": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+  "habitat_type": "Grassland/meadow",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.376001+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.816168+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

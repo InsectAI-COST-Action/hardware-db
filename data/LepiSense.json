@@ -9,7 +9,7 @@
   "device_description": "LepiSense features colourful lighting to attract insects, a high-resolution camera, and high-capacity data storage for pictures. Solar-powered and easy to set up, it aims to enable scalable, automated long-term monitoring of nocturnal insects.",
   "team_size": "",
   "person_hours": "",
-  "project duration": "",
+  "project_duration": "",
   "contributor_name": "Jonas Beuchert",
   "contributor_email": "https://www.linkedin.com/in/jonas-beuchert/",
   "contributor_role": "Technician",
@@ -75,9 +75,11 @@
   "subject_size_min_mm": "",
   "subject_size_max_mm": "",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1M9PXanj1rpfuDa0et-KDNAKT1g8hztoShMY4odAJHN8",
     "collected_date": "2026-06-01T14:46:30.026456Z",
-    "migrated_from_version": null
+    "migrated_from_version": null,
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.855555+00:00"
   }
 }

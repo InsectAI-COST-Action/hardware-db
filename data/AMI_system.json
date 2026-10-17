@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@ws.ch",
@@ -9,7 +9,7 @@
   "device_description": "The UKCEH AMI system offers a platform for long-term, autonomous monitoring of moths.\n\nCombining robust lighting for attracting insects with high resolution cameras, the UKCEH AMI system can provide practical and cost-effective solutions for standardised monitoring. UKCEH AMI systems have been deployed in the UK, Canada, USA, Cyprus, Panama, Kenya, Uganda, Singapore, Costa Rica and Argentina, with plans to expand further.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "",
   "contributor_email": "",
   "contributor_role": null,
@@ -33,7 +33,7 @@
   "documentation_language": null,
   "doi_references": "",
   "additional_resources": null,
-  "device_construction": "Fully custom: Designed and fabricated by the user (hardware and potentially software)",
+  "device_construction": "Fully custom: Designed and fabricated entirely by the user (e.g custom PCB)",
   "cost_unit_build": "900",
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
@@ -64,8 +64,8 @@
   "firmware_update_method": "",
   "firmware_version_repo": null,
   "classification_target_type": null,
-  "taxonomic_groups": "Lepidoptera",
-  "functional_groups": "night flying insects",
+  "taxonomic_groups": "Lepidoptera (butterflies & moths)",
+  "functional_groups": "Night-flying insects (nocturnal)",
   "habitat_type": "",
   "operational_environment": "Terrestrial",
   "attractants": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.372508+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.812383+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

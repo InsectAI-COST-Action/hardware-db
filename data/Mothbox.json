@@ -9,7 +9,7 @@
   "device_description": "The Mothbox is an open-source nocturnal insect monitoring device. It is designed to be low-cost, small, and lightweight, and although it can be used anywhere, it was designed for tropical field biologists who are working in remote locations. The Mothbox is typically powered by a lithium battery so that it can be used without a power grid, but it can be plugged in to constant power, attached to a solar panel, or use another type of battery. Anyone can make their own Mothbox - find out how by going to mothbox.org!",
   "team_size": "3-5",
   "person_hours": ">1 and <2 FTEs",
-  "project duration": "3 years",
+  "project_duration": "3 years",
   "contributor_name": "Kit Quitmeyer",
   "contributor_email": "kathleen.quitmeyer@gmail.com",
   "contributor_role": "Project lead",
@@ -64,8 +64,8 @@
   "firmware_update_method": "SD card; SSH/remote access",
   "firmware_version_repo": "https://github.com/Digital-Naturalism-Laboratories/Mothbox",
   "classification_target_type": "Taxonomic groups (species, genus, family, order, etc.)",
-  "taxonomic_groups": "Lepidoptera (butterflies & moths); Coleoptera (beetles); Hymenoptera (bees, wasps, ants); Diptera (flies, mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Orthoptera (grasshoppers & crickets); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Arachnida (spiders, mites); Other arthropods; Non-specific / all insects",
-  "functional_groups": "Pollinators (flower-visiting insects); Night-flying insects (nocturnal); Crepuscular insects (dusk/dawn active); Herbivores (plant feeders); Predatory insects (e.g. ground beetles, dragonflies); Parasitoids (e.g. parasitic wasps); Decomposers / detritivores (e.g. dung beetles, carrion feeders); Aquatic insects (larval or adult stage); Soil-dwelling insects; Wood-boring insects; Crop pests; Disease vectors (e.g. mosquitoes, sandflies); Invasive species",
+  "taxonomic_groups": "Lepidoptera (butterflies & moths); Coleoptera (beetles); Hymenoptera (bees; wasps; ants); Diptera (flies; mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Orthoptera (grasshoppers & crickets); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Arachnida (spiders; mites); Other arthropods; Non-specific / all insects",
+  "functional_groups": "Pollinators (flower-visiting insects); Night-flying insects (nocturnal); Crepuscular insects (dusk/dawn active); Herbivores (plant feeders); Predatory insects (e.g. ground beetles; dragonflies); Parasitoids (e.g. parasitic wasps); Decomposers / detritivores (e.g. dung beetles; carrion feeders); Aquatic insects (larval or adult stage); Soil-dwelling insects; Wood-boring insects; Crop pests; Disease vectors (e.g. mosquitoes; sandflies); Invasive species",
   "habitat_type": "Temperate forest; Tropical forest; Grassland/meadow; Wetland/marsh; Agricultural land; Urban/suburban; Desert/arid; Alpine/montane; Freshwater (rivers, lakes); Coastal/marine; Cave/subterranean; Indoor/laboratory",
   "operational_environment": "Terrestrial",
   "attractants": "UV light; Visible light (white/coloured LED)",
@@ -75,9 +75,11 @@
   "subject_size_min_mm": "1 mm",
   "subject_size_max_mm": "A4 paper size",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1M9PXanj1rpfuDa0et-KDNAKT1g8hztoShMY4odAJHN8",
     "collected_date": "2026-06-01T14:52:19.946457Z",
-    "migrated_from_version": null
+    "migrated_from_version": null,
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.868397+00:00"
   }
 }

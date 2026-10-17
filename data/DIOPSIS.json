@@ -9,7 +9,7 @@
   "device_description": "The DIOPSIS is a smart camera that automatically photographs and identifies insects in the wild. Set up in nature, it works day and night to capture which species are present and how often they appear, helping researchers track insect populations and monitor biodiversity over time.",
   "team_size": "3-5",
   "person_hours": ">1 and <2 FTEs",
-  "project duration": ">4 years",
+  "project_duration": ">4 years",
   "contributor_name": "Stephan Peterse",
   "contributor_email": "info@faunabit.eu",
   "contributor_role": "Other",
@@ -64,8 +64,8 @@
   "firmware_update_method": "Over-the-Air (OTA); SSH/remote access",
   "firmware_version_repo": "",
   "classification_target_type": "Functional groups (ecological role or trait)",
-  "taxonomic_groups": "Lepidoptera (butterflies & moths); Coleoptera (beetles); Hymenoptera (bees, wasps, ants); Diptera (flies, mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Orthoptera (grasshoppers & crickets); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Non-specific / all insects",
-  "functional_groups": "Day-flying insects (diurnal); Night-flying insects (nocturnal); Crepuscular insects (dusk/dawn active); Herbivores (plant feeders); Predatory insects (e.g. ground beetles, dragonflies); Parasitoids (e.g. parasitic wasps); Decomposers / detritivores (e.g. dung beetles, carrion feeders); Soil-dwelling insects; Crop pests",
+  "taxonomic_groups": "Lepidoptera (butterflies & moths); Coleoptera (beetles); Hymenoptera (bees; wasps; ants); Diptera (flies; mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Orthoptera (grasshoppers & crickets); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Non-specific / all insects",
+  "functional_groups": "Day-flying insects (diurnal); Night-flying insects (nocturnal); Crepuscular insects (dusk/dawn active); Herbivores (plant feeders); Predatory insects (e.g. ground beetles; dragonflies); Parasitoids (e.g. parasitic wasps); Decomposers / detritivores (e.g. dung beetles; carrion feeders); Soil-dwelling insects; Crop pests",
   "habitat_type": "Temperate forest; Grassland/meadow; Wetland/marsh; Agricultural land; Urban/suburban; Desert/arid; Alpine/montane; Coastal/marine",
   "operational_environment": "Terrestrial",
   "attractants": "UV light; Visible light (white/coloured LED)",
@@ -75,9 +75,11 @@
   "subject_size_min_mm": "3",
   "subject_size_max_mm": "",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1M9PXanj1rpfuDa0et-KDNAKT1g8hztoShMY4odAJHN8",
     "collected_date": "2026-06-01T14:52:19.946457Z",
-    "migrated_from_version": null
+    "migrated_from_version": null,
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.829623+00:00"
   }
 }

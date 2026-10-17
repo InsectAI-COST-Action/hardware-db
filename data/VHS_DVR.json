@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "Gula et al. 2010 reported seven years of experience using a video recording system to monitor endemic New Caledonian birds’ nests. Although the study was not specifically used for studying pollinators, the approach is readily applicable to monitoring invertebrate pollinators. They used commercial surveillance cameras with an infrared (IR) illuminator and electret mini microphones, both connected to a Digital Video Recorder (DVR) through a RCA cable. The system was powered by two 12 V 100 Ah batteries in parallel, located 50 m from the camera and microphone setup. Events of interest were manually scored, watching the footage at 24–36× speed. In the seven years of work, with seven similar systems, 22 000 h of monitoring were accrued; the longest continuously monitored period was 58 days. The total cost of each unit was quoted at € 520.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegoraro",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -33,7 +33,7 @@
   "documentation_language": null,
   "doi_references": "10.1007/s10344-010-0392-y",
   "additional_resources": null,
-  "device_construction": "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades",
+  "device_construction": "Modified off-the-shelf: Pre-built device with user-made adjustments",
   "cost_unit_build": "520",
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
@@ -66,7 +66,7 @@
   "classification_target_type": null,
   "taxonomic_groups": "Birds",
   "functional_groups": "",
-  "habitat_type": "Rainforest",
+  "habitat_type": "Tropical forest",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.407432+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.886007+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

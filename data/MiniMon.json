@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Helena Russello",
   "contact_email": "helena@qgg.au.dk",
@@ -9,7 +9,7 @@
   "device_description": "mini monitoring device for insects based on ESP32",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Helena Russello",
   "contributor_email": "helena@qgg.au.dk",
   "contributor_role": null,
@@ -33,7 +33,7 @@
   "documentation_language": null,
   "doi_references": "",
   "additional_resources": null,
-  "device_construction": "Partly custom: Assembled from off-the-shelf and/or open-source components; with some user design or modification",
+  "device_construction": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
   "cost_unit_build": "100",
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
@@ -48,11 +48,11 @@
   "power_sources": "Solar; Rechargeable battery",
   "power_autonomy_continuous": "",
   "processing_unit": "XIAO ESP32S3 Sense",
-  "model_processing": "Offboard processing (data transfer to and processing on separate computer)",
+  "model_processing": "Offboard processing (data transfer to separate computer)",
   "capture_modes": "Time-lapse",
   "main_optical_sensor_model_name": "ov5460 AF",
-  "main_sensor_resolution": "5 MPS",
-  "main_sensor_framerate": "2 FPS",
+  "main_sensor_resolution": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
+  "main_sensor_framerate": "1-5 fps",
   "lens_focusing": "Manual; Automatic",
   "min_focal_distance": "",
   "field_of_view": null,
@@ -64,7 +64,7 @@
   "firmware_update_method": "flashed via microSD card",
   "firmware_version_repo": null,
   "classification_target_type": null,
-  "taxonomic_groups": "arthropods",
+  "taxonomic_groups": "Non-specific / all insects",
   "functional_groups": "",
   "habitat_type": "",
   "operational_environment": "Terrestrial",
@@ -75,11 +75,11 @@
   "subject_size_min_mm": "5",
   "subject_size_max_mm": "200",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1tNogHhoMUmxk8j424FYuJMs09FsaRNw3-64MvX2eNZo",
     "collected_date": "2026-04-22T06:02:35.990080Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.398499+00:00"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.864927+00:00"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "The Insect Detect DIY camera trap for automated insect monitoring is composed of low-cost off-the-shelf hardware components, combined with open-source software and can be easily assembled and set up with the provided instructions. The annotated datasets and provided models for insect detection and classification can be used as starting point to train your own models, e.g. adapted to different backgrounds or insect taxa.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegoraro",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -33,7 +33,7 @@
   "documentation_language": null,
   "doi_references": "https://doi.org/10.1371/journal.pone.0295474",
   "additional_resources": null,
-  "device_construction": "Partly custom: Assembled from off-the-shelf and/or open-source components",
+  "device_construction": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
   "cost_unit_build": "660",
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
@@ -64,8 +64,8 @@
   "firmware_update_method": "",
   "firmware_version_repo": null,
   "classification_target_type": null,
-  "taxonomic_groups": "Flies, Bees, Butterflies, more",
-  "functional_groups": "Pollinating insects",
+  "taxonomic_groups": "Diptera (flies, mosquitoes); Hymenoptera (bees, wasps, ants); Lepidoptera (butterflies & moths); Non-specific / all insects",
+  "functional_groups": "Pollinators (flower-visiting insects)",
   "habitat_type": "",
   "operational_environment": "Terrestrial",
   "attractants": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": "50",
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.388809+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.847283+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "have_deviceID": "No",
+  "have_deviceID": "New device submission.",
   "data_licence_consent": null,
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@wsl.ch",
@@ -9,7 +9,7 @@
   "device_description": "Micheneau et al. in 2008 monitored species of the orchid genus Angraecum using hard-disk camcorders with a night option and equipped with long-lasting batteries and waterproof casings. Recordings were made from 6:15 am to 6:30 pm, dictated by maximum battery duration. Flowers were observed for a total of 38 days (392.58 h) and four nights (44.83 h). Micheneau et al. 2010 also used the same setup in 2010 to monitor Angraecum cadettii, an endemic orchid of Mauritius and Reunion Islands. The monitoring was split into 12 h periods (either day or night), to record eventual pol- linia removal or deposition on flowers. This survey produced 48 days and 14 nights (577 h total) of footage obtained from the study of 508 flowers.",
   "team_size": null,
   "person_hours": null,
-  "project duration": null,
+  "project_duration": null,
   "contributor_name": "Luca Pegoraro",
   "contributor_email": "luca.pegoraro@wsl.ch",
   "contributor_role": null,
@@ -65,8 +65,8 @@
   "firmware_version_repo": null,
   "classification_target_type": null,
   "taxonomic_groups": "",
-  "functional_groups": "Day-flying pollinators",
-  "habitat_type": "Cloud forest, oceanic island",
+  "functional_groups": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+  "habitat_type": "Tropical forest",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": null,
@@ -76,8 +76,8 @@
   "subject_size_max_mm": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.0-beta",
-    "last_migration_date": "2026-10-12T14:48:29.385523+00:00",
-    "schema_version": "1.1.0-beta"
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.844037+00:00",
+    "schema_version": "1.1.1-beta"
   }
 }

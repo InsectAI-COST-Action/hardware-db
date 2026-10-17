@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-06-01T00:00:00Z"
+    "last_updated": "2026-10-17T00:00:00Z"
   },
   "migrations": {
     "0.2.0→1.0.0": {
@@ -404,6 +404,136 @@
         ],
         "transforms": [
           {
+            "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
+            "type": "value_map",
+            "question_id": "file_types",
+            "multi_value": true,
+            "value_map": {
+              ".jpeg": "JPEG",
+              ".jpg": "JPEG",
+              ".png": "PNG",
+              ".tiff": "TIFF",
+              ".tif": "TIFF",
+              ".raw": "RAW (DNG/CR2/ARW)",
+              ".mp4": "MP4",
+              ".mov": "AVI/MKV",
+              ".avi": "AVI/MKV"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Normalise capture mode labels; old options had coarser categories",
+            "type": "value_map",
+            "question_id": "capture_modes",
+            "multi_value": true,
+            "value_map": {
+              "Video": "Continuous video",
+              "Still image": "Scheduled photo",
+              "Timelapse": "Time-lapse"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Rename 'Mains' to 'Grid electricity'; all other options are identical",
+            "type": "value_map",
+            "question_id": "power_sources",
+            "multi_value": true,
+            "value_map": {
+              "Mains": "Grid electricity"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Merge three old connectivity-related CHECKBOX fields into one. Tokens with null mapping are dropped (A/V ports, GPS, etc. are not connectivity options in the new schema's scope).",
+            "type": "merge",
+            "question_id": "connectivity",
+            "source_questions": [
+              "physical_connectivity_options",
+              "wireless_connectivity_options",
+              "data_transfer_methods"
+            ],
+            "multi_value": true,
+            "dedup": true,
+            "value_map": {
+              "Wi-Fi": "WiFi",
+              "Bluetooth": "Bluetooth",
+              "Cellular (e.g. 3G/4G/5G": "Cellular (4G/LTE-M/NB-IoT)",
+              "LTE-M": "Cellular (4G/LTE-M/NB-IoT)",
+              "NB-IoT)": "Cellular (4G/LTE-M/NB-IoT)",
+              "GPS / GNSS": null,
+              "NFC": null,
+              "Serial (UART/RS232/RS485)": null,
+              "Satellite Links": "Satellite",
+              "Ethernet": "Ethernet",
+              "HDMI": null,
+              "DisplayPort": null,
+              "Audio jack": null,
+              "Embedded connectors (I2C/SPI/GPIO)": null,
+              "Cable": "USB (wired)",
+              "Removable storage": "SD card",
+              "Wireless (nearby)": null,
+              "Wireless (remote)": null
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Parse 'min-max mm' free text into separate min/max fields",
+            "type": "split",
+            "question_id": "subject_size_range_mm",
+            "split_type": "numeric_range",
+            "target_questions": ["subject_size_min_mm", "subject_size_max_mm"]
+          },
+          {
+            "_comment": "Parse '-10 to 40 °C' free text into separate min/max fields",
+            "type": "split",
+            "question_id": "operational_temperature_range_c",
+            "split_type": "numeric_range",
+            "target_questions": ["temperature_min_c", "temperature_max_c"]
+          },
+          {
+            "_comment": "Convert lens focal range free text to the nearest RADIO option. lens_focal_range was renamed to min_focal_distance in the renames step.",
+            "type": "numeric_to_range_option",
+            "question_id": "min_focal_distance",
+            "unit_conversion": {"mm": 0.1, "cm": 1.0, "m": 100.0},
+            "option_ranges": [
+              {"label": "< 2 cm (macro)", "max": 2},
+              {"label": "2-5 cm", "min": 2, "max": 5},
+              {"label": "5-10 cm", "min": 5, "max": 10},
+              {"label": "10-20 cm", "min": 10, "max": 20},
+              {"label": "20-50 cm", "min": 20, "max": 50},
+              {"label": "> 50 cm", "min": 50}
+            ],
+            "fallback_option": "Other (please specify)"
+          },
+          {
+            "_comment": "Best-effort: use maintainer_name to fill contributor_name only if the submitter field is empty",
+            "type": "fill_if_empty",
+            "question_id": "contributor_name",
+            "source_question_id": "maintainer_name"
+          },
+          {
+            "_comment": "Best-effort: same pattern for email",
+            "type": "fill_if_empty",
+            "question_id": "contributor_email",
+            "source_question_id": "maintainer_email"
+          }
+        ]
+      }
+    },
+    "1.1.0-beta→1.1.1-beta": {
+      "created_date": "2026-10-17",
+      "description": "Normalize legacy values carried into 1.1.0-beta and rename the project duration question ID to snake_case.",
+      "mappings": {
+        "drops": [],
+        "adds": [],
+        "renames": [
+          {
+            "old_id": "project duration",
+            "new_id": "project_duration"
+          }
+        ],
+        "transforms": [
+          {
             "_comment": "Translate the old yes/no question into the equivalent new submission type.",
             "type": "value_map",
             "question_id": "have_deviceID",
@@ -519,120 +649,6 @@
               "2.1 Mpx": "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)"
             },
             "fallback_value": "preserve"
-          },
-          {
-            "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
-            "type": "value_map",
-            "question_id": "file_types",
-            "multi_value": true,
-            "value_map": {
-              ".jpeg": "JPEG",
-              ".jpg": "JPEG",
-              ".png": "PNG",
-              ".tiff": "TIFF",
-              ".tif": "TIFF",
-              ".raw": "RAW (DNG/CR2/ARW)",
-              ".mp4": "MP4",
-              ".mov": "AVI/MKV",
-              ".avi": "AVI/MKV"
-            },
-            "fallback_value": "preserve"
-          },
-          {
-            "_comment": "Normalise capture mode labels; old options had coarser categories",
-            "type": "value_map",
-            "question_id": "capture_modes",
-            "multi_value": true,
-            "value_map": {
-              "Video": "Continuous video",
-              "Still image": "Scheduled photo",
-              "Timelapse": "Time-lapse"
-            },
-            "fallback_value": "preserve"
-          },
-          {
-            "_comment": "Rename 'Mains' to 'Grid electricity'; all other options are identical",
-            "type": "value_map",
-            "question_id": "power_sources",
-            "multi_value": true,
-            "value_map": {
-              "Mains": "Grid electricity"
-            },
-            "fallback_value": "preserve"
-          },
-          {
-            "_comment": "Merge three old connectivity-related CHECKBOX fields into one. Tokens with null mapping are dropped (A/V ports, GPS, etc. are not connectivity options in the new schema's scope).",
-            "type": "merge",
-            "question_id": "connectivity",
-            "source_questions": [
-              "physical_connectivity_options",
-              "wireless_connectivity_options",
-              "data_transfer_methods"
-            ],
-            "multi_value": true,
-            "dedup": true,
-            "value_map": {
-              "Wi-Fi": "WiFi",
-              "Bluetooth": "Bluetooth",
-              "Cellular (e.g. 3G/4G/5G": "Cellular (4G/LTE-M/NB-IoT)",
-              "LTE-M": "Cellular (4G/LTE-M/NB-IoT)",
-              "NB-IoT)": "Cellular (4G/LTE-M/NB-IoT)",
-              "GPS / GNSS": null,
-              "NFC": null,
-              "Serial (UART/RS232/RS485)": null,
-              "Satellite Links": "Satellite",
-              "Ethernet": "Ethernet",
-              "HDMI": null,
-              "DisplayPort": null,
-              "Audio jack": null,
-              "Embedded connectors (I2C/SPI/GPIO)": null,
-              "Cable": "USB (wired)",
-              "Removable storage": "SD card",
-              "Wireless (nearby)": null,
-              "Wireless (remote)": null
-            },
-            "fallback_value": "preserve"
-          },
-          {
-            "_comment": "Parse 'min-max mm' free text into separate min/max fields",
-            "type": "split",
-            "question_id": "subject_size_range_mm",
-            "split_type": "numeric_range",
-            "target_questions": ["subject_size_min_mm", "subject_size_max_mm"]
-          },
-          {
-            "_comment": "Parse '-10 to 40 °C' free text into separate min/max fields",
-            "type": "split",
-            "question_id": "operational_temperature_range_c",
-            "split_type": "numeric_range",
-            "target_questions": ["temperature_min_c", "temperature_max_c"]
-          },
-          {
-            "_comment": "Convert lens focal range free text to the nearest RADIO option. lens_focal_range was renamed to min_focal_distance in the renames step.",
-            "type": "numeric_to_range_option",
-            "question_id": "min_focal_distance",
-            "unit_conversion": {"mm": 0.1, "cm": 1.0, "m": 100.0},
-            "option_ranges": [
-              {"label": "< 2 cm (macro)", "max": 2},
-              {"label": "2-5 cm", "min": 2, "max": 5},
-              {"label": "5-10 cm", "min": 5, "max": 10},
-              {"label": "10-20 cm", "min": 10, "max": 20},
-              {"label": "20-50 cm", "min": 20, "max": 50},
-              {"label": "> 50 cm", "min": 50}
-            ],
-            "fallback_option": "Other (please specify)"
-          },
-          {
-            "_comment": "Best-effort: use maintainer_name to fill contributor_name only if the submitter field is empty",
-            "type": "fill_if_empty",
-            "question_id": "contributor_name",
-            "source_question_id": "maintainer_name"
-          },
-          {
-            "_comment": "Best-effort: same pattern for email",
-            "type": "fill_if_empty",
-            "question_id": "contributor_email",
-            "source_question_id": "maintainer_email"
           }
         ]
       }

@@ -441,6 +441,17 @@
             "fallback_value": "preserve"
           },
           {
+            "_comment": "Map both legacy aquatic choices to the freshwater option.",
+            "type": "value_map",
+            "question_id": "operational_environment",
+            "multi_value": true,
+            "value_map": {
+              "Aquatic": "Aquatic (freshwater)",
+              "Semi-aquatic": "Aquatic (freshwater)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
             "_comment": "Normalize file extension tokens from old CHECKBOX to new option labels",
             "type": "value_map",
             "question_id": "file_types",

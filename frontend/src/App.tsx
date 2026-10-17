@@ -1,14 +1,24 @@
 import styles from "./App.module.css";
 import { DeviceGallery } from "./components/DeviceGallery/DeviceGallery";
 import { Filters } from "./components/Filters/Filters";
+import { Input } from "./components/Input/Input";
 import { Intro } from "./components/Intro/Intro";
+import { Select } from "./components/Select/Select";
+import { SORT_OPTIONS } from "./constants";
 import { useDeviceFilters } from "./hooks/useDeviceFilters";
 import { useDevices } from "./hooks/useDevices";
 
 const App = () => {
   const { devices, isLoading, error } = useDevices();
-  const { search, setSearch, filteredDevices, sections, setSelected } =
-    useDeviceFilters(devices);
+  const {
+    filteredDevices,
+    search,
+    sections,
+    setSearch,
+    setSelected,
+    setSort,
+    sort,
+  } = useDeviceFilters(devices);
 
   return (
     <>
@@ -20,14 +30,23 @@ const App = () => {
         <div className={styles.main}>
           <Filters onChange={setSelected} sections={sections} />
           <div className={styles.content}>
-            <input
-              aria-label="Search devices"
-              className={styles.searchInput}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search devices..."
-              type="search"
-              value={search}
-            />
+            <div className={styles.toolbar}>
+              <Input
+                className={styles.searchInput}
+                label="Search devices"
+                onChange={setSearch}
+                placeholder="Search devices..."
+                type="search"
+                value={search}
+              />
+              <Select
+                icon="/images/arrow-down-up.svg"
+                label="Sort devices"
+                onChange={setSort}
+                options={SORT_OPTIONS}
+                value={sort}
+              />
+            </div>
             <p className={styles.deviceCount}>
               Showing {filteredDevices.length} of {devices.length} devices
             </p>

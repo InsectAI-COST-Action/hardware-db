@@ -32,3 +32,5 @@ export type FilterSelections = Partial<Record<ListField, string[]>>;
 export type ListField = {
   [K in keyof Device]-?: Device[K] extends string[] | undefined ? K : never;
 }[keyof Device];
+
+export type SortOption = "random" | "name";

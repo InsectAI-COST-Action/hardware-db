@@ -5,11 +5,13 @@ import type {
   FilterOption,
   FilterSelections,
   ListField,
+  SortOption,
 } from "../types";
 
 export const useDeviceFilters = (devices: Device[]) => {
   const [search, setSearch] = useState("");
   const [selections, setSelections] = useState<FilterSelections>({});
+  const [sort, setSort] = useState<SortOption>("random");
 
   const searchedDevices = useMemo(
     () => devices.filter((device) => matchesSearch(device, search)),
@@ -18,8 +20,13 @@ export const useDeviceFilters = (devices: Device[]) => {
 
   const filteredDevices = useMemo(
     () =>
-      searchedDevices.filter((device) => matchesSelections(device, selections)),
-    [searchedDevices, selections],
+      sortDevices(
+        searchedDevices.filter((device) =>
+          matchesSelections(device, selections),
+        ),
+        sort,
+      ),
+    [searchedDevices, selections, sort],
   );
 
   const sections = useMemo(
@@ -43,7 +50,15 @@ export const useDeviceFilters = (devices: Device[]) => {
     setSelections((prev) => ({ ...prev, [field]: selected }));
   }, []);
 
-  return { search, setSearch, filteredDevices, sections, setSelected };
+  return {
+    filteredDevices,
+    search,
+    sections,
+    setSearch,
+    setSelected,
+    setSort,
+    sort,
+  };
 };
 
 const countValues = (devices: Device[], field: ListField) => {
@@ -102,5 +117,19 @@ const matchesSelections = (
     }
 
     const values = device[field as ListField] ?? [];
+
     return selected.some((value) => values.includes(value));
   });
+
+/**
+ * Devices arrive already shuffled, so "random" keeps the incoming order.
+ */
+const sortDevices = (devices: Device[], sort: SortOption) => {
+  if (sort === "name") {
+    return [...devices].sort((a, b) =>
+      (a.deviceName ?? "").localeCompare(b.deviceName ?? ""),
+    );
+  }
+
+  return devices;
+};

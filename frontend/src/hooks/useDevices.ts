@@ -54,7 +54,7 @@ const fetchDevices = async () => {
     console.warn(result.errors);
   }
 
-  return result.data
+  const devices = result.data
     .map((row) => ({
       haveDeviceId: row.have_deviceID,
       deviceName: row.device_name,
@@ -79,6 +79,23 @@ const fetchDevices = async () => {
       ipRating: row.ip_rating,
     }))
     .filter((device) => Boolean(device.deviceName));
+
+  return shuffle(devices);
+};
+
+/**
+ * Fisher–Yates shuffle. Done once on load so the default "random" order stays
+ * stable while filtering and when switching back from another sort.
+ */
+const shuffle = <T>(items: T[]) => {
+  const result = [...items];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
 };
 
 /**

@@ -9,7 +9,7 @@
   "device_description": "The Entocam is a camera system entirely dedicated to capturing Moths and Nocturnal insect pictures. It consists of a waterproof, programmable camera that features a 8MP Sony Starvis Sensor, built-in with a white flash and designed to focus on a screen located at 45 cm mounted with carbon rods. It is paired with the EntoCam Beam, a strong and adjustable Moth-Attracting LED.",
   "team_size": "3-5",
   "person_hours": ">2 and <5 FTEs",
-  "project duration": "2 years",
+  "project_duration": "2 years",
   "contributor_name": "",
   "contributor_email": "",
   "contributor_role": "",
@@ -75,9 +75,11 @@
   "subject_size_min_mm": "",
   "subject_size_max_mm": "",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1yeIc4kEuAwaYnVYmzQCOsLPFA81qBMLZtS9XKuMnmKQ",
     "collected_date": "2026-06-09T07:54:34.742380Z",
-    "migrated_from_version": null
+    "migrated_from_version": null,
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.833329+00:00"
   }
 }

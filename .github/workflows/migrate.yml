@@ -25,10 +25,10 @@ jobs:
           pip install -e .[ci]
 
       - name: Run migrations (dry-run first)
-        run: python reprocessData.py --dry-run --verbose
+        run: python reprocessData.py --dry-run --verbose --reorder-data
 
       - name: Run migrations
-        run: python reprocessData.py --verbose
+        run: python reprocessData.py --verbose --reorder-data
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6

@@ -2,12 +2,22 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-06-01T00:00:00Z"
+    "last_updated": "2026-10-17T00:00:00Z"
   },
   "migrations": {
     "0.2.0→1.0.0": {
       "created_date": "2026-05-30",
       "description": "Metadata-only migration: v0.2.0 and v1.0.0 have identical question IDs. This migration adds schema versioning metadata to records that predate the versioning system.",
+      "mappings": {
+        "drops": [],
+        "adds": [],
+        "renames": [],
+        "transforms": []
+      }
+    },
+    "1.0.0-beta→1.0.0": {
+      "created_date": "2026-06-01",
+      "description": "Identity migration: 1.0.0-beta and 1.0.0 have identical question IDs. This normalizes pre-release version tags to stable release.",
       "mappings": {
         "drops": [],
         "adds": [],
@@ -192,7 +202,7 @@
           {
             "question_id": "project duration",
             "title": "Project duration",
-            "type": "text",
+            "type": "choice",
             "default_value": null
           },
           {
@@ -510,14 +520,137 @@
         ]
       }
     },
-    "1.0.0-beta→1.0.0": {
-      "created_date": "2026-06-01",
-      "description": "Identity migration: 1.0.0-beta and 1.0.0 have identical question IDs. This normalizes pre-release version tags to stable release.",
+    "1.1.0-beta→1.1.1-beta": {
+      "created_date": "2026-10-17",
+      "description": "Normalize legacy values carried into 1.1.0-beta and rename the project duration question ID to snake_case.",
       "mappings": {
         "drops": [],
         "adds": [],
-        "renames": [],
-        "transforms": []
+        "renames": [
+          {
+            "old_id": "project duration",
+            "new_id": "project_duration"
+          }
+        ],
+        "transforms": [
+          {
+            "_comment": "Translate the old yes/no question into the equivalent new submission type.",
+            "type": "value_map",
+            "question_id": "have_deviceID",
+            "value_map": {
+              "Yes": "Update an existing entry.",
+              "No": "New device submission."
+            }
+          },
+          {
+            "_comment": "Update construction option wording and fold the two old partly-custom choices into one.",
+            "type": "value_map",
+            "question_id": "device_construction",
+            "multi_value": true,
+            "value_map": {
+              "Off-the-shelf: Purchased and used as-is": "Off-the-shelf: Purchased and used as-is",
+              "Modified off-the-shelf: Pre-built device with user-made adjustments or upgrades": "Modified off-the-shelf: Pre-built device with user-made adjustments",
+              "Partly custom: Assembled from off-the-shelf and/or open-source components": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+              "with some user design or modification": "Partly custom: Assembled from off-the-shelf/open-source components with some user design (e.g. 3D-printed parts)",
+              "Fully custom: Designed and fabricated by the user (hardware and potentially software)": "Fully custom: Designed and fabricated entirely by the user (e.g custom PCB)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Translate old processing choices to the new checkbox values; expand Hybrid to on-device and offboard processing.",
+            "type": "value_map",
+            "question_id": "model_processing",
+            "multi_value": true,
+            "value_map": {
+              "On-device (edge processing)": "On-device (edge processing)",
+              "Local computing (near edge processing using locally connected computers on the network)": "On-device (edge processing)",
+              "Offboard processing (data transfer to and processing on separate computer)": "Offboard processing (data transfer to separate computer)",
+              "Cloud processing": "Cloud processing",
+              "Hybrid": "On-device (edge processing); Offboard processing (data transfer to separate computer)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Map both legacy aquatic choices to the freshwater option.",
+            "type": "value_map",
+            "question_id": "operational_environment",
+            "multi_value": true,
+            "value_map": {
+              "Aquatic": "Aquatic (freshwater)",
+              "Semi-aquatic": "Aquatic (freshwater)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Normalize legacy taxonomic names to schema options; expand broad arthropods to all insect orders and Other.",
+            "type": "value_map",
+            "question_id": "taxonomic_groups",
+            "multi_value": true,
+            "value_map": {
+              "Lepidoptera": "Lepidoptera (butterflies & moths)",
+              "Diptera": "Diptera (flies, mosquitoes)",
+              "Hymenoptera": "Hymenoptera (bees, wasps, ants)",
+              "Coleoptera": "Coleoptera (beetles)",
+              "Flies": "Diptera (flies, mosquitoes)",
+              "Bees": "Hymenoptera (bees, wasps, ants)",
+              "Butterflies": "Lepidoptera (butterflies & moths)",
+              "arthropods": "Non-specific / all insects",
+              "more": "Non-specific / all insects"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Normalize legacy functional-guild text to the new functional-group checkbox options.",
+            "type": "value_map",
+            "question_id": "functional_groups",
+            "multi_value": true,
+            "value_map": {
+              "Day flying pollinators": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+              "Day-flying pollinators": "Day-flying insects (diurnal); Pollinators (flower-visiting insects)",
+              "Pollinating insects": "Pollinators (flower-visiting insects)",
+              "night flying insects": "Night-flying insects (nocturnal)",
+              "nocturnal insects": "Night-flying insects (nocturnal)"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Map legacy habitat descriptions to the new habitat categories by exact text.",
+            "type": "value_map",
+            "question_id": "habitat_type",
+            "value_map": {
+              "": "",
+              "Alpine (British Columbia, CA)": "Alpine/montane",
+              "Cloud forest, oceanic island": "Tropical forest",
+              "Common garden": "Indoor/laboratory",
+              "Meadows": "Grassland/meadow",
+              "many": "Other",
+              "open habitats": "Grassland/meadow",
+              "Rainforest": "Tropical forest"
+            }
+          },
+          {
+            "_comment": "Map a specific legacy frame rate and preserve ranges that do not identify the common deployment rate.",
+            "type": "value_map",
+            "question_id": "main_sensor_framerate",
+            "value_map": {
+              "2 FPS": "1-5 fps"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Map legacy sensor resolutions to the closest new range and preserve custom values that do not fit a range.",
+            "type": "value_map",
+            "question_id": "main_sensor_resolution",
+            "value_map": {
+              "13 MP": "> 8 MP (e.g. 4056 x 3040 or higher)",
+              "1920x1080p": "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)",
+              "5 MPS": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
+              "max ~1440p": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
+              "2.1 Mpx": "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)"
+            },
+            "fallback_value": "preserve"
+          }
+        ]
       }
     }
   }

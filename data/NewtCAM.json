@@ -9,7 +9,7 @@
   "device_description": "NewtCam is an automated underwater camera system for monitoring freshwater wildlife without capturing or handling animals. Organisms move freely through a tunnel where their movement triggers the recording of images or videos. The aquatic unit consists of a camera and a dual lighting system enclosed in a rugged watertight housing with adjustable ballasts for deployment at different depths and imaging orientations. Visible light produces colour images and attracts many taxa, including invertebrates, while near-infrared light produces greyscale images and enables observation of light-averse species. A cable connects the aquatic unit to a battery and a computing unit based on a System on Module integrated into a custom printed circuit board. App4Cam is an open-source, user-friendly configuration app available on GitHub under the GPL v3 licence. ",
   "team_size": "6–10",
   "person_hours": "20+ FTEs",
-  "project duration": ">4 years",
+  "project_duration": ">4 years",
   "contributor_name": "Xavier Mestdagh",
   "contributor_email": "xavier.mestdagh@list.lu",
   "contributor_role": "Project lead",
@@ -64,7 +64,7 @@
   "firmware_update_method": "USB cable",
   "firmware_version_repo": "5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-frontend#GPL-3.0-1-ov-file; 5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-backend#GPL-3.0-1-ov-file",
   "classification_target_type": "Taxonomic groups (species, genus, family, order, etc.)",
-  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies, mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
+  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies; mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
   "functional_groups": "Aquatic insects (larval or adult stage)",
   "habitat_type": "Wetland/marsh; Freshwater (rivers, lakes)",
   "operational_environment": "Aquatic (freshwater)",
@@ -75,9 +75,11 @@
   "subject_size_min_mm": "2",
   "subject_size_max_mm": "45 (diametral size)",
   "_metadata": {
-    "schema_version": "1.1.0-beta",
+    "schema_version": "1.1.1-beta",
     "collected_from_form_id": "1yeIc4kEuAwaYnVYmzQCOsLPFA81qBMLZtS9XKuMnmKQ",
     "collected_date": "2026-06-11T08:48:38.234666Z",
-    "migrated_from_version": null
+    "migrated_from_version": null,
+    "migrated_to_version": "1.1.1-beta",
+    "last_migration_date": "2026-10-17T16:46:14.877459+00:00"
   }
 }

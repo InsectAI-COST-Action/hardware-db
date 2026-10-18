@@ -33,6 +33,9 @@ jobs:
         run: python validateJSON.py
         working-directory: tests
 
+      - name: Run data migration tests
+        run: python -m unittest discover -s tests -p "testDataMigrations.py"
+
   test_auth:
     name: Drive auth & file ops (optional)
     # needs: validate_json

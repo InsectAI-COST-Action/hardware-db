@@ -97,9 +97,9 @@ Options:
 
 Recognized but intentionally skipped (warning only).
 
-## Current Important Migration
+## Current Migrations
 
-1.0.0 to 1.1.0-beta currently includes:
+1.0.0 to 1.1.0-beta retains its original migration mappings:
 
 - drop list cleanup for removed legacy fields
 - additional renames for documentation, institution, costs, and size fields
@@ -108,6 +108,21 @@ Recognized but intentionally skipped (warning only).
 - numeric range splits for subject size and temperature
 - focal distance mapping to range options
 - maintainer to contributor fallback copy when contributor fields are empty
+
+1.1.0-beta to 1.1.1-beta applies the later-approved value normalizations to records already at 1.1.0-beta:
+
+- `have_deviceID`
+- `device_construction`
+- `model_processing`
+- `operational_environment`
+- `taxonomic_groups`
+- `functional_groups`
+- `habitat_type`
+- `main_sensor_framerate`
+- `main_sensor_resolution`
+- renames `project duration` to `project_duration`
+
+`firmware_update_method` is intentionally left unchanged. Records migrating from an earlier version pass through the applicable migrations in sequence.
 
 ## Rules to Keep Stable
 

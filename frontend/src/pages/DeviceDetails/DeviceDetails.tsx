@@ -2,6 +2,7 @@ import { LinkButton } from "@/components/LinkButton/LinkButton";
 import { SpecList } from "@/components/SpecList/SpecList";
 import { Tabs } from "@/components/Tabs/Tabs";
 import { Tags } from "@/components/Tag/Tags";
+import { TeamList } from "@/components/TeamList/TeamList";
 import { useAppContext } from "@/hooks/useAppContext";
 import type { Device } from "@/lib/types";
 import { getContributor, getOverviewSpecs } from "@/lib/utils";
@@ -47,6 +48,7 @@ const DeviceView = ({ device }: { device: Device }) => {
   const specs = useMemo(() => getOverviewSpecs(device), [device]);
   const rawJson = useMemo(() => JSON.stringify(device.raw, null, 2), [device]);
   const contributor = getContributor(device);
+  const isEmail = device.contactUrl.startsWith("mailto:");
 
   return (
     <>
@@ -64,6 +66,16 @@ const DeviceView = ({ device }: { device: Device }) => {
           {contributor ? <p>{contributor}</p> : null}
         </div>
         <div className={styles.actions}>
+          {device.contactUrl ? (
+            <LinkButton
+              external={!isEmail}
+              href={device.contactUrl}
+              icon={isEmail ? "/images/mail.svg" : undefined}
+              variant="outline"
+            >
+              Contact
+            </LinkButton>
+          ) : null}
           {device.documentationUrl ? (
             <LinkButton
               external
@@ -80,6 +92,12 @@ const DeviceView = ({ device }: { device: Device }) => {
         <div aria-label="Overview" className={styles.panel} role="tabpanel">
           {device.deviceDescription ? <p>{device.deviceDescription}</p> : null}
           <SpecList specs={specs} variant="table" />
+          {device.team.length ? (
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Team</h2>
+              <TeamList members={device.team} />
+            </section>
+          ) : null}
         </div>
       )}
       {tab === "raw" && (

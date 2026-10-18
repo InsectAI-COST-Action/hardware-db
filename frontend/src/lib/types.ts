@@ -2,6 +2,8 @@ export interface Device {
   deviceName: string;
   deviceDescription: string;
   contactName: string;
+  /** A `mailto:` link or a web URL, or empty if neither. */
+  contactUrl: string;
   contactInstitution: string;
   documentationUrl: string;
   deviceConstruction: string[];
@@ -10,6 +12,7 @@ export interface Device {
   modelProcessing: string[];
   captureModes: string[];
   taxonomicGroups: string[];
+  team: TeamMember[];
   slug: string;
   raw: Record<string, string>;
 }
@@ -26,6 +29,11 @@ export type ListField = {
 }[keyof Device];
 
 export type SortOption = "random" | "name";
+
+export interface TeamMember {
+  name: string;
+  role: string;
+}
 
 export type Theme = "light" | "dark";
 

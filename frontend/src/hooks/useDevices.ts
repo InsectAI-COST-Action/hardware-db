@@ -1,5 +1,5 @@
 import { DEVICE_CSV_URL } from "@/lib/constants";
-import type { Device } from "@/lib/types";
+import type { Device, TeamMember } from "@/lib/types";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 
@@ -62,6 +62,7 @@ const fetchDevices = async () => {
         deviceName,
         deviceDescription: parseText(row.device_description),
         contactName: parseText(row.contact_name),
+        contactUrl: parseContactUrl(row.contact_email),
         contactInstitution: parseText(row.contact_institution),
         documentationUrl: parseText(row.documentation_url),
         deviceConstruction: parseList(row.device_construction).map((item) =>
@@ -72,6 +73,7 @@ const fetchDevices = async () => {
         modelProcessing: parseList(row.model_processing),
         captureModes: parseList(row.capture_modes),
         taxonomicGroups: parseList(row.taxonomic_groups),
+        team: parseTeam(row),
         slug: slugify(deviceName),
         raw: row,
       };
@@ -79,6 +81,25 @@ const fetchDevices = async () => {
     .filter((device) => Boolean(device.deviceName));
 
   return shuffle(devices);
+};
+
+/**
+ * Turns the contact field into a link. It is free text, so besides email
+ * addresses it can hold a web address (e.g. a LinkedIn profile), with or
+ * without the scheme. Anything else is dropped.
+ */
+const parseContactUrl = (value?: string) => {
+  const text = parseText(value);
+
+  if (/^[^@\s/]+@[^@\s]+\.[^@\s]+$/.test(text)) {
+    return `mailto:${text}`;
+  }
+
+  if (/^(https?:\/\/)?[^@\s/]+\.[a-z]{2,}(\/\S*)?$/i.test(text)) {
+    return /^https?:\/\//i.test(text) ? text : `https://${text}`;
+  }
+
+  return "";
 };
 
 /**
@@ -139,6 +160,47 @@ const splitList = (value: string) => {
   items.push(current);
 
   return items;
+};
+
+const TEAM_MEMBER_COLUMNS = [1, 2, 3, 4, 5].map((n) => ({
+  name: `team_member_${n}_name`,
+  role: `team_member_${n}_role`,
+}));
+
+/**
+ * Collects the team from the contributor, the numbered team member columns and
+ * `additional_team_members` ("name; affiliation; role | ..."). The contributor
+ * is only included with a role, since a contributor without one is often just
+ * whoever submitted the form. People listed twice are kept once.
+ */
+const parseTeam = (row: Record<string, string>) => {
+  const contributor = {
+    name: parseText(row.contributor_name),
+    role: parseText(row.contributor_role),
+  };
+  const members = [
+    ...(contributor.role ? [contributor] : []),
+    ...TEAM_MEMBER_COLUMNS.map((columns) => ({
+      name: parseText(row[columns.name]),
+      role: parseText(row[columns.role]),
+    })),
+    ...parseText(row.additional_team_members)
+      .split("|")
+      .map((entry) => {
+        const [name, , role] = entry.split(";");
+
+        return { name: parseText(name), role: parseText(role) };
+      }),
+  ];
+  const team = new Map<string, TeamMember>();
+
+  for (const member of members) {
+    if (member.name && !team.has(member.name)) {
+      team.set(member.name, member);
+    }
+  }
+
+  return [...team.values()];
 };
 
 /**

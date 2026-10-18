@@ -10,6 +10,7 @@
   border: none;
   border-bottom: 2px solid transparent;
   box-sizing: border-box;
+  cursor: pointer;
   display: flex;
   font-family: inherit;
   font-size: var(--font-size-base);

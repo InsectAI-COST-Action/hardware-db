@@ -12,6 +12,13 @@
   text-decoration: none;
 }
 
+.icon {
+  background: currentColor;
+  height: 16px;
+  mask: var(--icon) center / contain no-repeat;
+  width: 16px;
+}
+
 .externalIcon {
   background: currentColor;
   height: 16px;
@@ -30,8 +37,13 @@
 
 /* Outline variant */
 .outline {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+}
+
+.outline:hover {
+  background-color: var(--color-muted);
 }
 
 /* Primary variant */

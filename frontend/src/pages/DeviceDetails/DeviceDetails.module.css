@@ -49,6 +49,16 @@
   max-width: 768px;
 }
 
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+}
+
 .code {
   background: var(--color-muted);
   border-radius: var(--radius-md);

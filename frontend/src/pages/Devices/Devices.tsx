@@ -7,6 +7,7 @@ import { Switch } from "@/components/Switch/Switch";
 import { useAppContext } from "@/hooks/useAppContext";
 import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "@/lib/constants";
 import styles from "./Devices.module.css";
+import type { Device } from "@/lib/types";
 
 export const Devices = () => {
   const {
@@ -57,7 +58,7 @@ export const Devices = () => {
           <p className={styles.deviceCount}>
             Showing {filteredDevices.length} of {devices.length} devices
           </p>
-          <DeviceGallery
+          <Content
             devices={filteredDevices}
             isLoading={isLoading}
             error={error}
@@ -66,4 +67,28 @@ export const Devices = () => {
       </div>
     </div>
   );
+};
+
+const Content = ({
+  devices,
+  isLoading,
+  error,
+}: {
+  devices: Device[];
+  isLoading: boolean;
+  error: Error | null;
+}) => {
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Uh oh, could not load devices. Try again later.</p>;
+  }
+
+  if (devices.length === 0) {
+    return <p>No devices match the current filtering.</p>;
+  }
+
+  return <DeviceGallery devices={devices} />;
 };

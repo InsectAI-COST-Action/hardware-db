@@ -1,4 +1,5 @@
-import { Tag } from "@/components/Tag/Tag";
+import { SpecList } from "@/components/SpecList/SpecList";
+import { Tags } from "@/components/Tag/Tags";
 import type { Device } from "@/lib/types";
 import { getContributor, getOverviewSpecs } from "@/lib/utils";
 import { useMemo } from "react";
@@ -7,33 +8,21 @@ import styles from "./DeviceCard.module.css";
 
 export const DeviceCard = ({ device }: { device: Device }) => {
   const specs = useMemo(() => getOverviewSpecs(device, 3), [device]);
+  const contributor = getContributor(device);
 
   return (
     <Link className={styles.container} to={`/devices/${device.slug}`}>
-      {device.deviceConstruction?.length ? (
-        <div className={styles.tags}>
-          {device.deviceConstruction.map((type) => (
-            <Tag key={type}>{type}</Tag>
-          ))}
-        </div>
-      ) : null}
+      <Tags tags={device.deviceConstruction} />
       <div>
         <h3 className={styles.title}>{device.deviceName}</h3>
-        <h4 className={styles.subTitle}>{getContributor(device)}</h4>
+        {contributor ? (
+          <h4 className={styles.subTitle}>{contributor}</h4>
+        ) : null}
       </div>
       {device.deviceDescription ? (
         <p className={styles.description}>{device.deviceDescription}</p>
       ) : null}
-      {specs.length ? (
-        <dl className={styles.specs}>
-          {specs.map(({ label, value }) => (
-            <div className={styles.spec} key={label}>
-              <dt className={styles.specLabel}>{label}</dt>
-              <dd className={styles.specValue}>{value}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : null}
+      <SpecList specs={specs} />
     </Link>
   );
 };

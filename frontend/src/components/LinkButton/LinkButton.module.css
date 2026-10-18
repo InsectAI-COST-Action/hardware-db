@@ -12,6 +12,14 @@
   text-decoration: none;
 }
 
+.externalIcon {
+  background: currentColor;
+  height: 16px;
+  mask: url("/images/external-link.svg") center / contain no-repeat;
+  width: 16px;
+}
+
+/* Ghost variant */
 .ghost {
   color: var(--color-foreground);
 }
@@ -20,19 +28,14 @@
   background-color: var(--color-muted);
 }
 
+/* Outline variant */
 .outline {
-  border-color: var(--primary);
+  border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
+/* Primary variant */
 .primary {
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
-}
-
-.externalIcon {
-  background: currentColor;
-  height: 16px;
-  mask: url("/images/external-link.svg") center / contain no-repeat;
-  width: 16px;
 }

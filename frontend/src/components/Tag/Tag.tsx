@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import styles from "./Tag.module.css";
+import styles from "./Tags.module.css";
 
 interface TagProps {
   children: ReactNode;

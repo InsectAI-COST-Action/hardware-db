@@ -1,3 +1,9 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .tag {
   align-items: center;
   border-radius: var(--radius-md);

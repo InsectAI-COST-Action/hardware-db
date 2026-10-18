@@ -2,6 +2,7 @@ import { LinkButton } from "@/components/LinkButton/LinkButton";
 import { Switch } from "@/components/Switch/Switch";
 import { useTheme } from "@/hooks/useTheme";
 import { EXTERNAL_LINKS, THEME_OPTIONS } from "@/lib/constants";
+import { Link } from "react-router";
 import styles from "./TopBar.module.css";
 
 export const TopBar = () => {
@@ -9,10 +10,10 @@ export const TopBar = () => {
 
   return (
     <div className={styles.container}>
-      <a className={styles.homeLink} href="/">
+      <Link className={styles.homeLink} to="/">
         <img alt="" className={styles.logo} src="/images/logo.svg" />
         <span>InsectAI Hardware Database</span>
-      </a>
+      </Link>
       <nav className={styles.externalLinks}>
         {EXTERNAL_LINKS.map(({ label, href }) => (
           <LinkButton external href={href} key={label} variant="ghost">

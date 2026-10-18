@@ -5,7 +5,11 @@ export const getContributor = (device: Device) => {
     return `By ${device.contactInstitution}`;
   }
 
-  return `Contributed by ${device.contactName}`;
+  if (device.contactName?.length) {
+    return `Contributed by ${device.contactName}`;
+  }
+
+  return undefined;
 };
 
 /**

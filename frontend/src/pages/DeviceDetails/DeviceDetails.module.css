@@ -30,8 +30,6 @@
 }
 
 .tags {
-  display: flex;
-  gap: 8px;
   margin-bottom: 16px;
 }
 
@@ -51,29 +49,3 @@
   max-width: 768px;
 }
 
-.specs {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  margin: 0;
-}
-
-.spec {
-  border-top: 1px solid var(--color-border);
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-  padding: 16px 0;
-}
-
-.specLabel {
-  color: var(--color-muted-foreground);
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
-}
-
-.specValue {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  line-height: 1.5;
-  margin: 0;
-}

@@ -117,7 +117,7 @@ const parseDeviceConstruction = (value?: string) => [
   ...new Set(
     parseList(value)
       .map((item) => item.split(":")[0].trim())
-      .filter((item) => item[0] === item[0].toUpperCase()),
+      .filter((item) => item && item[0] === item[0].toUpperCase()),
   ),
 ];
 

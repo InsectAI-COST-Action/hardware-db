@@ -36,7 +36,7 @@
 }
 
 .option:not(.selected):hover {
-  background-color: var(--color-muted);
+  background: var(--color-muted);
 }
 
 .option:has(.input:focus-visible) {

@@ -11,6 +11,9 @@
   text-decoration: none;
 }
 
+.container:hover {
+  background: var(--color-muted);
+}
 
 .title {
   margin-bottom: 4px;

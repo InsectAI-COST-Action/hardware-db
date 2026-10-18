@@ -6,6 +6,7 @@
 
 .tag {
   align-items: center;
+  background: var(--color-surface);
   border-radius: var(--radius-md);
   border: 1px solid var(--color-accent);
   display: inline-flex;

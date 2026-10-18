@@ -32,22 +32,22 @@
 }
 
 .ghost:hover {
-  background-color: var(--color-muted);
+  background: var(--color-muted);
 }
 
 /* Outline variant */
 .outline {
   border-color: var(--color-border);
-  background-color: var(--color-surface);
+  background: var(--color-surface);
   color: var(--color-foreground);
 }
 
 .outline:hover {
-  background-color: var(--color-muted);
+  background: var(--color-muted);
 }
 
 /* Primary variant */
 .primary {
-  background-color: var(--color-primary);
+  background: var(--color-primary);
   color: var(--color-primary-foreground);
 }

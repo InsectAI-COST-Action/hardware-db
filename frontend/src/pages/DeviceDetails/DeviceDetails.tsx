@@ -9,10 +9,11 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import styles from "./DeviceDetails.module.css";
 
-type Tab = "overview";
+type Tab = "overview" | "raw";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "overview", label: "Overview" },
+  { value: "raw", label: "Raw data" },
 ];
 
 export const DeviceDetails = () => (
@@ -44,6 +45,7 @@ const Content = () => {
 const DeviceView = ({ device }: { device: Device }) => {
   const [tab, setTab] = useState<Tab>("overview");
   const specs = useMemo(() => getOverviewSpecs(device), [device]);
+  const rawJson = useMemo(() => JSON.stringify(device.raw, null, 2), [device]);
   const contributor = getContributor(device);
 
   return (
@@ -78,6 +80,13 @@ const DeviceView = ({ device }: { device: Device }) => {
         <div aria-label="Overview" className={styles.panel} role="tabpanel">
           {device.deviceDescription ? <p>{device.deviceDescription}</p> : null}
           <SpecList specs={specs} variant="table" />
+        </div>
+      )}
+      {tab === "raw" && (
+        <div aria-label="Raw data" className={styles.panel} role="tabpanel">
+          <pre className={styles.code}>
+            <code>{rawJson}</code>
+          </pre>
         </div>
       )}
     </>

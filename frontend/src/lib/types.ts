@@ -21,6 +21,7 @@ export interface Device {
   connectivity?: string[];
   ipRating?: string;
   slug: string;
+  raw: Record<string, string>;
 }
 
 export interface FilterOption {

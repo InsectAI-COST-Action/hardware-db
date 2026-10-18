@@ -49,3 +49,14 @@
   max-width: 768px;
 }
 
+.code {
+  background: var(--color-muted);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  margin: 0;
+  overflow-x: auto;
+  padding: 16px;
+}

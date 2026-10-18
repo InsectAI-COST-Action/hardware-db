@@ -78,6 +78,7 @@ const fetchDevices = async () => {
       connectivity: parseList(row.connectivity),
       ipRating: row.ip_rating,
       slug: slugify(row.device_name ?? ""),
+      raw: row,
     }))
     .filter((device) => Boolean(device.deviceName));
 

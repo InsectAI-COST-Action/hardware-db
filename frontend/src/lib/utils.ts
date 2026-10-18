@@ -1,11 +1,11 @@
 import type { Device } from "./types";
 
 export const getContributor = (device: Device) => {
-  if (device.contactInstitution?.length) {
+  if (device.contactInstitution) {
     return `By ${device.contactInstitution}`;
   }
 
-  if (device.contactName?.length) {
+  if (device.contactName) {
     return `Contributed by ${device.contactName}`;
   }
 
@@ -17,8 +17,8 @@ export const getContributor = (device: Device) => {
  * with a "+N more" suffix; without `maxItems` they are shown in full.
  */
 export const getOverviewSpecs = (device: Device, maxItems?: number) => {
-  const formatList = (items?: string[]) => {
-    if (!items?.length) {
+  const formatList = (items: string[]) => {
+    if (!items.length) {
       return undefined;
     }
 

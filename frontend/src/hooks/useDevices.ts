@@ -55,35 +55,46 @@ const fetchDevices = async () => {
   }
 
   const devices = result.data
-    .map((row) => ({
-      haveDeviceId: row.have_deviceID,
-      deviceName: row.device_name,
-      deviceDescription: row.device_description,
-      contactName: row.contact_name,
-      contactInstitution: row.contact_institution,
-      documentationUrl: row.documentation_url,
-      deviceConstruction: parseDeviceConstruction(row.device_construction),
-      powerSources: parseList(row.power_sources),
-      processingUnit: row.processing_unit,
-      modelProcessing: parseList(row.model_processing),
-      captureModes: parseList(row.capture_modes),
-      mainOpticalSensorModelName: row.main_optical_sensor_model_name,
-      classificationTargetType: row.classification_target_type,
-      taxonomicGroups: parseList(row.taxonomic_groups),
-      functionalGroups: parseList(row.functional_groups),
-      habitatType: parseList(row.habitat_type),
-      operationalEnvironment: parseList(row.operational_environment),
-      costUnitBuild: row.cost_unit_build,
-      weight: row.weight,
-      connectivity: parseList(row.connectivity),
-      ipRating: row.ip_rating,
-      slug: slugify(row.device_name ?? ""),
-      raw: row,
-    }))
+    .map((row) => {
+      const deviceName = parseText(row.device_name);
+
+      return {
+        deviceName,
+        deviceDescription: parseText(row.device_description),
+        contactName: parseText(row.contact_name),
+        contactInstitution: parseText(row.contact_institution),
+        documentationUrl: parseText(row.documentation_url),
+        deviceConstruction: parseList(row.device_construction).map((item) =>
+          item.split(":")[0].trim(),
+        ),
+        powerSources: parseList(row.power_sources),
+        processingUnit: parseText(row.processing_unit),
+        modelProcessing: parseList(row.model_processing),
+        captureModes: parseList(row.capture_modes),
+        taxonomicGroups: parseList(row.taxonomic_groups),
+        slug: slugify(deviceName),
+        raw: row,
+      };
+    })
     .filter((device) => Boolean(device.deviceName));
 
   return shuffle(devices);
 };
+
+/**
+ * Splits a `;`-separated list and normalizes each value by dropping a trailing
+ * parenthetical, so e.g. "Lepidoptera" and "Lepidoptera (butterflies & moths)"
+ * become the same value.
+ */
+const parseList = (value?: string) => [
+  ...new Set(
+    splitList(value ?? "")
+      .map((item) => item.trim().replace(/\s*\(.*\)$/, ""))
+      .filter(Boolean),
+  ),
+];
+
+const parseText = (value?: string) => value?.trim() ?? "";
 
 /**
  * Fisher–Yates shuffle. Done once on load so the default "random" order stays
@@ -101,26 +112,34 @@ const shuffle = <T>(items: T[]) => {
 };
 
 /**
- * Splits a `;`-separated list and normalizes each value by dropping a trailing
- * parenthetical, so e.g. "Lepidoptera" and "Lepidoptera (butterflies & moths)"
- * become the same value.
+ * Splits on `;` outside parentheses only. Commas in option labels end up as
+ * `;` in the data, e.g. "Hymenoptera (bees; wasps; ants)", and that must stay
+ * one item.
  */
-const parseList = (value?: string) => [
-  ...new Set(
-    (value ?? "")
-      .split(";")
-      .map((item) => item.trim().replace(/\s*\(.*\)$/, ""))
-      .filter(Boolean),
-  ),
-];
+const splitList = (value: string) => {
+  const items: string[] = [];
+  let current = "";
+  let depth = 0;
 
-const parseDeviceConstruction = (value?: string) => [
-  ...new Set(
-    parseList(value)
-      .map((item) => item.split(":")[0].trim())
-      .filter((item) => item && item[0] === item[0].toUpperCase()),
-  ),
-];
+  for (const char of value) {
+    if (char === "(") {
+      depth++;
+    } else if (char === ")") {
+      depth = Math.max(0, depth - 1);
+    }
+
+    if (char === ";" && depth === 0) {
+      items.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  items.push(current);
+
+  return items;
+};
 
 /**
  * Turns a device name into a URL-safe slug, e.g. "Lépinoc 2" -> "lepinoc-2".

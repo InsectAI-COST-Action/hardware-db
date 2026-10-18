@@ -98,7 +98,7 @@ const matchesSearch = (device: Device, query: string) => {
   }
 
   return [device.deviceName].some((field) =>
-    field?.toLowerCase().includes(normalizedQuery),
+    field.toLowerCase().includes(normalizedQuery),
   );
 };
 
@@ -116,7 +116,7 @@ const matchesSelections = (
       return true;
     }
 
-    const values = device[field as ListField] ?? [];
+    const values = device[field as ListField];
 
     return selected.some((value) => values.includes(value));
   });
@@ -127,7 +127,7 @@ const matchesSelections = (
 const sortDevices = (devices: Device[], sort: SortOption) => {
   if (sort === "name") {
     return [...devices].sort((a, b) =>
-      (a.deviceName ?? "").localeCompare(b.deviceName ?? ""),
+      a.deviceName.localeCompare(b.deviceName),
     );
   }
 

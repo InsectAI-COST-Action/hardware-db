@@ -1,6 +1,6 @@
 {
   "have_deviceID": "New device submission.",
-  "data_licence_consent": null,
+  "data_licence_consent": "I understand that the data I submit will be published under CC BY 4.0",
   "contact_name": "Luca Pegoraro",
   "contact_email": "luca.pegoraro@wsl.ch",
   "contact_institution": "Federal Research Isntitute WSL",

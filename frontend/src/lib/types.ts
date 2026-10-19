@@ -13,6 +13,7 @@ export interface Device {
   captureModes: string[];
   taxonomicGroups: string[];
   team: TeamMember[];
+  specifications: SpecGroup[];
   slug: string;
   raw: Record<string, string>;
 }
@@ -29,6 +30,16 @@ export type ListField = {
 }[keyof Device];
 
 export type SortOption = "random" | "name";
+
+export interface Spec {
+  label: string;
+  value: string;
+}
+
+export interface SpecGroup {
+  title: string;
+  specs: Spec[];
+}
 
 export interface TeamMember {
   name: string;

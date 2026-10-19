@@ -1,5 +1,5 @@
 import { DEVICE_CSV_URL } from "@/lib/constants";
-import type { Device, TeamMember } from "@/lib/types";
+import type { Device, SpecGroup, TeamMember } from "@/lib/types";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 
@@ -74,6 +74,7 @@ const fetchDevices = async () => {
         captureModes: parseList(row.capture_modes),
         taxonomicGroups: parseList(row.taxonomic_groups),
         team: parseTeam(row),
+        specifications: parseSpecifications(row),
         slug: slugify(deviceName),
         raw: row,
       };
@@ -201,6 +202,115 @@ const parseTeam = (row: Record<string, string>) => {
   }
 
   return [...team.values()];
+};
+
+/**
+ * How each specification is read from its column: as free text, as a `;`
+ * separated list, or as a 1-5 score.
+ */
+type SpecFormat = "text" | "list" | "score";
+
+const SPEC_GROUP_COLUMNS: {
+  title: string;
+  specs: { label: string; column: string; format?: SpecFormat }[];
+}[] = [
+  {
+    title: "Hardware",
+    specs: [
+      { label: "Construction", column: "device_construction", format: "list" },
+      { label: "Processor", column: "processing_unit" },
+      { label: "Mounting", column: "mounting_system", format: "list" },
+      { label: "Size, transport", column: "size_transport" },
+      { label: "Size, deployed", column: "size_deployed" },
+      { label: "Weight (kg)", column: "weight" },
+      {
+        label: "Skills & tools",
+        column: "skills_tools_required",
+        format: "list",
+      },
+      { label: "Licence", column: "device_licence", format: "list" },
+    ],
+  },
+  {
+    title: "Imaging",
+    specs: [
+      { label: "Capture modes", column: "capture_modes", format: "list" },
+      { label: "Sensor", column: "main_optical_sensor_model_name" },
+      { label: "Resolution", column: "main_sensor_resolution" },
+      { label: "Frame rate", column: "main_sensor_framerate" },
+      { label: "Focusing", column: "lens_focusing" },
+      { label: "Min. focal distance", column: "min_focal_distance" },
+      { label: "Field of view", column: "field_of_view" },
+      { label: "File types", column: "file_types", format: "list" },
+    ],
+  },
+  {
+    title: "Power & data",
+    specs: [
+      { label: "Power sources", column: "power_sources", format: "list" },
+      { label: "Autonomy", column: "power_autonomy_continuous" },
+      { label: "Image processing", column: "model_processing", format: "list" },
+      { label: "Connectivity", column: "connectivity", format: "list" },
+    ],
+  },
+  {
+    title: "Cost & upkeep",
+    specs: [
+      { label: "Unit build cost", column: "cost_unit_build" },
+      { label: "Seasonal deployment", column: "cost_deployment_seasonal" },
+      { label: "Software / compute", column: "cost_software_compute" },
+      { label: "Assembly time", column: "cost_assembly_time" },
+      { label: "Maintenance", column: "maintenance_interval" },
+      {
+        label: "Repairability",
+        column: "repairability_score",
+        format: "score",
+      },
+    ],
+  },
+  {
+    title: "Firmware",
+    specs: [
+      { label: "Last update", column: "last_firmware_update" },
+      {
+        label: "Update method",
+        column: "firmware_update_method",
+        format: "list",
+      },
+      { label: "Version / repo", column: "firmware_version_repo" },
+    ],
+  },
+];
+
+/**
+ * Groups the specification columns for display. Empty specs are left out, and
+ * so are groups with nothing left in them.
+ */
+const parseSpecifications = (row: Record<string, string>): SpecGroup[] =>
+  SPEC_GROUP_COLUMNS.map(({ title, specs }) => ({
+    title,
+    specs: specs
+      .map(({ label, column, format = "text" }) => ({
+        label,
+        value: formatSpec(row[column], format),
+      }))
+      .filter((spec) => spec.value),
+  })).filter((group) => group.specs.length);
+
+/**
+ * List items drop their explanation after a `:`, e.g. "Off-the-shelf:
+ * Purchased and used as-is" becomes "Off-the-shelf".
+ */
+const formatSpec = (value: string | undefined, format: SpecFormat) => {
+  if (format === "list") {
+    return parseList(value)
+      .map((item) => item.split(":")[0].trim())
+      .join(", ");
+  }
+
+  const text = parseText(value);
+
+  return format === "score" && text ? `${text} / 5` : text;
 };
 
 /**

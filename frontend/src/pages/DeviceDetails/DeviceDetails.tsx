@@ -1,4 +1,5 @@
 import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { SpecGroups } from "@/components/SpecGroups/SpecGroups";
 import { SpecList } from "@/components/SpecList/SpecList";
 import { Tabs } from "@/components/Tabs/Tabs";
 import { Tags } from "@/components/Tag/Tags";
@@ -10,10 +11,11 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import styles from "./DeviceDetails.module.css";
 
-type Tab = "overview" | "raw";
+type Tab = "overview" | "specifications" | "raw";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "overview", label: "Overview" },
+  { value: "specifications", label: "Specifications" },
   { value: "raw", label: "Raw data" },
 ];
 
@@ -98,6 +100,15 @@ const DeviceView = ({ device }: { device: Device }) => {
               <TeamList members={device.team} />
             </section>
           ) : null}
+        </div>
+      )}
+      {tab === "specifications" && (
+        <div aria-label="Specifications" role="tabpanel">
+          {device.specifications.length ? (
+            <SpecGroups groups={device.specifications} />
+          ) : (
+            <p>No specifications listed for this device.</p>
+          )}
         </div>
       )}
       {tab === "raw" && (

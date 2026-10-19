@@ -1,6 +1,7 @@
 ### Custom ignores
 # Backup files for migrations
 *.backup
+data/backups
 
 # Secrets
 *oauth*.json

@@ -61,7 +61,7 @@
   "maintenance_interval": null,
   "repairability_score": "3",
   "last_firmware_update": "yearly",
-  "firmware_update_method": "flashed via microSD card",
+  "firmware_update_method": "SD card",
   "firmware_version_repo": null,
   "classification_target_type": null,
   "taxonomic_groups": "Non-specific / all insects",

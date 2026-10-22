@@ -47,7 +47,7 @@
   "device_licence": "MIT",
   "power_sources": "Rechargeable battery",
   "power_autonomy_continuous": "10 days",
-  "processing_unit": "Raspberry Pi Zero 2 W",
+  "processing_unit": "Raspberry Pi Zero / Zero 2 W",
   "model_processing": "",
   "capture_modes": "Continuous video; Scheduled photo; Time-lapse",
   "main_optical_sensor_model_name": "Raspberry Pi camera v3",
@@ -74,10 +74,12 @@
   "ip_rating": "Depends on how good your tupperware is",
   "subject_size_min_mm": "3",
   "subject_size_max_mm": "50",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.882017+00:00",
-    "schema_version": "1.1.1-beta"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.597047+00:00",
+    "schema_version": "1.1.2-beta"
   }
 }

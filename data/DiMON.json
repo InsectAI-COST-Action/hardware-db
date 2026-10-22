@@ -74,12 +74,14 @@
   "ip_rating": "64",
   "subject_size_min_mm": "",
   "subject_size_max_mm": "",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
-    "schema_version": "1.1.1-beta",
+    "schema_version": "1.1.2-beta",
     "collected_from_form_id": "1M9PXanj1rpfuDa0et-KDNAKT1g8hztoShMY4odAJHN8",
     "collected_date": "2026-06-04T09:35:17.774297Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.820931+00:00"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.551772+00:00"
   }
 }

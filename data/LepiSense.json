@@ -47,7 +47,7 @@
   "device_licence": "Proprietary",
   "power_sources": "Solar",
   "power_autonomy_continuous": "1.5 years",
-  "processing_unit": "ATMSAMD21J microcontroller with ARM Cortex-M0+ core (32 KB RAM, 256 KB flash memory, 48 MHz CPU speed)",
+  "processing_unit": "ATMSAMD21J microcontroller with ARM Cortex-M0+ core (32 KB RAM; 256 KB flash memory; 48 MHz CPU speed)",
   "model_processing": "Offboard processing (data transfer to separate computer); Cloud processing; No model / manual identification only",
   "capture_modes": "Time-lapse",
   "main_optical_sensor_model_name": "Arducam Mega 5 MP camera with autofocus",
@@ -74,12 +74,14 @@
   "ip_rating": "",
   "subject_size_min_mm": "",
   "subject_size_max_mm": "",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
-    "schema_version": "1.1.1-beta",
+    "schema_version": "1.1.2-beta",
     "collected_from_form_id": "1M9PXanj1rpfuDa0et-KDNAKT1g8hztoShMY4odAJHN8",
     "collected_date": "2026-06-01T14:46:30.026456Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.855555+00:00"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.582877+00:00"
   }
 }

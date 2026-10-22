@@ -50,7 +50,8 @@ Maps values for one question.
 Options:
 - value_map: dictionary of old to new values
 - fallback_value: preserve, null, or fixed value
-- multi_value: true for semicolon/comma separated checkbox strings
+- multi_value: true for checkbox strings with multiple selected values
+- input_separator: delimiter used to split multi-value input (default `;`); set explicitly only when the source format uses another delimiter. Avoid comma delimiters when option labels contain commas.
 - separator: output separator (default ; )
 
 ### split

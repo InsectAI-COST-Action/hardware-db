@@ -64,7 +64,7 @@
   "firmware_update_method": "USB cable",
   "firmware_version_repo": "5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-frontend#GPL-3.0-1-ov-file; 5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-backend#GPL-3.0-1-ov-file",
   "classification_target_type": "Taxonomic groups (species, genus, family, order, etc.)",
-  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies; mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
+  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies, mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
   "functional_groups": "Aquatic insects (larval or adult stage)",
   "habitat_type": "Wetland/marsh; Freshwater (rivers, lakes)",
   "operational_environment": "Aquatic (freshwater)",

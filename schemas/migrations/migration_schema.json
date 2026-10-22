@@ -67,7 +67,11 @@
                     "type": {"enum": ["value_map", "split", "merge", "format", "custom"]},
                     "mapping": {"type": "object"},
                     "format": {"type": "string"},
-                    "split_regex": {"type": "string"}
+                    "split_regex": {"type": "string"},
+                    "input_separator": {
+                      "type": "string",
+                      "description": "Delimiter used to split multi-value source data; defaults to semicolon. Use only when the source format is known to use a different delimiter."
+                    }
                   }
                 },
                 "description": "Value transformations for existing questions"

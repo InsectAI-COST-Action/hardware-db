@@ -38,8 +38,8 @@
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
   "cost_assembly_time": null,
-  "size_transport": "20x30x10",
-  "size_deployed": "20x30x10",
+  "size_transport": "200 x 300 x 100",
+  "size_deployed": "200 x 300 x 100",
   "weight": "1.5",
   "mounting_system": null,
   "skills_tools_required": null,
@@ -47,7 +47,7 @@
   "device_licence": "MIT",
   "power_sources": "Rechargeable battery",
   "power_autonomy_continuous": "10 days",
-  "processing_unit": "Raspberry Pi Zero 2 W",
+  "processing_unit": "Raspberry Pi Zero / Zero 2 W",
   "model_processing": "",
   "capture_modes": "Continuous video; Scheduled photo; Time-lapse",
   "main_optical_sensor_model_name": "Raspberry Pi camera v3",
@@ -66,7 +66,7 @@
   "classification_target_type": null,
   "taxonomic_groups": "Diptera (flies, mosquitoes); Hymenoptera (bees, wasps, ants); Coleoptera (beetles); Non-specific / all insects",
   "functional_groups": "Pollinators (flower-visiting insects)",
-  "habitat_type": "Other",
+  "habitat_type": "Grassland/meadow",
   "operational_environment": "Terrestrial",
   "attractants": null,
   "temperature_min_c": "-10",
@@ -74,10 +74,12 @@
   "ip_rating": "Depends on how good your tupperware is",
   "subject_size_min_mm": "3",
   "subject_size_max_mm": "50",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.882017+00:00",
-    "schema_version": "1.1.1-beta"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.597047+00:00",
+    "schema_version": "1.1.2-beta"
   }
 }

@@ -38,8 +38,8 @@
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
   "cost_assembly_time": null,
-  "size_transport": "20x30x20",
-  "size_deployed": "40x20x90",
+  "size_transport": "200 x 300 x 200",
+  "size_deployed": "400 x 200 x 900",
   "weight": "5",
   "mounting_system": null,
   "skills_tools_required": null,
@@ -47,7 +47,7 @@
   "device_licence": "GPL-3.0",
   "power_sources": "Solar; Rechargeable battery",
   "power_autonomy_continuous": "",
-  "processing_unit": "Raspberry Pi Zero 2 WH",
+  "processing_unit": "Raspberry Pi Zero / Zero 2 W",
   "model_processing": "On-device (edge processing)",
   "capture_modes": "Continuous video; Scheduled photo; Time-lapse",
   "main_optical_sensor_model_name": "OAK-1 (Auto-Focus)",
@@ -74,10 +74,12 @@
   "ip_rating": "",
   "subject_size_min_mm": "3",
   "subject_size_max_mm": "50",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.847283+00:00",
-    "schema_version": "1.1.1-beta"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.573607+00:00",
+    "schema_version": "1.1.2-beta"
   }
 }

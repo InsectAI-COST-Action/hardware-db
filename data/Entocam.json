@@ -38,8 +38,8 @@
   "cost_deployment_seasonal": "",
   "cost_software_compute": "",
   "cost_assembly_time": "",
-  "size_transport": "20x40x10",
-  "size_deployed": "55x35x50",
+  "size_transport": "200 x 400 x 100",
+  "size_deployed": "550 x 350 x 500",
   "weight": "1",
   "mounting_system": "Tripod; Tree strap / clamp",
   "skills_tools_required": "No tools required (snap-fit assembly)",
@@ -74,12 +74,14 @@
   "ip_rating": "IP64",
   "subject_size_min_mm": "",
   "subject_size_max_mm": "",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
-    "schema_version": "1.1.1-beta",
+    "schema_version": "1.1.2-beta",
     "collected_from_form_id": "1yeIc4kEuAwaYnVYmzQCOsLPFA81qBMLZtS9XKuMnmKQ",
     "collected_date": "2026-06-09T07:54:34.742380Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.833329+00:00"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.559036+00:00"
   }
 }

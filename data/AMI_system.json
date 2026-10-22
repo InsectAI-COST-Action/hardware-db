@@ -38,8 +38,8 @@
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
   "cost_assembly_time": null,
-  "size_transport": "55x35x23",
-  "size_deployed": "55x35x50",
+  "size_transport": "550 x 350 x 230",
+  "size_deployed": "550 x 350 x 500",
   "weight": "15",
   "mounting_system": null,
   "skills_tools_required": null,
@@ -74,10 +74,12 @@
   "ip_rating": "",
   "subject_size_min_mm": null,
   "subject_size_max_mm": null,
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.812383+00:00",
-    "schema_version": "1.1.1-beta"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.544566+00:00",
+    "schema_version": "1.1.2-beta"
   }
 }

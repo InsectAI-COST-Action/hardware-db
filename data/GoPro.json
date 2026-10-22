@@ -74,10 +74,12 @@
   "ip_rating": "",
   "subject_size_min_mm": null,
   "subject_size_max_mm": null,
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
     "migrated_from_version": "0.2.0",
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.838337+00:00",
-    "schema_version": "1.1.1-beta"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.564883+00:00",
+    "schema_version": "1.1.2-beta"
   }
 }

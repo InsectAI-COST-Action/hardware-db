@@ -64,7 +64,7 @@
   "firmware_update_method": "USB cable",
   "firmware_version_repo": "5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-frontend#GPL-3.0-1-ov-file; 5.6.0 | https://github.com/LIST-LUXEMBOURG/app4cam-backend#GPL-3.0-1-ov-file",
   "classification_target_type": "Taxonomic groups (species, genus, family, order, etc.)",
-  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies; mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
+  "taxonomic_groups": "Coleoptera (beetles); Diptera (flies, mosquitoes); Hemiptera (true bugs); Odonata (dragonflies & damselflies); Trichoptera (caddisflies); Ephemeroptera (mayflies); Plecoptera (stoneflies); Other arthropods",
   "functional_groups": "Aquatic insects (larval or adult stage)",
   "habitat_type": "Wetland/marsh; Freshwater (rivers, lakes)",
   "operational_environment": "Aquatic (freshwater)",
@@ -74,12 +74,14 @@
   "ip_rating": "Aquatic unit, IP68; Computing unit, IP64",
   "subject_size_min_mm": "2",
   "subject_size_max_mm": "45 (diametral size)",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
-    "schema_version": "1.1.1-beta",
+    "schema_version": "1.1.2-beta",
     "collected_from_form_id": "1yeIc4kEuAwaYnVYmzQCOsLPFA81qBMLZtS9XKuMnmKQ",
     "collected_date": "2026-06-11T08:48:38.234666Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.877459+00:00"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.594156+00:00"
   }
 }

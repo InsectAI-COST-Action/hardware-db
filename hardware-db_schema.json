@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.1.2-beta",
     "created_date": "2026-10-22T00:00:00Z",
-    "description": "Add video tutorial question, country of affiliation, private individual affiliation, language dropdown, processing unit checklist; make device construction a single choice, lens focusing multiple choice, and device dimensions in mm."
+    "description": "Add video tutorial question, country of affiliation, private individual affiliation, language checkbox list, processing unit checklist; make device construction a single choice, lens focusing multiple choice, and device dimensions in mm."
   },
   "info": {
     "title": "InsectAI hardware database",
@@ -616,10 +616,10 @@
         {
           "id": "documentation_language",
           "title": "Documentation language",
-          "description": "Primary language of the documentation. If the documentation is in a language that is not listed, select 'Other'.",
+          "description": "Select all languages available in the documentation. If a language is not listed, select 'Other'.",
           "required": false,
           "type": "choice",
-          "choiceType": "DROP_DOWN",
+          "choiceType": "CHECKBOX",
           "options": [
             "English",
             "French",
@@ -645,6 +645,32 @@
             "Korean",
             "Indonesian",
             "Other"
+          ],
+          "isOther": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
           ]
         },
         {

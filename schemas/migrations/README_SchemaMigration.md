@@ -125,7 +125,7 @@ Recognized but intentionally skipped (warning only).
 1.1.1-beta to 1.1.2-beta (free-text to constrained-field conversions are best-effort only):
 
 - adds `watched_video_tutorial` and `contact_country` (empty defaults)
-- `documentation_language` and `processing_unit`: known names are normalised to the new options, other text is preserved
+- `documentation_language` (multi-select checkbox) and `processing_unit`: known names are normalised to the new options, other text is preserved
 - `device_construction` (now single choice): `custom` placeholder, currently skipped with a warning
 - `contact_country`, `size_transport` and `size_deployed` need no transform: the country is new and not inferred, and the dimension change only affected the title (the description already asked for mm)
 

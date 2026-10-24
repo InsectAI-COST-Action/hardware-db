@@ -11,11 +11,12 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import styles from "./DeviceDetails.module.css";
 
-type Tab = "overview" | "specifications" | "raw";
+type Tab = "overview" | "specifications" | "ecology" | "raw";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "overview", label: "Overview" },
   { value: "specifications", label: "Specifications" },
+  { value: "ecology", label: "Ecology and deployment" },
   { value: "raw", label: "Raw data" },
 ];
 
@@ -108,6 +109,15 @@ const DeviceView = ({ device }: { device: Device }) => {
             <SpecGroups groups={device.specifications} />
           ) : (
             <p>No specifications listed for this device.</p>
+          )}
+        </div>
+      )}
+      {tab === "ecology" && (
+        <div aria-label="Ecology and deployment" role="tabpanel">
+          {device.ecology.length ? (
+            <SpecGroups groups={device.ecology} />
+          ) : (
+            <p>No ecology or deployment details listed for this device.</p>
           )}
         </div>
       )}

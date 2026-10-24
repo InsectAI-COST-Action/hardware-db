@@ -74,7 +74,8 @@ const fetchDevices = async () => {
         captureModes: parseList(row.capture_modes),
         taxonomicGroups: parseList(row.taxonomic_groups),
         team: parseTeam(row),
-        specifications: parseSpecifications(row),
+        specifications: parseSpecGroups(row, SPEC_GROUP_COLUMNS),
+        ecology: parseSpecGroups(row, ECOLOGY_GROUP_COLUMNS),
         slug: slugify(deviceName),
         raw: row,
       };
@@ -210,10 +211,12 @@ const parseTeam = (row: Record<string, string>) => {
  */
 type SpecFormat = "text" | "list" | "score";
 
-const SPEC_GROUP_COLUMNS: {
+type SpecGroupColumns = {
   title: string;
   specs: { label: string; column: string; format?: SpecFormat }[];
-}[] = [
+}[];
+
+const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   {
     title: "Hardware",
     specs: [
@@ -282,12 +285,56 @@ const SPEC_GROUP_COLUMNS: {
   },
 ];
 
+const ECOLOGY_GROUP_COLUMNS: SpecGroupColumns = [
+  {
+    title: "Target organisms",
+    specs: [
+      {
+        label: "Classifies by",
+        column: "classification_target_type",
+        format: "list",
+      },
+      { label: "Taxonomic groups", column: "taxonomic_groups", format: "list" },
+      {
+        label: "Functional groups",
+        column: "functional_groups",
+        format: "list",
+      },
+      { label: "Min. subject size (mm)", column: "subject_size_min_mm" },
+      { label: "Max. subject size (mm)", column: "subject_size_max_mm" },
+    ],
+  },
+  {
+    title: "Habitat & sampling",
+    specs: [
+      {
+        label: "Environment",
+        column: "operational_environment",
+        format: "list",
+      },
+      { label: "Habitats", column: "habitat_type", format: "list" },
+      { label: "Attractants", column: "attractants", format: "list" },
+    ],
+  },
+  {
+    title: "Field conditions",
+    specs: [
+      { label: "Weatherproofing", column: "ip_rating" },
+      { label: "Min. temperature (°C)", column: "temperature_min_c" },
+      { label: "Max. temperature (°C)", column: "temperature_max_c" },
+    ],
+  },
+];
+
 /**
- * Groups the specification columns for display. Empty specs are left out, and
- * so are groups with nothing left in them.
+ * Groups the columns for display. Empty specs are left out, and so are groups
+ * with nothing left in them.
  */
-const parseSpecifications = (row: Record<string, string>): SpecGroup[] =>
-  SPEC_GROUP_COLUMNS.map(({ title, specs }) => ({
+const parseSpecGroups = (
+  row: Record<string, string>,
+  groups: SpecGroupColumns,
+): SpecGroup[] =>
+  groups.map(({ title, specs }) => ({
     title,
     specs: specs
       .map(({ label, column, format = "text" }) => ({

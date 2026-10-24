@@ -14,6 +14,7 @@ export interface Device {
   taxonomicGroups: string[];
   team: TeamMember[];
   specifications: SpecGroup[];
+  ecology: SpecGroup[];
   slug: string;
   raw: Record<string, string>;
 }

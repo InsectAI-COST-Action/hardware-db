@@ -50,7 +50,8 @@ Maps values for one question.
 Options:
 - value_map: dictionary of old to new values
 - fallback_value: preserve, null, or fixed value
-- multi_value: true for semicolon/comma separated checkbox strings
+- multi_value: true for checkbox strings with multiple selected values
+- input_separator: delimiter used to split multi-value input (default `;`); set explicitly only when the source format uses another delimiter. Avoid comma delimiters when option labels contain commas.
 - separator: output separator (default ; )
 
 ### split
@@ -121,6 +122,13 @@ Recognized but intentionally skipped (warning only).
 - `main_sensor_framerate`
 - `main_sensor_resolution`
 - renames `project duration` to `project_duration`
+
+1.1.1-beta to 1.1.2-beta (free-text to constrained-field conversions are best-effort only):
+
+- adds `watched_video_tutorial` and `contact_country` (empty defaults)
+- `documentation_language` (multi-select checkbox) and `processing_unit`: known names are normalised to the new options, other text is preserved
+- `device_construction` (now single choice): `custom` placeholder, currently skipped with a warning
+- `contact_country`, `size_transport` and `size_deployed` need no transform: the country is new and not inferred, and the dimension change only affected the title (the description already asked for mm)
 
 `firmware_update_method` is intentionally left unchanged. Records migrating from an earlier version pass through the applicable migrations in sequence.
 

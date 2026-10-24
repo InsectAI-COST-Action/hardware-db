@@ -38,7 +38,7 @@
   "cost_deployment_seasonal": null,
   "cost_software_compute": null,
   "cost_assembly_time": null,
-  "size_transport": "20x10x7 cm",
+  "size_transport": "200 x 100 x 70 mm",
   "size_deployed": null,
   "weight": "",
   "mounting_system": null,
@@ -61,7 +61,7 @@
   "maintenance_interval": null,
   "repairability_score": "3",
   "last_firmware_update": "yearly",
-  "firmware_update_method": "flashed via microSD card",
+  "firmware_update_method": "SD card",
   "firmware_version_repo": null,
   "classification_target_type": null,
   "taxonomic_groups": "Non-specific / all insects",
@@ -74,12 +74,14 @@
   "ip_rating": "rain resistant",
   "subject_size_min_mm": "5",
   "subject_size_max_mm": "200",
+  "watched_video_tutorial": null,
+  "contact_country": null,
   "_metadata": {
-    "schema_version": "1.1.1-beta",
+    "schema_version": "1.1.2-beta",
     "collected_from_form_id": "1tNogHhoMUmxk8j424FYuJMs09FsaRNw3-64MvX2eNZo",
     "collected_date": "2026-04-22T06:02:35.990080Z",
     "migrated_from_version": null,
-    "migrated_to_version": "1.1.1-beta",
-    "last_migration_date": "2026-10-17T16:46:14.864927+00:00"
+    "migrated_to_version": "1.1.2-beta",
+    "last_migration_date": "2026-10-22T14:37:35.588787+00:00"
   }
 }

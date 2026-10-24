@@ -4,7 +4,7 @@
     "device_name": "AMI system",
     "institution_name": "",
     "contact_name": "Luca Pegoraro",
-    "contact_email": "luca.pegoraro@ws.ch",
+    "contact_email": "luca.pegoraro@wsl.ch",
     "contributor_name": "",
     "contributor_email": "",
     "maintainer_name": "",
@@ -15,7 +15,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "CamcorderAgelica",
@@ -33,7 +33,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "DIOPSIS",
@@ -51,7 +51,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-01T14:52:19.946457Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "DiMON",
@@ -69,7 +69,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-04T09:35:17.774297Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "Entocam",
@@ -87,7 +87,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-09T07:54:34.742380Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "GoPro",
@@ -105,7 +105,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "HDD_camcorder",
@@ -123,7 +123,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "InsectDetect",
@@ -141,7 +141,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "LepiSense",
@@ -159,7 +159,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-01T14:46:30.026456Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "Lépinoc",
@@ -177,7 +177,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-04-22T06:02:35.990080Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "MiniMon",
@@ -195,7 +195,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-04-22T06:02:35.990080Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "Mothbox",
@@ -213,7 +213,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-01T14:52:19.946457Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "NewtCAM",
@@ -231,7 +231,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "2026-06-11T08:48:38.234666Z",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "PICT",
@@ -249,7 +249,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "VHS_DVR",
@@ -267,7 +267,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "WiFi_SurvCam",
@@ -285,7 +285,7 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   },
   {
     "filename": "iPod",
@@ -303,6 +303,6 @@
     "github_link": "",
     "documentation_link": "",
     "collected_date": "",
-    "schema_version": "1.1.1-beta"
+    "schema_version": "1.1.2-beta"
   }
 ]

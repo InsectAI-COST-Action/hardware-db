@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Migration registry: defines transformations between schema versions",
     "format_version": "1.0.0",
-    "last_updated": "2026-10-17T00:00:00Z"
+    "last_updated": "2026-10-22T00:00:00Z"
   },
   "migrations": {
     "0.2.0→1.0.0": {
@@ -647,6 +647,117 @@
               "5 MPS": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
               "max ~1440p": "~3-5 MP (e.g. 2048 x 1536 or 2592 x 1944)",
               "2.1 Mpx": "~1-2 MP (e.g. 1600 x 1200 or 1920 x 1080)"
+            },
+            "fallback_value": "preserve"
+          }
+        ]
+      }
+    },
+    "1.1.1-beta→1.1.2-beta": {
+      "created_date": "2026-10-22",
+      "description": "Adds the video tutorial and country of affiliation questions; adds the Private individual affiliation option; turns documentation language and processing unit into constrained choices; changes device construction to single choice, lens focusing to multiple choice, and device dimensions to mm. Free-text to constrained-field conversions are best-effort placeholders.",
+      "mappings": {
+        "drops": [],
+        "adds": [
+          {
+            "question_id": "watched_video_tutorial",
+            "title": "Have you watched the video tutorial?",
+            "type": "choice",
+            "default_value": null
+          },
+          {
+            "question_id": "contact_country",
+            "title": "Country of institutional affiliation",
+            "type": "choice",
+            "default_value": null
+          }
+        ],
+        "renames": [],
+        "transforms": [
+          {
+            "_comment": "Best-effort: normalise common language names; unrecognised text is preserved for later manual mapping to a dropdown option or 'Other'.",
+            "type": "value_map",
+            "question_id": "documentation_language",
+            "multi_value": true,
+            "value_map": {
+              "English": "English",
+              "english": "English",
+              "EN": "English",
+              "French": "French",
+              "french": "French",
+              "Français": "French",
+              "Spanish": "Spanish",
+              "spanish": "Spanish",
+              "Español": "Spanish",
+              "German": "German",
+              "german": "German",
+              "Deutsch": "German",
+              "Portuguese": "Portuguese",
+              "Italian": "Italian",
+              "Dutch": "Dutch",
+              "Swedish": "Swedish",
+              "Danish": "Danish",
+              "Norwegian": "Norwegian",
+              "Finnish": "Finnish",
+              "Polish": "Polish",
+              "Czech": "Czech",
+              "Greek": "Greek",
+              "Russian": "Russian",
+              "Ukrainian": "Ukrainian",
+              "Turkish": "Turkish",
+              "Arabic": "Arabic",
+              "Hindi": "Hindi",
+              "Chinese": "Chinese",
+              "Japanese": "Japanese",
+              "Korean": "Korean",
+              "Indonesian": "Indonesian"
+            },
+            "fallback_value": "preserve"
+          },
+          {
+            "_comment": "Placeholder: device_construction changed from multiple to single choice. Records with several selected options need manual or rule-based selection; values are left unchanged for now.",
+            "type": "custom",
+            "question_id": "device_construction"
+          },
+          {
+            "_comment": "Best-effort: map common free-text board names to the new processing unit checkbox options; unmatched text is preserved for later review ('Other').",
+            "type": "value_map",
+            "question_id": "processing_unit",
+            "multi_value": true,
+            "value_map": {
+              "Raspberry Pi 5": "Raspberry Pi 5",
+              "RPi 5": "Raspberry Pi 5",
+              "Raspberry Pi 4": "Raspberry Pi 4",
+              "Raspberry Pi 4B": "Raspberry Pi 4",
+              "Raspberry Pi 4 Model B": "Raspberry Pi 4",
+              "RPi 4": "Raspberry Pi 4",
+              "Raspberry Pi 3": "Raspberry Pi 3",
+              "Raspberry Pi 3B": "Raspberry Pi 3",
+              "Raspberry Pi 3B+": "Raspberry Pi 3",
+              "RPi 3": "Raspberry Pi 3",
+              "Raspberry Pi Zero": "Raspberry Pi Zero / Zero 2 W",
+              "Raspberry Pi Zero W": "Raspberry Pi Zero / Zero 2 W",
+              "Raspberry Pi Zero 2 W": "Raspberry Pi Zero / Zero 2 W",
+              "Raspberry Pi Pico": "Raspberry Pi Pico / Pico W (RP2040)",
+              "Raspberry Pi Pico W": "Raspberry Pi Pico / Pico W (RP2040)",
+              "NVIDIA Jetson Nano": "NVIDIA Jetson Nano",
+              "Jetson Nano": "NVIDIA Jetson Nano",
+              "NVIDIA Jetson Orin Nano": "NVIDIA Jetson Orin Nano",
+              "Jetson Orin Nano": "NVIDIA Jetson Orin Nano",
+              "Arduino Uno": "Arduino Uno",
+              "Arduino Nano": "Arduino Nano",
+              "ESP32": "ESP32",
+              "ESP32-C3": "ESP32-C3",
+              "ESP32-S3": "ESP32-S3",
+              "ESP8266": "ESP8266",
+              "Teensy": "Teensy",
+              "BeagleBone Black": "BeagleBone Black",
+              "Orange Pi": "Orange Pi",
+              "Banana Pi": "Banana Pi",
+              "Odroid": "Odroid",
+              "Google Coral Dev Board": "Google Coral Dev Board",
+              "Coral Dev Board": "Google Coral Dev Board",
+              "OpenMV Cam": "OpenMV Cam"
             },
             "fallback_value": "preserve"
           }

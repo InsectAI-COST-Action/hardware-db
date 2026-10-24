@@ -471,7 +471,7 @@
         },
         {
           "id": "size_transport",
-          "title": "Packaged dimensions for transport (L × W × H)",
+          "title": "Packaged dimensions for transport (L × W × H), in cm",
           "description": "Approximate dimensions in mm when the device is packed for transport (e.g. '300 × 200 × 150').",
           "required": false,
           "type": "text",
@@ -479,7 +479,7 @@
         },
         {
           "id": "size_deployed",
-          "title": "Deployed dimensions (L × W × H)",
+          "title": "Deployed dimensions (L × W × H), in cm",
           "description": "Approximate dimensions in mm when the device is set up and operational (e.g. '500 × 400 × 800').",
           "required": false,
           "type": "text",

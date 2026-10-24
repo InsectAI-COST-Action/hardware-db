@@ -137,8 +137,8 @@ class SchemaMigration:
     ) -> None:
         """Map old values to new values for a question.
 
-        When ``multi_value=True`` the field is treated as a semicolon-separated
-        checkbox string. Tokens absent from ``value_map`` are preserved when
+        When ``multi_value=True`` the field is split using ``input_separator``
+        (a semicolon by default). Tokens absent from ``value_map`` are preserved when
         ``fallback_value='preserve'`` and dropped otherwise. For single values,
         that fallback preserves the original value; other fallback values replace
         it. Duplicate mapped values are removed from checkbox strings.
@@ -150,12 +150,13 @@ class SchemaMigration:
         value_map = transform.get("value_map", {})
         fallback = transform.get("fallback_value")
         multi_value = transform.get("multi_value", False)
+        input_separator = transform.get("input_separator", ";")
         separator = transform.get("separator", "; ")
 
         if multi_value:
             if not isinstance(old_value, str) or not old_value:
                 return
-            tokens = [t.strip() for t in old_value.replace(",", ";").split(";") if t.strip()]
+            tokens = [t.strip() for t in old_value.split(input_separator) if t.strip()]
             mapped: List[str] = []
             seen: set = set()
             for token in tokens:
@@ -246,7 +247,7 @@ class SchemaMigration:
         """Merge multiple old questions into one new question.
 
         When ``multi_value=True`` and a ``value_map`` is provided each source
-        field is treated as a semicolon-separated checkbox string; tokens are
+        field is split using ``input_separator`` (a semicolon by default); tokens are
         mapped individually, deduplicated, then joined.  Tokens with a ``null``
         mapping are explicitly dropped; tokens absent from ``value_map`` are
         preserved when ``fallback_value='preserve'`` or dropped otherwise.
@@ -257,6 +258,7 @@ class SchemaMigration:
         multi_value = transform.get("multi_value", False)
         value_map = transform.get("value_map", {})
         fallback = transform.get("fallback_value")
+        input_separator = transform.get("input_separator", ";")
         separator = transform.get("separator", "; ")
         dedup = transform.get("dedup", True)
 
@@ -267,7 +269,7 @@ class SchemaMigration:
                 val = data.pop(old_q_id, None)
                 if not val or not isinstance(val, str):
                     continue
-                tokens = [t.strip() for t in val.replace(",", ";").split(";") if t.strip()]
+                tokens = [t.strip() for t in val.split(input_separator) if t.strip()]
                 for token in tokens:
                     if token in value_map:
                         new_val = value_map[token]

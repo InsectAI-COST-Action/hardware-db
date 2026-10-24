@@ -7,6 +7,7 @@ import { TeamList } from "@/components/TeamList/TeamList";
 import { useAppContext } from "@/hooks/useAppContext";
 import type { Device } from "@/lib/types";
 import { getContributor, getOverviewSpecs } from "@/lib/utils";
+import { Mail } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import styles from "./DeviceDetails.module.css";
@@ -73,7 +74,7 @@ const DeviceView = ({ device }: { device: Device }) => {
             <LinkButton
               external={!isEmail}
               href={device.contactUrl}
-              icon={isEmail ? "/images/mail.svg" : undefined}
+              icon={isEmail ? Mail : undefined}
               variant="outline"
             >
               Contact

@@ -1,8 +1,8 @@
-import type { CSSProperties } from "react";
+import { ChevronDown, type LucideIcon } from "lucide-react";
 import styles from "./Select.module.css";
 
 interface SelectProps<T extends string> {
-  icon?: string;
+  icon?: LucideIcon;
   label: string;
   onChange: (value: T) => void;
   options: { value: T; label: string }[];
@@ -10,23 +10,23 @@ interface SelectProps<T extends string> {
 }
 
 export const Select = <T extends string>({
-  icon,
+  icon: Icon,
   label,
   onChange,
   options,
   value,
 }: SelectProps<T>) => (
   <div className={styles.container}>
-    {icon && (
-      <span
+    {Icon && (
+      <Icon
         aria-hidden="true"
         className={`${styles.icon} ${styles.leadingIcon}`}
-        style={{ "--icon": `url("${icon}")` } as CSSProperties}
+        size={16}
       />
     )}
     <select
       aria-label={label}
-      className={`${styles.select} ${icon ? styles.withIcon : ""}`}
+      className={`${styles.select} ${Icon ? styles.withIcon : ""}`}
       onChange={(e) => onChange(e.target.value as T)}
       value={value}
     >
@@ -36,10 +36,10 @@ export const Select = <T extends string>({
         </option>
       ))}
     </select>
-    <span
+    <ChevronDown
       aria-hidden="true"
       className={`${styles.icon} ${styles.chevron}`}
-      style={{ "--icon": 'url("/images/chevron-down.svg")' } as CSSProperties}
+      size={16}
     />
   </div>
 );

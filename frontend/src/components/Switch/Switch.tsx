@@ -1,11 +1,12 @@
-import { useId, type CSSProperties } from "react";
+import type { LucideIcon } from "lucide-react";
+import { useId } from "react";
 import styles from "./Switch.module.css";
 
 interface SwitchProps<T extends string> {
   label: string;
   onChange: (value: T) => void;
   options: {
-    icon?: string;
+    icon?: LucideIcon;
     label: string;
     value: T;
   }[];
@@ -39,11 +40,7 @@ export const Switch = <T extends string>({
             value={option.value}
           />
           {option.icon && (
-            <span
-              aria-hidden="true"
-              className={styles.icon}
-              style={{ "--icon": `url("${option.icon}")` } as CSSProperties}
-            />
+            <option.icon aria-hidden="true" className={styles.icon} size={16} />
           )}
           {showLabels && <span>{option.label}</span>}
         </label>

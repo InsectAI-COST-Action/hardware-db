@@ -1,5 +1,16 @@
 import { DEVICE_CSV_URL } from "@/lib/constants";
 import type { Device, SpecGroup, TeamMember } from "@/lib/types";
+import {
+  BatteryCharging,
+  Bug,
+  Camera,
+  CodeXml,
+  Coins,
+  Wrench,
+  type LucideIcon,
+  Thermometer,
+  Trees,
+} from "lucide-react";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 
@@ -213,12 +224,14 @@ type SpecFormat = "text" | "list" | "score";
 
 type SpecGroupColumns = {
   title: string;
+  icon: LucideIcon;
   specs: { label: string; column: string; format?: SpecFormat }[];
 }[];
 
 const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   {
     title: "Hardware",
+    icon: Wrench,
     specs: [
       { label: "Construction", column: "device_construction", format: "list" },
       { label: "Processor", column: "processing_unit", format: "list" },
@@ -236,6 +249,7 @@ const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Imaging",
+    icon: Camera,
     specs: [
       { label: "Capture modes", column: "capture_modes", format: "list" },
       { label: "Sensor", column: "main_optical_sensor_model_name" },
@@ -249,6 +263,7 @@ const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Power & data",
+    icon: BatteryCharging,
     specs: [
       { label: "Power sources", column: "power_sources", format: "list" },
       { label: "Autonomy", column: "power_autonomy_continuous" },
@@ -258,6 +273,7 @@ const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Cost & upkeep",
+    icon: Coins,
     specs: [
       { label: "Unit build cost", column: "cost_unit_build" },
       { label: "Seasonal deployment", column: "cost_deployment_seasonal" },
@@ -273,6 +289,7 @@ const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Firmware",
+    icon: CodeXml,
     specs: [
       { label: "Last update", column: "last_firmware_update" },
       {
@@ -288,16 +305,17 @@ const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
 const ECOLOGY_GROUP_COLUMNS: SpecGroupColumns = [
   {
     title: "Target organisms",
+    icon: Bug,
     specs: [
       {
-        label: "Classifies by",
-        column: "classification_target_type",
+        label: "Functional groups",
+        column: "functional_groups",
         format: "list",
       },
       { label: "Taxonomic groups", column: "taxonomic_groups", format: "list" },
       {
-        label: "Functional groups",
-        column: "functional_groups",
+        label: "Classifies by",
+        column: "classification_target_type",
         format: "list",
       },
       { label: "Min. subject size (mm)", column: "subject_size_min_mm" },
@@ -306,6 +324,7 @@ const ECOLOGY_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Habitat & sampling",
+    icon: Trees,
     specs: [
       {
         label: "Environment",
@@ -318,10 +337,11 @@ const ECOLOGY_GROUP_COLUMNS: SpecGroupColumns = [
   },
   {
     title: "Field conditions",
+    icon: Thermometer,
     specs: [
-      { label: "Weatherproofing", column: "ip_rating" },
       { label: "Min. temperature (°C)", column: "temperature_min_c" },
       { label: "Max. temperature (°C)", column: "temperature_max_c" },
+      { label: "Weatherproofing", column: "ip_rating" },
     ],
   },
 ];
@@ -334,15 +354,18 @@ const parseSpecGroups = (
   row: Record<string, string>,
   groups: SpecGroupColumns,
 ): SpecGroup[] =>
-  groups.map(({ title, specs }) => ({
-    title,
-    specs: specs
-      .map(({ label, column, format = "text" }) => ({
-        label,
-        value: formatSpec(row[column], format),
-      }))
-      .filter((spec) => spec.value),
-  })).filter((group) => group.specs.length);
+  groups
+    .map(({ title, icon, specs }) => ({
+      title,
+      icon,
+      specs: specs
+        .map(({ label, column, format = "text" }) => ({
+          label,
+          value: formatSpec(row[column], format),
+        }))
+        .filter((spec) => spec.value),
+    }))
+    .filter((group) => group.specs.length);
 
 /**
  * List items drop their explanation after a `:`, e.g. "Off-the-shelf:

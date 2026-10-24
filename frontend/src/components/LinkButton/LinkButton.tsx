@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import { ExternalLink, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import styles from "./LinkButton.module.css";
 
 interface LinkButtonProps {
@@ -6,7 +7,7 @@ interface LinkButtonProps {
   className?: string;
   external?: boolean;
   href: string;
-  icon?: string;
+  icon?: LucideIcon;
   variant?: "ghost" | "outline" | "primary";
 }
 
@@ -15,7 +16,7 @@ export const LinkButton = ({
   className,
   external = false,
   href,
-  icon,
+  icon: Icon,
   variant = "primary",
 }: LinkButtonProps) => (
   <a
@@ -23,14 +24,10 @@ export const LinkButton = ({
     href={href}
     {...(external && { rel: "noopener noreferrer", target: "_blank" })}
   >
-    {icon && (
-      <span
-        aria-hidden="true"
-        className={styles.icon}
-        style={{ "--icon": `url("${icon}")` } as CSSProperties}
-      />
-    )}
+    {Icon && <Icon aria-hidden="true" className={styles.icon} size={16} />}
     {children}
-    {external && <span aria-hidden="true" className={styles.externalIcon} />}
+    {external && (
+      <ExternalLink aria-hidden="true" className={styles.icon} size={16} />
+    )}
   </a>
 );

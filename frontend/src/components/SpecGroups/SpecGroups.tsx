@@ -13,9 +13,12 @@ export const SpecGroups = ({ groups }: SpecGroupsProps) => {
 
   return (
     <div className={styles.grid}>
-      {groups.map(({ title, specs }) => (
+      {groups.map(({ title, icon: Icon, specs }) => (
         <section className={styles.card} key={title}>
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.title}>
+            <Icon aria-hidden="true" className={styles.icon} size={24} />
+            {title}
+          </h3>
           <SpecList specs={specs} variant="table" />
         </section>
       ))}

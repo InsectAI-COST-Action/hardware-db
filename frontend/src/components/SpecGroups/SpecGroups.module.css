@@ -12,5 +12,12 @@
 }
 
 .title {
+  align-items: center;
+  display: flex;
+  gap: 8px;
   padding-bottom: 16px;
+}
+
+.icon {
+  flex-shrink: 0;
 }

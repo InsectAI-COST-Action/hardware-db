@@ -6,6 +6,7 @@ import { Select } from "@/components/Select/Select";
 import { Switch } from "@/components/Switch/Switch";
 import { useAppContext } from "@/hooks/useAppContext";
 import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "@/lib/constants";
+import { ArrowDownUp } from "lucide-react";
 import styles from "./Devices.module.css";
 import type { Device } from "@/lib/types";
 
@@ -41,7 +42,7 @@ export const Devices = () => {
               value={search}
             />
             <Select
-              icon="/images/arrow-down-up.svg"
+              icon={ArrowDownUp}
               label="Sort devices"
               onChange={setSort}
               options={SORT_OPTIONS}

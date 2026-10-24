@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface Device {
   deviceName: string;
   deviceDescription: string;
@@ -39,6 +41,7 @@ export interface Spec {
 
 export interface SpecGroup {
   title: string;
+  icon: LucideIcon;
   specs: Spec[];
 }
 

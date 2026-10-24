@@ -1,3 +1,11 @@
+import {
+  Grid2x2,
+  type LucideIcon,
+  Moon,
+  Scale,
+  Sun,
+  Table,
+} from "lucide-react";
 import type { ListField, SortOption, Theme, ViewMode } from "./types";
 
 export const DEVICE_CSV_URL =
@@ -32,17 +40,21 @@ export const SORT_OPTIONS: {
 export const SUBMIT_LINK =
   "https://docs.google.com/forms/d/1tEs9BkqGV579_Qd8aOVvAhmVWEfLAnKxa04KMH8Pi3Q/viewform";
 
-export const THEME_OPTIONS: { value: Theme; label: string; icon: string }[] = [
-  { value: "light", label: "Light mode", icon: "/images/sun.svg" },
-  { value: "dark", label: "Dark mode", icon: "/images/moon.svg" },
+export const THEME_OPTIONS: {
+  value: Theme;
+  label: string;
+  icon: LucideIcon;
+}[] = [
+  { value: "light", label: "Light mode", icon: Sun },
+  { value: "dark", label: "Dark mode", icon: Moon },
 ];
 
 export const VIEW_MODE_OPTIONS: {
   value: ViewMode;
   label: string;
-  icon: string;
+  icon: LucideIcon;
 }[] = [
-  { value: "table", label: "Table", icon: "/images/table.svg" },
-  { value: "gallery", label: "Gallery", icon: "/images/grid-2x2.svg" },
-  { value: "compare", label: "Compare", icon: "/images/scale.svg" },
+  { value: "table", label: "Table", icon: Table },
+  { value: "gallery", label: "Gallery", icon: Grid2x2 },
+  { value: "compare", label: "Compare", icon: Scale },
 ];

@@ -23,14 +23,11 @@
 }
 
 .icon {
-  background: var(--color-muted-foreground);
-  height: 16px;
-  mask: var(--icon) center / contain no-repeat;
+  color: var(--color-muted-foreground);
   pointer-events: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
 }
 
 .leadingIcon {

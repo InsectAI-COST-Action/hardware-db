@@ -16,10 +16,9 @@ export const FILTER_DEFINITIONS: {
   title: string;
 }[] = [
   { field: "deviceConstruction", title: "Construction" },
-  { field: "taxonomicGroups", title: "Target taxa" },
   { field: "captureModes", title: "Capture mode" },
   { field: "powerSources", title: "Power source" },
-  { field: "modelProcessing", title: "Image processing" },
+  { field: "taxonomicGroups", title: "Target taxa" },
 ];
 
 export const SORT_OPTIONS: {

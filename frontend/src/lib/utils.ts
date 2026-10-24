@@ -33,9 +33,9 @@ export const getOverviewSpecs = (device: Device, maxItems?: number) => {
   };
 
   return [
-    { label: "Processor", value: device.processingUnit },
-    { label: "Power", value: formatList(device.powerSources) },
-    { label: "Capture", value: formatList(device.captureModes) },
+    { label: "Processor", value: formatList(device.processingUnits) },
+    { label: "Capture mode", value: formatList(device.captureModes) },
+    { label: "Power source", value: formatList(device.powerSources) },
     { label: "Target taxa", value: formatList(device.taxonomicGroups) },
   ].filter((spec) => spec.value);
 };

@@ -8,7 +8,7 @@ export interface Device {
   documentationUrl: string;
   deviceConstruction: string[];
   powerSources: string[];
-  processingUnit: string;
+  processingUnits: string[];
   modelProcessing: string[];
   captureModes: string[];
   taxonomicGroups: string[];

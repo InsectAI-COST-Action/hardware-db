@@ -1,4 +1,5 @@
 import { DeviceGallery } from "@/components/DeviceGallery/DeviceGallery";
+import { DeviceTable } from "@/components/DeviceTable/DeviceTable";
 import { Filters } from "@/components/Filters/Filters";
 import { Input } from "@/components/Input/Input";
 import { Intro } from "@/components/Intro/Intro";
@@ -8,7 +9,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 import { SORT_OPTIONS, VIEW_MODE_OPTIONS } from "@/lib/constants";
 import { ArrowDownUp } from "lucide-react";
 import styles from "./Devices.module.css";
-import type { Device } from "@/lib/types";
+import type { Device, ViewMode } from "@/lib/types";
 
 export const Devices = () => {
   const {
@@ -63,6 +64,7 @@ export const Devices = () => {
             devices={filteredDevices}
             isLoading={isLoading}
             error={error}
+            viewMode={viewMode}
           />
         </div>
       </div>
@@ -74,10 +76,12 @@ const Content = ({
   devices,
   isLoading,
   error,
+  viewMode,
 }: {
   devices: Device[];
   isLoading: boolean;
   error: Error | null;
+  viewMode: ViewMode;
 }) => {
   if (isLoading) {
     return <p>Loading...</p>;
@@ -89,6 +93,10 @@ const Content = ({
 
   if (devices.length === 0) {
     return <p>No devices match the current filtering.</p>;
+  }
+
+  if (viewMode === "table") {
+    return <DeviceTable devices={devices} />;
   }
 
   return <DeviceGallery devices={devices} />;

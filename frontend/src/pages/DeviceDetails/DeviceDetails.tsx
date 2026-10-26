@@ -17,7 +17,7 @@ type Tab = "overview" | "specifications" | "ecology" | "raw";
 const TABS: { value: Tab; label: string }[] = [
   { value: "overview", label: "Overview" },
   { value: "specifications", label: "Specifications" },
-  { value: "ecology", label: "Ecology and deployment" },
+  { value: "ecology", label: "Ecology & deployment" },
   { value: "raw", label: "Raw data" },
 ];
 
@@ -114,7 +114,7 @@ const DeviceView = ({ device }: { device: Device }) => {
         </div>
       )}
       {tab === "ecology" && (
-        <div aria-label="Ecology and deployment" role="tabpanel">
+        <div aria-label="Ecology & deployment" role="tabpanel">
           {device.ecology.length ? (
             <SpecGroups groups={device.ecology} />
           ) : (

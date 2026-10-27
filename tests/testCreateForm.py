@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from createForm import (
     build_template_item_requests,
     normalize_form_id,
+    publish_form,
     update_readme_form_link,
 )
 from collectResponses import extract_answer_value
@@ -106,6 +107,61 @@ class TemplateFormTests(unittest.TestCase):
             "abc123",
         )
         self.assertEqual(normalize_form_id("abc123"), "abc123")
+
+    def test_publishes_form_and_returns_responder_uri(self):
+        responder_uri = "https://docs.google.com/forms/d/e/published/viewform"
+
+        class FakeRequest:
+            def __init__(self, response):
+                self.response = response
+
+            def execute(self):
+                return self.response
+
+        class FakeForms:
+            def __init__(self):
+                self.publish_call = None
+                self.get_call = None
+
+            def setPublishSettings(self, **kwargs):
+                self.publish_call = kwargs
+                return FakeRequest({})
+
+            def get(self, **kwargs):
+                self.get_call = kwargs
+                return FakeRequest({"responderUri": responder_uri})
+
+        class FakeService:
+            def __init__(self):
+                self.forms_api = FakeForms()
+
+            def forms(self):
+                return self.forms_api
+
+        service = FakeService()
+
+        result = publish_form(service, "form-123")
+
+        self.assertEqual(result, responder_uri)
+        self.assertEqual(
+            service.forms_api.publish_call,
+            {
+                "formId": "form-123",
+                "body": {
+                    "publishSettings": {
+                        "publishState": {
+                            "isPublished": True,
+                            "isAcceptingResponses": True,
+                        }
+                    },
+                    "updateMask": "publishState",
+                },
+            },
+        )
+        self.assertEqual(
+            service.forms_api.get_call,
+            {"formId": "form-123", "fields": "responderUri"},
+        )
 
     def test_readme_link_update_preserves_utf8_text(self):
         content = (

@@ -118,6 +118,9 @@ def pick_cfg_value(
     
     # 4. Defaults for some keys (handled in argparse)
 
+    if key in caller_globals and caller_globals[key] is None:
+        return None
+
     # Nothing found → explicit failure.
     raise ValueError(
         f"Configuration value for '{key}' not supplied. Provide it via CLI, a .secrets "
@@ -157,6 +160,10 @@ def build_config(caller_globals: Dict[str, Any]) -> Dict[str, Any]:
     parser.add_argument(
         "--form-id", 
         help="Google Form ID."
+    )
+    parser.add_argument(
+        "--template-form-id",
+        help="Google Form ID or URL for the file-upload template.",
     )
     parser.add_argument(
         "--oauth-client-json",

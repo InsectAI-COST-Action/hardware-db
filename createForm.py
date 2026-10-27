@@ -1,9 +1,13 @@
 import os
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 from googleapiclient.discovery import build
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 from authFlow_helpers import resolve_oauth_path, make_creds
 from configParsing import build_config
@@ -19,6 +23,7 @@ GOOGLE_FORM_ID = ""
 PARENT_DIR = ""
 OAUTH_CLIENT_JSON = ""
 TOKEN_CREATE_FORM = ""
+TEMPLATE_FORM_ID = None
 DISCOVERY_DOC = ""
 DEBUG = False
 UPDATE_LINKS = False
@@ -83,6 +88,9 @@ def build_question_item(q, section_id_map=None):
             "high": q["high"]
         }
 
+    elif q["type"] == "file_upload":
+        raise ValueError("File-upload questions must be supplied by a template form")
+
     else:
         raise ValueError(f"Unknown question type: {q['type']}")
 
@@ -101,6 +109,200 @@ def build_batch_requests(items):
         }
         for idx, item in enumerate(items)
     ]
+
+
+def normalize_form_id(value):
+    if not value:
+        return value
+
+    parsed = urlparse(value)
+    if parsed.scheme and parsed.netloc:
+        path_parts = [part for part in parsed.path.split("/") if part]
+        if "d" in path_parts:
+            form_index = path_parts.index("d")
+            if form_index + 1 < len(path_parts):
+                return path_parts[form_index + 1]
+        query_id = parse_qs(parsed.query).get("id", [None])[0]
+        if query_id:
+            return query_id
+        raise ValueError("Could not find a Google Form ID in TEMPLATE_FORM_ID")
+
+    return value
+
+
+def build_template_item_requests(schema, template_items):
+    upload_ids = []
+    for item in template_items:
+        question = item.get("questionItem", {}).get("question", {})
+        if "fileUploadQuestion" not in question:
+            raise ValueError(
+                "The upload template must contain only file-upload questions"
+            )
+        upload_ids.append(item["itemId"])
+
+    expected_uploads = [
+        q
+        for section in schema.get("sections", [])
+        for q in section.get("questions", [])
+        if q.get("type") == "file_upload"
+    ]
+    if len(upload_ids) != len(expected_uploads):
+        raise ValueError(
+            "Upload template has "
+            f"{len(upload_ids)} upload question(s), but schema declares "
+            f"{len(expected_uploads)}"
+        )
+
+    current_items = list(upload_ids)
+    requests = []
+    create_refs = {}
+    item_ids = {}
+    item_locations = {}
+    target_index = 0
+    upload_index = 0
+
+    def add_schema_item(key, item):
+        nonlocal target_index
+        requests.append({
+            "createItem": {
+                "item": item,
+                "location": {"index": target_index},
+            }
+        })
+        create_refs[key] = len(requests) - 1
+        current_items.insert(target_index, key)
+        item_locations[key] = target_index
+        target_index += 1
+
+    for section in schema.get("sections", []):
+        section_key = ("section", section["id"])
+        add_schema_item(section_key, build_section_header(section))
+
+        for question in section.get("questions", []):
+            question_key = ("question", question["id"])
+            if question["type"] != "file_upload":
+                add_schema_item(question_key, build_question_item(question))
+                continue
+
+            item_id = upload_ids[upload_index]
+            upload_index += 1
+            current_index = current_items.index(item_id)
+            if current_index != target_index:
+                requests.append({
+                    "moveItem": {
+                        "originalLocation": {"index": current_index},
+                        "newLocation": {"index": target_index},
+                    }
+                })
+                current_items.insert(target_index, current_items.pop(current_index))
+
+            item_ids[question_key] = item_id
+            item_locations[question_key] = target_index
+            target_index += 1
+
+    return requests, create_refs, item_ids, item_locations
+
+
+def create_template_items(forms_service, form_id, schema):
+    template = forms_service.forms().get(formId=form_id).execute()
+    requests, create_refs, item_ids, item_locations = build_template_item_requests(
+        schema, template.get("items", [])
+    )
+    response = forms_service.forms().batchUpdate(
+        formId=form_id,
+        body={"requests": requests},
+    ).execute()
+
+    for key, request_index in create_refs.items():
+        item_ids[key] = response["replies"][request_index]["createItem"]["itemId"]
+
+    section_id_map = {
+        section_id: item_ids[("section", section_id)]
+        for section_id in (section["id"] for section in schema.get("sections", []))
+    }
+    logic_requests = []
+    for section in schema.get("sections", []):
+        for question in section.get("questions", []):
+            if question.get("type") != "choice" or "logic" not in question:
+                continue
+            key = ("question", question["id"])
+            logic_requests.append({
+                "updateItem": {
+                    "item": {
+                        "itemId": item_ids[key],
+                        "questionItem": {
+                            "question": {
+                                "choiceQuestion": {
+                                    "type": question.get("choiceType", "RADIO"),
+                                    "options": build_choice_options(
+                                        question, section_id_map
+                                    ),
+                                }
+                            }
+                        },
+                    },
+                    "location": {"index": item_locations[key]},
+                    "updateMask": "questionItem.question.choiceQuestion",
+                }
+            })
+    if logic_requests:
+        forms_service.forms().batchUpdate(
+            formId=form_id,
+            body={"requests": logic_requests},
+        ).execute()
+
+
+def create_regular_items(forms_service, form_id, schema):
+    items = []
+    section_positions = {}
+    for section in schema["sections"]:
+        section_positions[section["id"]] = len(items)
+        items.append(build_section_header(section))
+        for question in section.get("questions", []):
+            items.append(build_question_item(question))
+
+    response = forms_service.forms().batchUpdate(
+        formId=form_id,
+        body={"requests": build_batch_requests(items)},
+    ).execute()
+    replies = response["replies"]
+    section_id_map = {
+        section_id: replies[item_index]["createItem"]["itemId"]
+        for section_id, item_index in section_positions.items()
+    }
+
+    logic_requests = []
+    reply_index = 0
+    for section in schema["sections"]:
+        reply_index += 1
+        for question in section.get("questions", []):
+            if question["type"] == "choice" and "logic" in question:
+                logic_requests.append({
+                    "updateItem": {
+                        "item": {
+                            "itemId": replies[reply_index]["createItem"]["itemId"],
+                            "questionItem": {
+                                "question": {
+                                    "choiceQuestion": {
+                                        "type": question.get("choiceType", "RADIO"),
+                                        "options": build_choice_options(
+                                            question, section_id_map
+                                        ),
+                                    }
+                                }
+                            },
+                        },
+                        "location": {"index": reply_index},
+                        "updateMask": "questionItem.question.choiceQuestion",
+                    }
+                })
+            reply_index += 1
+
+    if logic_requests:
+        forms_service.forms().batchUpdate(
+            formId=form_id,
+            body={"requests": logic_requests},
+        ).execute()
 
 # ----------------------------------------------------------------------
 # Functions to update .env and README
@@ -234,28 +436,41 @@ def main():
         schema = json.load(f)
 
     ### 1. Create empty form
-    form = forms_service.forms().create(
-        body={
-            "info": {
-                "title": schema["info"]["title"]
-            }
-        }
-    ).execute()
-
-    form_id = form["formId"]
+    upload_questions = [
+        q
+        for section in schema.get("sections", [])
+        for q in section.get("questions", [])
+        if q.get("type") == "file_upload"
+    ]
+    if upload_questions:
+        template_form_id = normalize_form_id(cfg["TEMPLATE_FORM_ID"])
+        if not template_form_id:
+            raise ValueError(
+                "TEMPLATE_FORM_ID is required when the schema declares "
+                "file_upload questions"
+            )
+        copied_form = drive_service.files().copy(
+            fileId=template_form_id,
+            body={"name": schema["info"]["title"]},
+            fields="id",
+        ).execute()
+        form_id = copied_form["id"]
+    else:
+        form = forms_service.forms().create(
+            body={"info": {"title": schema["info"]["title"]}}
+        ).execute()
+        form_id = form["formId"]
     
     # 1a. Add description and any top‑level settings
-    form_updates = []
-
-    # description
+    info = {"title": schema["info"]["title"]}
     if "description" in schema["info"]:
-        desc_text = schema["info"]["description"].replace("\\n", "\n")
-        form_updates.append({
-            "updateFormInfo": {
-            "info": {"description": desc_text},
-            "updateMask": "description"
-            }
-        })
+        info["description"] = schema["info"]["description"].replace("\\n", "\n")
+    form_updates = [{
+        "updateFormInfo": {
+            "info": info,
+            "updateMask": ",".join(info),
+        }
+    }]
 
     # # 1b. settings (email collection, etc.)
     # if "settings" in schema:
@@ -277,75 +492,10 @@ def main():
             body={"requests": form_updates}
         ).execute()
 
-    ### 2. Create sections + questions (NO logic yet)
-    items = []
-    section_positions = {}  # section_id → index in item list
-
-    for section in schema["sections"]:
-        section_positions[section["id"]] = len(items)
-
-        # Section header
-        items.append(build_section_header(section))
-
-        # Questions in this section
-        for q in section.get("questions", []):
-            items.append(build_question_item(q))
-
-    resp = forms_service.forms().batchUpdate(
-        formId=form_id,
-        body={"requests": build_batch_requests(items)}
-    ).execute()
-
-    ### 3. Map symbolic section IDs → Google itemIds
-    section_id_map = {}
-    replies = resp["replies"]
-
-    for section_id, item_index in section_positions.items():
-        section_id_map[section_id] = replies[item_index]["createItem"]["itemId"]
-
-    ### 4. Patch branching logic (choice questions only)
-    logic_requests = []
-    reply_index = 0          # keeps the position of the current item in the form
-    section_start_indices = {}   # map section id → first item index (pageBreak)
-
-    for section in schema["sections"]:
-        # The pageBreak that starts the section occupies one index
-        section_start_indices[section["id"]] = reply_index
-        reply_index += 1      # pageBreak itself
-
-        for q in section.get("questions", []):
-            if q["type"] == "choice" and "logic" in q:
-                # The item that holds the question is the next index after the pageBreak
-                item_id = replies[reply_index]["createItem"]["itemId"]
-
-                # Build the update request – note the added `location`
-                logic_requests.append({
-                    "updateItem": {
-                        "item": {
-                            "itemId": item_id,
-                            "questionItem": {
-                                "question": {
-                                    "choiceQuestion": {
-                                        "type": q.get("choiceType", "RADIO"),
-                                        "options": build_choice_options(q, section_id_map)
-                                    }
-                                }
-                            }
-                        },
-                        "location": {
-                            "index": reply_index
-                        },
-                        "updateMask": "questionItem.question.choiceQuestion"
-                    }
-                })
-            
-            reply_index += 1
-    
-    if logic_requests:
-        forms_service.forms().batchUpdate(
-            formId=form_id,
-            body={"requests": logic_requests}
-        ).execute()
+    if upload_questions:
+        create_template_items(forms_service, form_id, schema)
+    else:
+        create_regular_items(forms_service, form_id, schema)
 
     ### 5. Rename & move Drive file
     drive_service.files().update(

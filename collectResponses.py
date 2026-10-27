@@ -36,6 +36,24 @@ def get_schema_version(schema_path: str) -> str:
         return "1.0.0"
 
 
+def extract_answer_value(answer_obj):
+    if "textAnswers" in answer_obj:
+        values = [answer["value"] for answer in answer_obj["textAnswers"]["answers"]]
+        return "; ".join(values)
+
+    if "fileUploadAnswers" in answer_obj:
+        return [
+            {
+                "file_id": uploaded_file.get("fileId"),
+                "file_name": uploaded_file.get("fileName"),
+                "mime_type": uploaded_file.get("mimeType"),
+            }
+            for uploaded_file in answer_obj["fileUploadAnswers"].get("answers", [])
+        ]
+
+    return ""
+
+
 def write_csv_from_json_files(
     output_dir: Path,
     csv_file: Path,
@@ -46,6 +64,8 @@ def write_csv_from_json_files(
         # Keep CSV one-record-per-line by flattening embedded line breaks in free-text fields.
         if value is None:
             return ""
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, ensure_ascii=False)
         text = str(value)
         return " ".join(text.replace("\r\n", "\n").replace("\r", "\n").splitlines())
 
@@ -176,16 +196,7 @@ def main():
 
             if question_id in answers:
                 answer_obj = answers[question_id]
-
-                # Handle different answer types
-                if "textAnswers" in answer_obj:
-                    values = [
-                        a["value"] for a in answer_obj["textAnswers"]["answers"]
-                    ]
-                    answer_value = "; ".join(values)
-
-                else:
-                    answer_value = ""
+                answer_value = extract_answer_value(answer_obj)
 
             else:
                 answer_value = ""

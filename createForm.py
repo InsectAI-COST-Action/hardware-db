@@ -3,6 +3,7 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 from urllib.parse import parse_qs, urlparse
 
 from googleapiclient.discovery import build
@@ -128,6 +129,29 @@ def normalize_form_id(value):
         raise ValueError("Could not find a Google Form ID in TEMPLATE_FORM_ID")
 
     return value
+
+
+def publish_form(forms_service, form_id):
+    forms_service.forms().setPublishSettings(
+        formId=form_id,
+        body={
+            "publishSettings": {
+                "publishState": {
+                    "isPublished": True,
+                    "isAcceptingResponses": True,
+                }
+            },
+            "updateMask": "publishState",
+        },
+    ).execute()
+    form = forms_service.forms().get(
+        formId=form_id,
+        fields="responderUri",
+    ).execute()
+    responder_uri = form.get("responderUri")
+    if not responder_uri:
+        raise RuntimeError("Published form did not return a responder URI")
+    return responder_uri
 
 
 def build_template_item_requests(schema, template_items):
@@ -336,7 +360,11 @@ def write_form_id_to_env(form_id: str, env_file: str = ".env"):
     with env_path.open("w", encoding="utf-8") as f:
         f.writelines(lines)
 
-def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
+def update_readme_form_link(
+    form_id: str,
+    readme_file: str = "README.md",
+    responder_uri: Optional[str] = None,
+):
     """Update the form link in README.md between the GOOGLE_FORM_ID markers."""
     readme_path = Path(readme_file)
     
@@ -345,7 +373,7 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
         return
     
     # Generate the new form link
-    new_link = f"https://docs.google.com/forms/d/{form_id}/viewform"
+    new_link = responder_uri or f"https://docs.google.com/forms/d/{form_id}/viewform"
     
     # Read the file
     content = readme_path.read_text(encoding="utf-8")
@@ -368,14 +396,20 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
     readme_path.write_text(new_content, encoding="utf-8")
 
 
-def write_form_config_to_docs(form_id: str, forms_service, schema: dict, docs_dir: str = "docs"):
+def write_form_config_to_docs(
+    form_id: str,
+    forms_service,
+    schema: dict,
+    docs_dir: str = "docs",
+    responder_uri: Optional[str] = None,
+):
     """Write form config JSON for the GitHub Pages landing page."""
     docs_path = Path(docs_dir)
     docs_path.mkdir(exist_ok=True)
 
     config = {
         "form_id": form_id,
-        "form_url": f"https://docs.google.com/forms/d/{form_id}/viewform",
+        "form_url": responder_uri or f"https://docs.google.com/forms/d/{form_id}/viewform",
         "entry_ids": {}
     }
 
@@ -522,14 +556,22 @@ def main():
         removeParents=previous_parents,
         fields="id, parents"
     ).execute()
+
+    responder_uri = publish_form(forms_service, form_id)
     
     # Check if links should be updated
     if cfg["UPDATE_LINKS"]:
         write_form_id_to_env(form_id)   # Write form ID to .env
-        update_readme_form_link(form_id)   # Update link in README
-        write_form_config_to_docs(form_id, forms_service, schema)   # Write landing page config
+        update_readme_form_link(form_id, responder_uri=responder_uri)
+        write_form_config_to_docs(
+            form_id,
+            forms_service,
+            schema,
+            responder_uri=responder_uri,
+        )
 
     print("Form created successfully:")
+    print(f"Responder URL: {responder_uri}")
     print(f"https://docs.google.com/forms/d/{form_id}/edit")
 
 

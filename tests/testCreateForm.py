@@ -1,13 +1,18 @@
 import unittest
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 import jsonschema
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from createForm import build_template_item_requests, normalize_form_id
+from createForm import (
+    build_template_item_requests,
+    normalize_form_id,
+    update_readme_form_link,
+)
 from collectResponses import extract_answer_value
 
 
@@ -101,6 +106,24 @@ class TemplateFormTests(unittest.TestCase):
             "abc123",
         )
         self.assertEqual(normalize_form_id("abc123"), "abc123")
+
+    def test_readme_link_update_preserves_utf8_text(self):
+        content = (
+            "Price €20 – example\n"
+            "<!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->\n"
+            "old link\n"
+            "<!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->\n"
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            readme_path = Path(temp_dir) / "README.md"
+            readme_path.write_text(content, encoding="utf-8")
+
+            update_readme_form_link("abc123", str(readme_path))
+
+            updated = readme_path.read_text(encoding="utf-8")
+
+        self.assertIn("Price €20 – example", updated)
+        self.assertIn("https://docs.google.com/forms/d/abc123/viewform", updated)
 
     def test_extracts_uploaded_file_metadata(self):
         result = extract_answer_value({

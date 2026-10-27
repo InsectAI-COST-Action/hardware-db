@@ -65,7 +65,10 @@
                 "title": { "type": "string" },
                 "description": { "type": ["string", "null"] },
                 "required": { "type": "boolean" },
-                "type": { "type": "string" },
+                "type": {
+                  "type": "string",
+                  "enum": ["text", "choice", "scale", "file_upload"]
+                },
                 "paragraph": { "type": "boolean" },
                 "choiceType": { "type": "string" },
                 "high": { "type": "number" },

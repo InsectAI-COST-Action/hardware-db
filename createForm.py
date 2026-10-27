@@ -313,14 +313,14 @@ def write_form_id_to_env(form_id: str, env_file: str = ".env"):
     
     if not env_path.exists():
         # Create new .env file if it doesn't exist
-        with env_path.open("w") as f:
+        with env_path.open("w", encoding="utf-8") as f:
             f.write(f"GOOGLE_FORM_ID={form_id}\n")
         return
     
     # Read the existing file
     lines = []
     found = False
-    with env_path.open("r") as f:
+    with env_path.open("r", encoding="utf-8") as f:
         for line in f:
             if line.startswith("GOOGLE_FORM_ID="):
                 lines.append(f"GOOGLE_FORM_ID={form_id}\n")
@@ -333,7 +333,7 @@ def write_form_id_to_env(form_id: str, env_file: str = ".env"):
         lines.append(f"GOOGLE_FORM_ID={form_id}\n")
     
     # Write back
-    with env_path.open("w") as f:
+    with env_path.open("w", encoding="utf-8") as f:
         f.writelines(lines)
 
 def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
@@ -348,7 +348,7 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
     new_link = f"https://docs.google.com/forms/d/{form_id}/viewform"
     
     # Read the file
-    content = readme_path.read_text()
+    content = readme_path.read_text(encoding="utf-8")
     
     # Find and replace the link between the markers
     begin_marker = "<!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->"
@@ -365,7 +365,7 @@ def update_readme_form_link(form_id: str, readme_file: str = "README.md"):
     # Reconstruct with new link
     new_content = before + f"\n{new_link}\n" + after
     
-    readme_path.write_text(new_content)
+    readme_path.write_text(new_content, encoding="utf-8")
 
 
 def write_form_config_to_docs(form_id: str, forms_service, schema: dict, docs_dir: str = "docs"):
@@ -432,7 +432,7 @@ def main():
     drive_service = build("drive", "v3", credentials=creds)
     
     ### Load schema
-    with open(cfg["SCHEMA_FILE"]) as f:
+    with open(cfg["SCHEMA_FILE"], "r", encoding="utf-8") as f:
         schema = json.load(f)
 
     ### 1. Create empty form

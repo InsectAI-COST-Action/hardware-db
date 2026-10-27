@@ -1,361 +1,96 @@
-[![Tests](https://github.com/InsectAI-COST-Action/hardware-db/actions/workflows/tests.yml/badge.svg)](https://github.com/InsectAI-COST-Action/hardware-db/actions/workflows/tests.yml)
+# TL;DR
 
-# Insect AI Hardware Database
+The InsectAI hardware database stores device records as JSON and CSV, with GitHub Actions for form creation, response collection, and index generation.
 
-<p align="center">
-<b>🚧 Under construction! 🚧</b>
-</p>
-<p align="center">
-<img src="./assets/InsectAI - full.svg" height="250"/>
-<img src="./assets/hardware-db_pictogram.svg" height="250"/>
-</p>
+The image-upload feature is **not yet end-to-end usable through automated form creation**. The generator can copy a template, place its existing upload questions according to the schema, publish the form, and return Google's responder URL. However, Google Forms drops the upload-folder association when the template is copied. The Forms API also rejects attempts to create upload questions or restore their `folderId` afterward. As a result, a freshly generated form has upload questions with no destination folder and requires manual setup in the Forms UI.
 
-# Quickstart
-Welcome! This is the InsectAI hardware database, designed to collate information on devices used for automated monitoring of insects. 
+This status was verified on 2026-10-27 against a template with restored, active upload folders. The latest test copy was published and accepting responses, but both upload questions had `folderId=None`.
 
-Here you can submit details about systems you use, develop or commercialise for the monitoring insects, and you can visualise the data we have collected to choose a system for your needs. 
+# Current Status
 
-More info on the scope of the InsectAI hardware database *coming soon*... 
+## Working
 
-For more info on InsectAI, visit our official website [insectai.eu](https://insectai.eu/), or the [InsectAI page](https://www.cost.eu/actions/CA22129/) on the [COST Association](https://www.cost.eu/) website. 
+- `hardware-db_schema.json` is the active schema. The versioned v2 beta schema is in `schemas/hardware-db_schema_v2.0.0-beta.json`.
+- `createForm.py` copies the manually authored upload template when the schema declares `file_upload` questions. It leaves those questions unchanged and inserts/moves them into schema order while creating the other sections and questions.
+- Newly generated forms are published and set to accept responses. The script retrieves and prints Google's canonical `responderUri`.
+- `collectResponses.py` recognizes `fileUploadAnswers` and stores each uploaded file's Drive ID, name, and MIME type in response JSON and CSV data.
+- GitHub Actions contain workflows for schema checks, form creation, scheduled response collection, and device-index generation.
+- The device-ID checker and data index are in `docs/`.
 
-## Contribute data 
-If you want to submit a system to the database, you can fill in the form here: 
-<!-- GOOGLE_FORM_ID-BEGIN comment to anchor auto-update of form link -->
-https://docs.google.com/forms/d/1-F45Oz7rC3oyU0R8vKYE39Kj192yY6le1h1DswAVs38/viewform
-<!-- GOOGLE_FORM_ID-END comment to anchor auto-update of form link -->
+## Blocking Issue: Upload Folders
 
-<!-- ### Beginning of spoiler section -->
-<details>
-  <summary>Additional links <i>(for development purposes only)</i></summary>
+Google's Forms API documentation states that file-upload questions cannot be created through the API. The current workflow therefore starts from a manually authored template form and copies it with the Drive API.
 
+Testing established the following:
 
-Form w/ responses from [*Pegoraro et al.* 2020](https://portlandpress.com/emergtoplifesci/article-abstract/4/1/87/222100/Automated-video-monitoring-of-insect-pollinators?redirectedFrom=fulltext): https://docs.google.com/forms/d/e/1FAIpQLSeYXqfhX8GNSSikLYQEr8XaImpMpMRJxpsHRKNRa-t-ZCh29g/viewform?usp=header
+1. The template's upload questions had valid, non-trashed Drive folder IDs.
+2. A new copy made from that template had no `folderId` on either upload question.
+3. Assigning the template's existing folder IDs to the copied questions with `forms.batchUpdate` failed with HTTP 400: `Creation of file_upload question not supported.` A regular Drive folder cannot be attached as a substitute.
+4. The copy can still report `isPublished=true` and `isAcceptingResponses=true`; publication does not repair the missing upload destination.
 
-Form w/ first batch of responses for testing: https://docs.google.com/forms/d/e/1FAIpQLSd_qqcBcWHkN7p1yZeIcECoQHG3Ow7fB0cCYU-zKObfeDm60g/viewform?usp=dialog
-\
+Therefore, the current generator cannot create a fresh, upload-ready form without a manual Forms UI step. Reusing the template's upload folders would be acceptable from a storage perspective, but the Forms API does not permit assigning them to a copy. Until this limitation has a supported workaround, automated form creation with file uploads is blocked.
 
-<!-- ### End of spoilers section -->
-</details>
+The API also has a separate responder-permissions view. The tested forms had an `anyone` published-reader permission, so the observed failure is not explained by missing link-sharing permission alone.
 
-## Visualise data
-If you want to visualise information on insect monitoring systems we collected, you can click here: 
-<!-- FRONTEND-BEGIN comment to anchor auto-update of form link -->
-*...link coming soon...*
-<!-- FRONTEND-END comment to anchor auto-update of form link -->
+## Response Collection and Images
 
-All the data is also stored in the `/data` directory in this repo, both in a CSV file with one row for each system, and as JSON files (one file per system). 
+The collector currently retrieves response metadata and serializes upload references (`file_id`, `file_name`, `mime_type`) into the database outputs. It does **not** download image bytes from Drive, create image derivatives, or add image assets to the device records or frontend.
 
-> [!NOTE]
-> A **deviceID checker** tool is available via GitHub Pages (`docs/index.html`). Use it to type your intended device name, preview the device ID it will produce, and check whether it is already taken. A full data-browsing and filtering frontend is planned separately.
+Consequently, the complete image pipeline is not implemented. Even after upload-folder provisioning is solved, image files will not yet be copied into the repository or processed into device photos and thumbnails.
 
-# Documentation
-Below we explain what does what in the repository and how to use it. 
-If you only want to contribute or read data, you should not need to read this section. 
+## Automation and Local Setup
 
-For progress also see [Development notes](DevNotes), [TODO](TODO) and [CHANGELOG](CHANGELOG).
+The GitHub Actions workflows are configured to validate changes, create forms after relevant schema changes, collect responses on a schedule, and regenerate the device index. The form-creation automation must not be treated as production-ready for image uploads until newly created forms can receive upload destinations without manual intervention.
 
-<!-- ### Beginning of spoiler section -->
-<details>
-  <summary>Expand section</summary>
+For local development, create and activate a Python environment, then install the project:
 
-## Intro
-The workflow is, at its most basic: 
-```
-hardware-db_schema.json --- createForm.py ---> Google Form
-Google Form --- collectResponses.py ---> data/ (JSON, CSV)
-data/ (JSON) --- generateIndex.py ---> docs/devices_index.json
-```
-
-<p align="center">
-<img src="./assets/Hardware-dtb-image.png" width="600"/>
-</p>
-
-The repo is set up to run certain workflows automatically, but if you want to run things locally you will need to install it. 
-
-### Install locally
-What you need before getting started: 
- - Python >3.11
-
-All of the required third‑party libraries are declared in `pyproject.toml` so you can use `pip` directly; no conda/mamba environment is required.
-
-You can clone the repo and install the package into a fresh virtual environment:
-
-**Windows**
 ```powershell
-git clone https://github.com/InsectAI-COST-Action/hardware-db.git
-chdir hardware-db
 python -m venv .venv
-.venv\Scripts\activate      # activate the venv
-pip install -e .            # runtime dependencies only
+.venv\Scripts\activate
+pip install -e .[ci]
 ```
 
-**Linux/MacOS**
-```bash
-git clone https://github.com/InsectAI-COST-Action/hardware-db.git
-cd hardware-db
-python3 -m venv .venv
-pip install -e .
-```
+Keep OAuth client files and token JSON files in the local, ignored `.secrets` configuration; do not commit credentials. Configuration can also be supplied through CLI arguments and environment variables. When running on Windows, use the `python` command from the activated project environment rather than the `py` launcher if it selects a different interpreter.
 
-If you are running tests or building inside GitHub Actions you can install the extra dependencies with the `ci` extra:
+Run the focused form tests with:
 
 ```powershell
-pip install -e .[ci]        # installs jsonschema etc. for CI/test runs
+python -m unittest tests.testCreateForm
 ```
 
-Anytime you close / reopen the terminal, make sure the virtual environment is properly loaded: 
+Validate the active schema with:
 
-**Windows**
-```PowerShell
-.venv\Scripts\activate
+```powershell
+python tests/validateSchema.py hardware-db_schema.json
 ```
 
-**Linux/MacOS**
-```bash
-source .venv/bin/activate
+## Data Flow
+
+```text
+hardware-db_schema.json -> createForm.py -> Google Form
+Google Form -> collectResponses.py -> data/*.json and data/*.csv
+data/*.json -> generateIndex.py -> docs/devices_index.json
 ```
 
-## The database schema
-We store the main database ontology in `hardware-db_schema.json`. This is a modified version of Google Forms API schema to make it easier to edit by hand. 
+Question IDs in the schema are not sent to Google Forms. Response collection maps form questions back to schema fields by question title, so changing a title requires care. Device record filenames are derived from normalized device names. Existing collision handling detects a submission that would change an existing device record and routes it for maintainer review.
 
-Example of valid JSON schema:
-```json
-{
-    "info": {
-        "title": "The form title here (not the file name)",
-        "description": "You description here."
-    },
-    "settings": {
-        "emailCollectionType": "DO_NOT_COLLECT"
-    },
-    "sections": [
-        {
-            "id": "sec1",
-            "title": "Section 1",
-            "description": null,
-            "questions": [
-                {
-                    "id": "q1",
-                    "title": "Question 1",
-                    "required": true,
-                    "type": "choice",
-                    "choiceType": "RADIO",
-                    "options": [
-                        "Yes",
-                        "No"
-                    ]
-                },
-                {
-                    "id": "q2",
-                    "title": "Question 2",
-                    "required": true,
-                    "type": "text",
-                    "paragraph": false
-                }
-            ]
-        },
-        {
-            "id": "sec2",
-            "title": "Section 2",
-            "description": "Your section description here.",
-            "questions": [
-                {
-                    "id": "q3",
-                    "title": "Question 3",
-                    "required": true,
-                    "type": "text",
-                    "paragraph": false
-                }
-            ]
-        }
-    ]
-}
-```
+# Roadmap
 
-The syntax is as follows: 
- - There's an `info` block, that contains general details for form. 
- - This is followed by `settings` (currently only manages whether sign-in is required). 
- - Then there's the `section` block, that takes a unique `id` and other details.
- - Nested within `section`, there's `questions`, that itself takes a unique `id` and the question, its description and type as well as allowed options (for some types). 
+The checkboxes below distinguish implemented work from work still required for a complete image-upload feature.
 
-The terms in the schema map to Google Forms API's terms like so: 
-
-| JSON schema    | Google Forms API   |
-| -------------- | ------------------ |
-| `form.title`   | `info.title`       |
-| `sections[]`   | `pageBreakItem`    |
-| `questions[]`  | `questionItem`     |
-| Question order | insertion order    |
-| Section order  | insertion order    |
-| Symbolic `id`  | not sent to Google |
-
-Importantly, the `id` field is what we use to collect the answers, as a shorthand for the question itself, and it needs to be unique. 
-
-### Logic navigation
-For now, *only choice questions is supported*, and maps onto Google API like this:
-| JSON schema    | Google Forms API                      | Meaning              |
-| -------------- | ------------------------------------- | -------------------- |
-| `"section_id"` | `goToSectionId: "<pageBreak itemId>"` | Jump to that section |
-| `"next"`       | `goToAction: "NEXT_SECTION"`          | Go to next section   |
-| `"submit"`     | `goToAction: "SUBMIT_FORM"`           | Submit form          |
-
-The current implementation does two passes of the form, because the API only allows redirection to a specific sectionID, and these are non-meaningful (i.e. created on the fly), so you need to query the form you just created to retrieve these ids and then apply the logic to them. 
-
-### Mandatory fields
-In an effort to align with other existing hardware repositories, we align our required field with [Wildlabs' Inventory](https://wildlabs.net/inventory). 
-Below the mapping in out schema to their naming. 
-
-| InsectAI `hardware-db` | Wildlabs' Inventory             |
-| ---------------------- | ------------------------------- |
-| `contact_name`         | `Name` (collected via sign-in)  |
-| `contact_email`        | `Email` (collected via sign-in) |
-| `device_name`          | `Product_name`                  |
-| `device_description`   | `Overview`                      |
-
-
-# Authenticating in Google APIs
-We only support regular OAuth2 authentication via personal access token, not via service account tokens. This is because personal Google accounts (i.e. non-GSuite, non-Workspace accounts) cannot grant service accounts Drive storage space, and this creates issues with managing forms and responses. 
-
-We support both local and CI/CD deployments, and there are a few parts to it:
- - Helper functions in `src/`
-    - `src/authFlow_helpers.py` handles the tokens generated in Google API dashboard; these can be saved on your machine as `.json` file, or saved as a repository secret on Github (see below for info on how to set secrets on Github). 
-    - `src/configParsing.py` looks in various places for the info needed to authenticate and run the scripts. Importantly, you can call the scripts with arguments in CLI, or supply values with environmental variables or `.env` file (see next section); the order of precedence is: 
-      1. CLI argument (if not None)
-      2. Environment variable (if present)
-      3. .secrets and .env file entry (if present)
-      4. Hardcoded defaults for some variables (e.g. debug, secrets-file)
-
-## Secrets and environmental variables
-
-### Local
-To avoid hosting in the repo sensitive information, the OAuth access tokens are stored locally in a `.secrets` file. The format is simply
-
-```bash
-OAUTH_CLIENT_JSON=path_to_file
-TOKEN_TEST_AUTH=path_to_file
-```
-
-...and so on. The helper functions will try to resolve the path and read the content of the JSON file with your access tokens. 
-
-The file `.env` contains non-sensitive information, like the permissions to be granted to the API, and locations of the form, etc. It is structured in a similar way as the `.secrets` file. 
-The parser `src/configParsing.py` attempts to coerce values into sensible types (i.e. string, boolean, etc) and passes them to the caller as a dictionary. 
-
-### CI/CD workflows
-When using CD/CI runners, like Github Actions, we can pass the authentication information via Github's [Repository Secrets](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets). 
-
-Basically, you name a secret variable appropriately, `OAUTH_CLIENT_JSON` and `REFRESH TOKEN` in our case, and paste the content of the your JSON file into it. This variables are made available to Github Action runners via the construct `OAUTH_CLIENT_JSON: ${{ secrets.OAUTH_CLIENT_JSON }}`. 
-
-To generate the refresh token that Github needs, you can run the script `generateRefreshToken.py` locally, and paste its output into a repository secret in Github.
-
-Environmental variables can be assigned directly in the workflow, but if not they will fall back to the `.env` file that is available in the repo. 
-
-
-# Using Google API to manage forms and responses
-There are two scripts responsible for creating the form based on the schema, and collecting the answers.
-
-## Creating the form
-`createForm.py` uses helpers in `src/configParsing.py` and `src/authFlow_helpers.py` to create authenticate with [Google Forms API](https://developers.google.com/workspace/forms/api/reference/rest), and create the form based on `hardware-db_schema.json`. 
-
-The variables that are needed are declared at the top, without values, in order for the parser to find the value fro those keys: 
-```python
-# ----------------------------------------------------------------------
-# Declare needed config keys for script's functioning
-# ----------------------------------------------------------------------
-DB_VERSION = "v0.2.0"
-SCOPES = []
-SCHEMA_FILE = ""
-GOOGLE_FORM_ID = ""
-OAUTH_CLIENT_JSON = ""
-TOKEN_CREATE_FORM = ""
-DISCOVERY_DOC = ""
-DEBUG = False
-```
-
-It then basically parses the schema and build the body of the request in a format that is compatible with Google Form API. 
-It first creates the sections and adds questions to the form; then it applies the required section navigation logic to the created sections; it then renames the file and moves it the specified folder in Google Drive. 
-
-## Collecting the data
-`collectResponses.py` again depends on `src/configParsing.py` and `src/authFlow_helpers.py`, and needs the variables specified at the top of the script (again without their values, the config parser takes care of filling them):
-```python
-# ----------------------------------------------------------------------
-# Declare needed config keys for script's functioning
-# ----------------------------------------------------------------------
-SCOPES = []
-SCHEMA_FILE = ""
-GOOGLE_FORM_ID = ""
-OAUTH_CLIENT_JSON = ""
-TOKEN_COLLECT_RESPONSES = ""
-DISCOVERY_DOC = ""
-DEBUG = False
-```
-
-It first reads the responses from the form identified by `FORM_ID`; then, it loads the schema and uses the *question title* to match the questions to the `id` in the schema; it then grab the responses, and can now associate the responses to the schema's `id`, building a dictionary with `id` shorthands as keys and the response as value; finally, it writes out in `data/` a CSV with all the responses (one per row) as well as one JSON file for each response. The filename — and therefore the effective device ID — is derived from the `device_name` answer: whitespace is replaced with underscores and non-word characters are stripped (see `sanitize_filename()` in `src/misc_helpers.py`). The deviceID checker page applies the same normalization client-side.
-
-> [!CAUTION]
-> The `id` field in the schema is lost when building the API request. 
-> In order to associate questions pulled from the form (and their responses) to the schema, we need to match the *question title*. 
-> This means that if the question title changes with different versions of the schema, this mapping would break!
-
-**Collision handling**: if the normalized device name matches an existing file in `data/` and the incoming response differs from the stored record, a collision is flagged. The new record is still written to `data/` (making the diff visible in the review PR), and a timestamped report is saved to `data/collisions/collision_report_<timestamp>.json` listing each affected device with submitter contact details. Non-colliding records are committed directly to the branch; collisions trigger an automatic pull request for maintainer review (see [Collecting and parsing responses](#collecting-and-parsing-responses) below).
-
-
-## Generating the device index
-`generateIndex.py` reads every JSON file in `data/` and writes two files to `docs/`:
- - `docs/devices_index.json` — a compact index of all records, consumed by the GitHub Pages landing page.
- - `docs/form_config.json` — the current form URL; existing `entry_ids` written by `createForm.py` are preserved.
-
-The script has no third-party dependencies and runs automatically after `collectResponses.py` in CI.
-
-
-## The deviceID checker landing page
-`docs/index.html` is published via GitHub Pages and provides two tabs:
-1. **Check device ID**: type your intended device name to preview the normalised device ID it will produce and confirm it is not already taken (checked against `docs/devices_index.json`).
-2. **Browse existing devices**: search by system name, institution, or contributor; select a device to view its metadata card.
-
-The JS normalization (`normalizeDeviceId()`) mirrors `sanitize_filename()` in `src/misc_helpers.py` exactly: trim, collapse whitespace to `_`, strip non-`\w`/`-` characters.
-
-> [!NOTE]
-> This page is a submission helper only. A separate full-featured data-browsing and filtering frontend is planned.
-
-
-# Lifecycle of the automated workflows
-The automated workflows on Github actions are set up to only run on a schedule or when certain files are modified in the repo. 
-
-## Tests
-Various tests are defined in `.github/workflows/tests.yml`. This workflow get triggered when certain files are modified in the repo, mainly `hardware-db_schema.json`, the python scripts and `.env`. 
-
-It runs three jobs: 
- - `validate_json`: to make sure that the modified schema satisfies expected format
- - `test_auth`: to ensure the authentication workflow succeeds
- - `test_config`: to assert that variables get assigned values in the expected precedence
-
-If any fail, the other workflows will not get triggered. This is desirable, because failing these basic tests early makes it easier to troubleshoot issues and does not generate spurious forms. 
-
-## Creating the Google Form from the schema
-The workflow `.github/workflows/createForm.yml` triggers after a successful run of the Tests workflow. This means that it only triggers when Tests is triggered, and only if Tests succeeds. 
-
-It reads access tokens from Github repo secrets, and then calls `createForm.py --update-links`, which updates `.env`, the form link in `README.md`, and `docs/form_config.json`.
-
-## Collecting and parsing responses
-The workflow `.github/workflows/collectResponses.yml` starts on a schedule at 4am every day, and checks that the latest run of Tests was successful before running. 
-
-It reads access tokens from Github repo secrets, and other variables, notably `FORM_ID`, from `.env`; if `FORM_ID` is assigned within the workflow itself, this takes precedence over the value in `.env` (i.e. for testing purposes). 
-
-It runs `collectResponses.py` (writing CSV, per-device JSON, and any collision reports), then `generateIndex.py` (rebuilding `docs/devices_index.json`). Non-colliding device files, the CSV, and the docs files are committed and pushed directly. If any collision report has `collision_count > 0`, the workflow opens an automatic pull request on branch `bot/collision-review-<branch>` containing all affected device files. A maintainer should review the diff, consult the collision report in `data/collisions/` for submitter contact details, edit the JSON in the PR branch if needed, and merge when satisfied. 
-
-> [!WARNING]
-> Due to Github's design, `workflow_run` conditions only get triggered on the main branch, se thread [here](https://github.com/orgs/community/discussions/66512).
-
-<!-- ### End of spoilers section -->
-</details>
-
-
-# Contacts
-If you have questions please get in touch with the current maintainers listed in [CONTACTS.md](CONTACTS.md).
-
-# Citation
-If you found this repo useful, please cite it as: 
->The InsectAI hardware database - https://github.com/InsectAI-COST-Action/hardware-db 
-
-If you use one of the systems listed here, please make sure to credit the authors! Info available in the respective system entry. 
+- [x] Add optional `file_upload` fields to the schema and validation rules.
+- [x] Use a template form to retain manually authored upload questions, without attempting to create or modify those questions through the Forms API.
+- [x] Place copied upload questions according to schema order while generating the remaining form items.
+- [x] Publish generated forms and retrieve the canonical responder URL.
+- [x] Parse uploaded-file metadata from form responses into JSON and CSV outputs.
+- [x] Add focused tests for template placement, upload metadata, publication requests, and UTF-8 text handling.
+- [ ] Resolve upload-folder provisioning without a per-form manual step. Investigate supported architectures: a single manually initialized form that is updated and reused, a formally supported Google workflow for creating/copying upload destinations, or an external upload service. Do not rely on unsupported Forms API mutations.
+- [ ] Confirm the selected architecture with a fresh form, a non-owner responder account, and a real image submission before enabling automated form creation in production.
+- [ ] Extend response collection to download uploaded originals from Drive using response file IDs, with handling for permissions, missing files, duplicate submissions, retries, and safe filenames.
+- [ ] Define image retention, storage, licensing, privacy, and size policies before committing or publishing respondent images.
+- [ ] Post-process images: preserve originals, generate optimized display images and thumbnails, and use the first device-image upload as the cover image while keeping example images separate.
+- [ ] Add image paths and relevant metadata to device JSON records and decide how image references should appear in CSV and the device index.
+- [ ] Update `generateIndex.py` and the GitHub Pages interface to display cover images and example images.
+- [ ] Update the scheduled collection workflow to download and process assets, handle collisions for image changes, and commit or submit them for maintainer review.
+- [ ] Add end-to-end tests for image folder availability, response collection, image processing, record updates, and the published responder experience.
+- [ ] Re-enable unattended form creation for the upload-enabled schema only after the folder-provisioning blocker is resolved.

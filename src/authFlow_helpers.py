@@ -65,6 +65,12 @@ def resolve_oauth_path(value: Optional[Union[str, Path]]) -> Path:
     if path_candidate.is_file():
         return path_candidate
 
+    # Recover from a stale absolute path when the same file exists in this repo.
+    if path_candidate.is_absolute():
+        repo_candidate = Path(__file__).resolve().parent.parent / path_candidate.name
+        if repo_candidate.is_file():
+            return repo_candidate
+
     ### Raw JSON string? (starts with { and ends with })
     if _is_json_string(candidate):
         try:

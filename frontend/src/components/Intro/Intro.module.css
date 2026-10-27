@@ -1,7 +1,7 @@
 .container {
-  --background-image: url("https://insectipsum.com/photos/1024/256?image_id=3");
+  --background-image: url("/images/bg-light-mode.jpg");
   background-image:
-    linear-gradient(to right, rgb(0 0 0 / 70%), rgb(0 0 0 / 0%)),
+    linear-gradient(to right, rgb(0 0 0 / 30%), rgb(0 0 0 / 0%)),
     var(--background-image);
   background-position: center;
   background-size: cover;
@@ -54,5 +54,5 @@
 }
 
 :global(:root[data-theme="dark"]) .container {
-  --background-image: url("https://insectipsum.com/photos/1024/256?image_id=8");
+  --background-image: url("/images/bg-dark-mode.jpg");
 }

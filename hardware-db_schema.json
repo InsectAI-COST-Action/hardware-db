@@ -1,8 +1,8 @@
 {
   "_metadata": {
-    "schema_version": "1.1.2-beta",
-    "created_date": "2026-10-22T00:00:00Z",
-    "description": "Add video tutorial question, country of affiliation, private individual affiliation, language checkbox list, processing unit checklist; make device construction a single choice, lens focusing multiple choice, and device dimensions in mm."
+    "schema_version": "2.0.0-beta",
+    "created_date": "2026-10-27T00:00:00Z",
+    "description": "EXPERIMENTAL: using a manually created template form with image uploads questions as a source to copy the questions over to the programmatically generated form with the JSON schema."
   },
   "info": {
     "title": "InsectAI hardware database",
@@ -388,7 +388,7 @@
             "1 year",
             "2 years",
             "3 years",
-            "4 years", 
+            "4 years",
             ">4 years"
           ]
         },
@@ -692,6 +692,27 @@
       ]
     },
     {
+      "id": "image_uploads",
+      "title": "Image uploads (optional)",
+      "description": "Upload images of the device and example images taken with the device.",
+      "questions": [
+        {
+          "id": "device_images",
+          "title": "Device images",
+          "description": "Please upload here images of the device itself. The FIRST image uploaded will be used as cover picture for the database entry. ",
+          "required": false,
+          "type": "file_upload"
+        },
+        {
+          "id": "device_example_images",
+          "title": "Example images taken with the device",
+          "description": "Here you can upload example images taken with the device. ",
+          "required": false,
+          "type": "file_upload"
+        }
+      ]
+    },
+    {
       "id": "device_details",
       "title": "Device details (optional)",
       "description": "Physical characteristics, construction, and cost information for the device.",
@@ -793,7 +814,7 @@
             false,
             true
           ]
-        }, 
+        },
         {
           "id": "skills_tools_required",
           "title": "Skills and tools required for construction",
@@ -851,12 +872,12 @@
             "Rechargeable battery",
             "Non-rechargeable battery",
             "Other"
-          ], 
+          ],
           "isOther": [
-            false, 
-            false, 
-            false, 
-            false, 
+            false,
+            false,
+            false,
+            false,
             true
           ]
         },
@@ -893,7 +914,7 @@
             "Teensy",
             "BeagleBone Black",
             "Orange Pi",
-            "Banana Pi", 
+            "Banana Pi",
             "Odroid",
             "Google Coral Dev Board",
             "OpenMV Cam",
@@ -956,29 +977,15 @@
             "Other"
           ],
           "isOther": [
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
             true
           ]
-        },
-        {
-          "id": "device_images",
-          "title": "Device images",
-          "description": "Please upload here images of the device itself. The FIRST image uploaded will be used as cover picture for the database entry. ",
-          "required": false,
-          "type": "file_upload"
-        },
-        {
-          "id": "device_example_images",
-          "title": "Example images taken with the device",
-          "description": "Here you can upload example images taken with the device. ",
-          "required": false,
-          "type": "file_upload"
         },
         {
           "id": "main_optical_sensor_model_name",
@@ -1092,18 +1099,18 @@
             "SD card",
             "None",
             "Other"
-          ], 
+          ],
           "isOther": [
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
             false,
             false,
-            false, 
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
             true
           ]
         },
@@ -1125,17 +1132,17 @@
             "JSON",
             "HDF5",
             "Other"
-          ], 
+          ],
           "isOther": [
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
-            false, 
             false,
-            false, 
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
             true
           ]
         }
@@ -1184,11 +1191,11 @@
             "SD card",
             "SSH/remote access",
             "Other"
-          ], 
+          ],
           "isOther": [
             false,
-            false, 
-            false, 
+            false,
+            false,
             false,
             true
           ]
@@ -1307,10 +1314,10 @@
             "Cave/subterranean",
             "Indoor/laboratory",
             "Other"
-          ], 
+          ],
           "isOther": [
-            false, 
-            false, 
+            false,
+            false,
             false,
             false,
             false,

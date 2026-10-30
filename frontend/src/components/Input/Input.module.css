@@ -1,0 +1,9 @@
+.input {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  display: block;
+  height: 40px;
+  padding: 0 12px;
+}

@@ -1,0 +1,31 @@
+.container {
+  align-items: center;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: 16px;
+  padding: 12px 64px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.homeLink {
+  align-items: center;
+  color: var(--color-foreground);
+  display: flex;
+  font-weight: 500;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo {
+  display: block;
+  height: 32px;
+}
+
+.externalLinks {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}

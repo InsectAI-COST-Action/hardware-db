@@ -1,0 +1,95 @@
+.sheet {
+  background: var(--color-background);
+  border: none;
+  border-left: 1px solid var(--color-border);
+  box-sizing: border-box;
+  color: inherit;
+  flex-direction: column;
+  height: 100dvh;
+  margin: 0 0 0 auto;
+  max-height: none;
+  max-width: none;
+  padding: 0;
+  width: min(90vw, 960px);
+}
+
+.sheet[open] {
+  display: flex;
+}
+
+.sheet::backdrop {
+  background: rgb(0 0 0 / 0.4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet {
+    transform: translateX(100%);
+    transition:
+      transform 0.25s ease,
+      overlay 0.25s allow-discrete,
+      display 0.25s allow-discrete;
+  }
+
+  .sheet[open] {
+    transform: translateX(0);
+  }
+
+  @starting-style {
+    .sheet[open] {
+      transform: translateX(100%);
+    }
+  }
+
+  .sheet::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.25s ease,
+      overlay 0.25s allow-discrete,
+      display 0.25s allow-discrete;
+  }
+
+  .sheet[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .sheet[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}
+
+.header {
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+.title {
+  font-size: var(--font-size-lg);
+}
+
+.closeButton {
+  align-items: center;
+  background: none;
+  border-radius: var(--radius-md);
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.closeButton:hover {
+  background: var(--color-muted);
+}
+
+.body {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+}

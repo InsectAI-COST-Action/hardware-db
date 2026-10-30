@@ -1,5 +1,6 @@
 .container {
   --background-image: url("/images/bg-light-mode.jpg");
+  align-items: center;
   background-image:
     linear-gradient(to right, rgb(0 0 0 / 30%), rgb(0 0 0 / 0%)),
     var(--background-image);

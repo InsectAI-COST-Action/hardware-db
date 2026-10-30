@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# InsectAI Hardware Database - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A website for browsing, filtering and comparing the automated insect monitoring devices in the [InsectAI hardware database](../README.md).
 
-Currently, two official plugins are available:
+## Run it locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+You need [Node.js](https://nodejs.org/) (version 20.19 or newer). Then, from this `frontend` folder:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```sh
+npm install   # first time only
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open the address it prints (usually http://localhost:5173). The page reloads automatically when you save a file.
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+> [!NOTE]
+> The app loads device data from the CSV file on GitHub's `main` branch, not from your local `data/` folder. Changes to the local CSV only show up after they're merged into `main`. To test with other data, change `DEVICE_CSV_URL` in `src/lib/constants.ts`.
 
-export default defineConfig([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+## Where things are
+
+| To change…                                        | Look in                                           |
+| ------------------------------------------------- | ------------------------------------------------- |
+| Which specs are shown, their labels and units     | `SPEC_GROUP_COLUMNS` in `src/lib/constants.ts`    |
+| Ecology & deployment fields                       | `ECOLOGY_GROUP_COLUMNS` in `src/lib/constants.ts` |
+| Filters in the sidebar                            | `FILTER_DEFINITIONS` in `src/lib/constants.ts`    |
+| Data source, external links, submit form link     | `src/lib/constants.ts`                            |
+| How CSV rows are turned into devices              | `src/hooks/useDevices.ts`                         |
+| Pages (device list, device details)               | `src/pages/`                                      |
+| Reusable building blocks (cards, table, buttons…) | `src/components/`                                 |
+| Colours, fonts and light/dark theme               | `src/index.css`                                   |
+
+Each component keeps its styles next to it in a `.module.css` file.
+
+## Before you share a change
+
+```sh
+npm run lint    # checks for common mistakes
+npm run build   # checks types and builds the site into dist/
 ```
+
+Both should finish without errors.
+
+## Built with
+
+[React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) and [Vite](https://vite.dev/). Icons come from [Lucide](https://lucide.dev/icons/).

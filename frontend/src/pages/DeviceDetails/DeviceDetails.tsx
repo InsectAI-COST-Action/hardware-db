@@ -12,13 +12,13 @@ import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router";
 import styles from "./DeviceDetails.module.css";
 
-type Tab = "overview" | "specifications" | "ecology" | "raw";
+type Tab = "overview" | "specifications" | "ecology" | "json";
 
 const TABS: { value: Tab; label: string }[] = [
   { value: "overview", label: "Overview" },
   { value: "specifications", label: "Specifications" },
   { value: "ecology", label: "Ecology & deployment" },
-  { value: "raw", label: "Raw data" },
+  { value: "json", label: "JSON data" },
 ];
 
 export const DeviceDetails = () => (
@@ -122,8 +122,8 @@ const DeviceView = ({ device }: { device: Device }) => {
           )}
         </div>
       )}
-      {tab === "raw" && (
-        <div aria-label="Raw data" className={styles.panel} role="tabpanel">
+      {tab === "json" && (
+        <div aria-label="JSON data" className={styles.panel} role="tabpanel">
           <pre className={styles.code}>
             <code>{rawJson}</code>
           </pre>

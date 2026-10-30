@@ -5,7 +5,6 @@ import styles from "./Intro.module.css";
 export const Intro = () => (
   <div className={styles.container}>
     <div className={styles.text}>
-      <span>Open community catalogue · CC BY 4.0</span>
       <h1>Hardware for automated insect monitoring</h1>
       <p>
         This is the InsectAI hardware database, designed to collate information

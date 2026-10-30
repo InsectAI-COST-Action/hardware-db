@@ -89,9 +89,12 @@ export const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
     title: "Cost & upkeep",
     icon: Coins,
     specs: [
-      { label: "Unit build cost", column: "cost_unit_build" },
-      { label: "Seasonal deployment", column: "cost_deployment_seasonal" },
       { label: "Software / compute", column: "cost_software_compute" },
+      { label: "Unit build cost (EUR)", column: "cost_unit_build" },
+      {
+        label: "Seasonal deployment (EUR)",
+        column: "cost_deployment_seasonal",
+      },
       { label: "Assembly time", column: "cost_assembly_time" },
       { label: "Maintenance", column: "maintenance_interval" },
       {

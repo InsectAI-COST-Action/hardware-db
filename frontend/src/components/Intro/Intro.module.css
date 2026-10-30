@@ -11,6 +11,7 @@
   gap: 32px;
   grid-template-columns: 1fr 400px;
   padding: 64px;
+  position: relative;
 }
 
 .text {
@@ -48,6 +49,19 @@
   margin-bottom: 16px;
 }
 
+.credit {
+  bottom: 16px;
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+  position: absolute;
+  right: 16px;
+}
+
+.creditDark {
+  display: none;
+}
+
 @media (max-width: 1024px) {
   .container {
     grid-template-columns: 1fr;
@@ -56,4 +70,12 @@
 
 :global(:root[data-theme="dark"]) .container {
   --background-image: url("/images/bg-dark-mode.jpg");
+}
+
+:global(:root[data-theme="dark"]) .creditLight {
+  display: none;
+}
+
+:global(:root[data-theme="dark"]) .creditDark {
+  display: inline;
 }

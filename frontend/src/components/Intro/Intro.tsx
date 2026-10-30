@@ -25,5 +25,9 @@ export const Intro = () => (
         Open submission form
       </LinkButton>
     </div>
+    <p className={styles.credit}>
+      <span className={styles.creditLight}>Photo by Luca Pegoraro</span>
+      <span className={styles.creditDark}>Photo by Jirislav Skuhrovec</span>
+    </p>
   </div>
 );

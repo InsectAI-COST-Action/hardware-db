@@ -29,3 +29,46 @@
   color: var(--color-muted-foreground);
   font-size: var(--font-size-sm);
 }
+
+/* Leaves room so the floating bar doesn't cover the last rows */
+.withSelectionBar {
+  padding-bottom: 80px;
+}
+
+.selectionBar {
+  align-items: center;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  bottom: 24px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.15);
+  display: flex;
+  gap: 8px;
+  left: 50%;
+  padding: 8px 8px 8px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .selectionBar {
+    transition:
+      opacity 0.2s ease,
+      translate 0.2s ease;
+  }
+
+  @starting-style {
+    .selectionBar {
+      opacity: 0;
+      translate: 0 16px;
+    }
+  }
+}
+
+.selectionCount {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-right: 8px;
+  white-space: nowrap;
+}

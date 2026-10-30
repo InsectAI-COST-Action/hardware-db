@@ -1,6 +1,6 @@
 import { ExternalLink, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import styles from "./LinkButton.module.css";
+import styles from "./Button.module.css";
 
 interface LinkButtonProps {
   children: ReactNode;
@@ -20,7 +20,7 @@ export const LinkButton = ({
   variant = "primary",
 }: LinkButtonProps) => (
   <a
-    className={`${styles.linkButton} ${styles[variant]} ${className ?? ""}`}
+    className={`${styles.button} ${styles[variant]} ${className ?? ""}`}
     href={href}
     {...(external && { rel: "noopener noreferrer", target: "_blank" })}
   >

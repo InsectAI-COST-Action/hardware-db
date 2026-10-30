@@ -1,4 +1,4 @@
-import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { LinkButton } from "@/components/Button/LinkButton";
 import { SUBMIT_LINK } from "@/lib/constants";
 import styles from "./Intro.module.css";
 

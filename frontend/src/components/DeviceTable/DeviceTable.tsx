@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/Checkbox/Checkbox";
 import { Tags } from "@/components/Tag/Tags";
 import type { Device } from "@/lib/types";
 import { getContributor, getOverviewSpecs } from "@/lib/utils";
@@ -12,40 +13,81 @@ const SPEC_COLUMNS = [
   "Target taxa",
 ];
 
-export const DeviceTable = ({ devices }: { devices: Device[] }) => (
-  <div className={styles.container}>
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>Device</th>
-          <th>Construction</th>
-          {SPEC_COLUMNS.map((label) => (
-            <th key={label}>{label}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {devices.map((device) => (
-          <DeviceRow key={device.slug} device={device} />
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+interface DeviceTableProps {
+  devices: Device[];
+  onSelectedChange: (slugs: string[]) => void;
+  selected: string[];
+}
 
-const DeviceRow = ({ device }: { device: Device }) => {
+export const DeviceTable = ({
+  devices,
+  onSelectedChange,
+  selected,
+}: DeviceTableProps) => {
+  const toggle = (slug: string) => {
+    onSelectedChange(
+      selected.includes(slug)
+        ? selected.filter((item) => item !== slug)
+        : [...selected, slug],
+    );
+  };
+
+  return (
+    <div className={styles.container}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th className={styles.checkboxCell} />
+            <th>Device</th>
+            <th>Construction</th>
+            {SPEC_COLUMNS.map((label) => (
+              <th key={label}>{label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {devices.map((device) => (
+            <DeviceRow
+              device={device}
+              isSelected={selected.includes(device.slug)}
+              key={device.slug}
+              onToggle={() => toggle(device.slug)}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+interface DeviceRowProps {
+  device: Device;
+  isSelected: boolean;
+  onToggle: () => void;
+}
+
+const DeviceRow = ({ device, isSelected, onToggle }: DeviceRowProps) => {
   const specs = getOverviewSpecs(device);
   const contributor = getContributor(device);
 
   return (
-    <tr>
+    <tr className={isSelected ? styles.selected : undefined}>
+      <td className={styles.checkboxCell}>
+        <Checkbox
+          checked={isSelected}
+          className={styles.checkbox}
+          label={`Select ${device.deviceName}`}
+          onChange={onToggle}
+        />
+      </td>
       <td>
+        {/* Stretched over the whole row so it stays clickable */}
         <Link className={styles.name} to={`/devices/${device.slug}`}>
-          <span>{device.deviceName}</span>
-          {contributor ? (
-            <span className={styles.contributor}>{contributor}</span>
-          ) : null}
+          {device.deviceName}
         </Link>
+        {contributor ? (
+          <p className={styles.contributor}>{contributor}</p>
+        ) : null}
       </td>
       <td>
         <Tags tags={device.deviceConstruction} />

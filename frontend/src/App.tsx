@@ -9,11 +9,14 @@ import styles from "./App.module.css";
 
 const App = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("gallery");
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const devicesState = useDevices();
   const filtersState = useDeviceFilters(devicesState.devices);
   const context: AppContext = {
     ...devicesState,
     ...filtersState,
+    selectedDevices,
+    setSelectedDevices,
     setViewMode,
     viewMode,
   };

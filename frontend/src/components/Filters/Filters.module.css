@@ -37,13 +37,6 @@
   gap: 8px;
 }
 
-.option input {
-  accent-color: var(--color-accent);
-  cursor: pointer;
-  height: 16px;
-  width: 16px;
-}
-
 .optionLabel {
   flex: 1;
   font-size: var(--font-size-sm);

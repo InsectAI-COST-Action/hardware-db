@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import type { Device } from "./types";
 
 export const getContributor = (device: Device) => {
@@ -38,4 +39,21 @@ export const getOverviewSpecs = (device: Device, maxItems?: number) => {
     { label: "Power source", value: formatList(device.powerSources) },
     { label: "Target taxa", value: formatList(device.taxonomicGroups) },
   ].filter((spec) => spec.value);
+};
+
+/**
+ * Click handler for a device link: in selection mode it toggles the device
+ * instead of navigating. Cmd/ctrl-click still opens the device in a new tab.
+ */
+export const handleSelectableClick = (
+  e: MouseEvent<HTMLAnchorElement>,
+  isSelectionMode: boolean,
+  onToggle: () => void,
+) => {
+  if (!isSelectionMode || e.metaKey || e.ctrlKey) {
+    return;
+  }
+
+  e.preventDefault();
+  onToggle();
 };

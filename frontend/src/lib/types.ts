@@ -39,6 +39,18 @@ export interface Spec {
   value: string;
 }
 
+/**
+ * How each specification is read from its column: as free text, as a `;`
+ * separated list, or as a 1-5 score.
+ */
+export type SpecFormat = "text" | "list" | "score";
+
+export type SpecGroupColumns = {
+  title: string;
+  icon: LucideIcon;
+  specs: { label: string; column: string; format?: SpecFormat }[];
+}[];
+
 export interface SpecGroup {
   title: string;
   icon: LucideIcon;
@@ -52,4 +64,4 @@ export interface TeamMember {
 
 export type Theme = "light" | "dark";
 
-export type ViewMode = "gallery" | "table" | "compare";
+export type ViewMode = "gallery" | "table";

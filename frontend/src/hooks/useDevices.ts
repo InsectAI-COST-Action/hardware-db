@@ -1,16 +1,15 @@
-import { DEVICE_CSV_URL } from "@/lib/constants";
-import type { Device, SpecGroup, TeamMember } from "@/lib/types";
 import {
-  BatteryCharging,
-  Bug,
-  Camera,
-  CodeXml,
-  Coins,
-  Wrench,
-  type LucideIcon,
-  Thermometer,
-  Trees,
-} from "lucide-react";
+  DEVICE_CSV_URL,
+  ECOLOGY_GROUP_COLUMNS,
+  SPEC_GROUP_COLUMNS,
+} from "@/lib/constants";
+import type {
+  Device,
+  SpecFormat,
+  SpecGroup,
+  SpecGroupColumns,
+  TeamMember,
+} from "@/lib/types";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 
@@ -215,136 +214,6 @@ const parseTeam = (row: Record<string, string>) => {
 
   return [...team.values()];
 };
-
-/**
- * How each specification is read from its column: as free text, as a `;`
- * separated list, or as a 1-5 score.
- */
-type SpecFormat = "text" | "list" | "score";
-
-type SpecGroupColumns = {
-  title: string;
-  icon: LucideIcon;
-  specs: { label: string; column: string; format?: SpecFormat }[];
-}[];
-
-const SPEC_GROUP_COLUMNS: SpecGroupColumns = [
-  {
-    title: "Hardware",
-    icon: Wrench,
-    specs: [
-      { label: "Construction", column: "device_construction", format: "list" },
-      { label: "Processor", column: "processing_unit", format: "list" },
-      { label: "Mounting", column: "mounting_system", format: "list" },
-      { label: "Size, transport (mm)", column: "size_transport" },
-      { label: "Size, deployed (mm)", column: "size_deployed" },
-      { label: "Weight (kg)", column: "weight" },
-      {
-        label: "Skills & tools",
-        column: "skills_tools_required",
-        format: "list",
-      },
-      { label: "Licence", column: "device_licence", format: "list" },
-    ],
-  },
-  {
-    title: "Imaging",
-    icon: Camera,
-    specs: [
-      { label: "Capture modes", column: "capture_modes", format: "list" },
-      { label: "Sensor", column: "main_optical_sensor_model_name" },
-      { label: "Resolution", column: "main_sensor_resolution" },
-      { label: "Frame rate", column: "main_sensor_framerate" },
-      { label: "Focusing", column: "lens_focusing", format: "list" },
-      { label: "Min. focal distance", column: "min_focal_distance" },
-      { label: "Field of view", column: "field_of_view" },
-      { label: "File types", column: "file_types", format: "list" },
-    ],
-  },
-  {
-    title: "Power & data",
-    icon: BatteryCharging,
-    specs: [
-      { label: "Power sources", column: "power_sources", format: "list" },
-      { label: "Autonomy", column: "power_autonomy_continuous" },
-      { label: "Image processing", column: "model_processing", format: "list" },
-      { label: "Connectivity", column: "connectivity", format: "list" },
-    ],
-  },
-  {
-    title: "Cost & upkeep",
-    icon: Coins,
-    specs: [
-      { label: "Unit build cost", column: "cost_unit_build" },
-      { label: "Seasonal deployment", column: "cost_deployment_seasonal" },
-      { label: "Software / compute", column: "cost_software_compute" },
-      { label: "Assembly time", column: "cost_assembly_time" },
-      { label: "Maintenance", column: "maintenance_interval" },
-      {
-        label: "Repairability",
-        column: "repairability_score",
-        format: "score",
-      },
-    ],
-  },
-  {
-    title: "Firmware",
-    icon: CodeXml,
-    specs: [
-      { label: "Last update", column: "last_firmware_update" },
-      {
-        label: "Update method",
-        column: "firmware_update_method",
-        format: "list",
-      },
-      { label: "Version / repo", column: "firmware_version_repo" },
-    ],
-  },
-];
-
-const ECOLOGY_GROUP_COLUMNS: SpecGroupColumns = [
-  {
-    title: "Target organisms",
-    icon: Bug,
-    specs: [
-      {
-        label: "Functional groups",
-        column: "functional_groups",
-        format: "list",
-      },
-      { label: "Taxonomic groups", column: "taxonomic_groups", format: "list" },
-      {
-        label: "Classifies by",
-        column: "classification_target_type",
-        format: "list",
-      },
-      { label: "Min. subject size (mm)", column: "subject_size_min_mm" },
-      { label: "Max. subject size (mm)", column: "subject_size_max_mm" },
-    ],
-  },
-  {
-    title: "Habitat & sampling",
-    icon: Trees,
-    specs: [
-      {
-        label: "Environment",
-        column: "operational_environment",
-        format: "list",
-      },
-      { label: "Habitats", column: "habitat_type", format: "list" },
-      { label: "Attractants", column: "attractants", format: "list" },
-    ],
-  },
-  {
-    title: "Field conditions",
-    icon: Thermometer,
-    specs: [
-      { label: "Min. temperature (°C)", column: "temperature_min_c" },
-      { label: "Max. temperature (°C)", column: "temperature_max_c" },
-      { label: "Weatherproofing", column: "ip_rating" },
-    ],
-  },
-];
 
 /**
  * Groups the columns for display. Empty specs are left out, and so are groups

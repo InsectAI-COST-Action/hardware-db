@@ -1,4 +1,4 @@
-import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { LinkButton } from "@/components/Button/LinkButton";
 import { SpecGroups } from "@/components/SpecGroups/SpecGroups";
 import { SpecList } from "@/components/SpecList/SpecList";
 import { Tabs } from "@/components/Tabs/Tabs";

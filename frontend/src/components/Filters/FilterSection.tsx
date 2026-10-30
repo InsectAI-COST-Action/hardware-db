@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/Checkbox/Checkbox";
 import type { FilterOption } from "@/lib/types";
 import styles from "./Filters.module.css";
 
@@ -27,10 +28,9 @@ export const FilterSection = ({
       <span className={styles.sectionTitle}>{title}</span>
       {options.map(({ value, count }) => (
         <label className={styles.option} key={value}>
-          <input
+          <Checkbox
             checked={selected.includes(value)}
             onChange={() => toggle(value)}
-            type="checkbox"
           />
           <span className={styles.optionLabel}>{value}</span>
           <span className={styles.optionCount}>{count}</span>

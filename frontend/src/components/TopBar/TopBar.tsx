@@ -1,4 +1,4 @@
-import { LinkButton } from "@/components/LinkButton/LinkButton";
+import { LinkButton } from "@/components/Button/LinkButton";
 import { Switch } from "@/components/Switch/Switch";
 import { useTheme } from "@/hooks/useTheme";
 import { EXTERNAL_LINKS, THEME_OPTIONS } from "@/lib/constants";

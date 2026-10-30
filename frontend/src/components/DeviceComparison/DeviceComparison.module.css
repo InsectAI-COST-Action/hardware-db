@@ -1,0 +1,76 @@
+.container {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid var(--color-border);
+  line-height: 1.5;
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table tbody:last-child tr:last-child > * {
+  border-bottom: none;
+}
+
+.labelCell {
+  background: var(--color-surface);
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  left: 0;
+  min-width: 120px;
+  position: sticky;
+  z-index: 1;
+}
+
+.deviceCell {
+  font-weight: normal;
+  min-width: 200px;
+}
+
+.name {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+.contributor {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+}
+
+.groupCell {
+  background: var(--color-muted);
+}
+
+.groupTitle {
+  align-items: center;
+  display: inline-flex;
+  font-weight: 500;
+  gap: 8px;
+  left: 16px;
+  position: sticky;
+}
+
+.valueCell {
+  font-size: var(--font-size-sm);
+}
+
+.empty {
+  color: var(--color-muted-foreground);
+}

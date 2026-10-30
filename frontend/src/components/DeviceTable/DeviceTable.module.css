@@ -31,8 +31,31 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.table tbody tr:hover {
+.table tbody tr {
+  position: relative;
+}
+
+.table tbody tr:hover,
+.table tbody tr.selected {
   background: var(--color-muted);
+}
+
+.table tbody tr:has(.name:focus-visible) {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: -2px;
+}
+
+.table .checkboxCell {
+  padding-right: 0;
+  /* Aligns the checkbox with the first line of text */
+  padding-top: 16px;
+  width: 16px;
+}
+
+/* Sits above the stretched link */
+.checkbox {
+  position: relative;
+  z-index: 1;
 }
 
 .spec {
@@ -46,6 +69,17 @@
   font-size: var(--font-size-base);
   font-weight: 500;
   text-decoration: none;
+}
+
+/* The whole row shows the focus ring instead */
+.name:focus-visible {
+  outline: none;
+}
+
+.name::after {
+  content: "";
+  inset: 0;
+  position: absolute;
 }
 
 .contributor {

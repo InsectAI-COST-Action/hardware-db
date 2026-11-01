@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    base: mode === "github-pages" ? "/hardware-db/" : "/",
     plugins: [react()],
     define: {
       "import.meta.env.VITE_GOOGLE_FORM_ID": JSON.stringify(googleFormId),

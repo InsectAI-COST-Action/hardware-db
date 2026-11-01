@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  color: var(--color-foreground);
+  cursor: pointer;
+  display: block;
+  height: 40px;
+  padding: 0 36px 0 12px;
+}
+
+.select:hover {
+  background: var(--color-muted);
+}
+
+.select.withIcon {
+  padding-left: 36px;
+}
+
+.icon {
+  color: var(--color-muted-foreground);
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.leadingIcon {
+  left: 12px;
+}
+
+.chevron {
+  right: 12px;
+}

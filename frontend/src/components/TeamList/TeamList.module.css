@@ -1,0 +1,38 @@
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: start;
+}
+
+.member {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.avatar {
+  align-items: center;
+  background: var(--color-accent);
+  border-radius: 50%;
+  color: var(--color-accent-foreground);
+  display: flex;
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.role {
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-sm);
+}

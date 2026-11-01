@@ -171,8 +171,8 @@ export const SORT_OPTIONS: {
   { value: "name", label: "Name (A-Z)" },
 ];
 
-export const SUBMIT_LINK =
-  "https://docs.google.com/forms/d/1tEs9BkqGV579_Qd8aOVvAhmVWEfLAnKxa04KMH8Pi3Q/viewform";
+const googleFormId = import.meta.env.VITE_GOOGLE_FORM_ID;
+export const SUBMIT_LINK = `https://docs.google.com/forms/d/${googleFormId}/viewform`;
 
 export const THEME_OPTIONS: {
   value: Theme;
